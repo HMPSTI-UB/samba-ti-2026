@@ -47,9 +47,9 @@ export default function HeroVisual() {
       <AnimatePresence mode="wait">
         <motion.div
           key={active.id}
-          initial={{ opacity: 0, scale: 0.8, rotate: -20, filter: "blur(20px)" }}
-          animate={{ opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)" }}
-          exit={{ opacity: 0, scale: 1.1, rotate: 20, filter: "blur(20px)" }}
+          initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          exit={{ opacity: 0, scale: 1.1, rotate: 20 }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
           className="relative w-full h-full flex items-center justify-center"
         >
@@ -60,7 +60,8 @@ export default function HeroVisual() {
               opacity: [0.6, 0.8, 0.6]
             }}
             transition={{ duration: 3, repeat: Infinity }}
-            className={`absolute w-1/2 h-1/2 rounded-full blur-[80px] ${active.color} opacity-60`}
+            className="absolute w-full h-full rounded-full opacity-60"
+            style={{ background: `radial-gradient(circle, ${active.accent} 0%, transparent 60%)` }}
           />
 
           {/* Form Specifics */}
@@ -96,11 +97,11 @@ function NebulaForm({ color, secondary }: { color: string; secondary: string }) 
             scale: [1, 1.2, 1],
           }}
           transition={{ duration: 5 + i, repeat: Infinity, ease: "linear" }}
-          className="absolute rounded-full blur-[40px] opacity-30"
+          className="absolute rounded-full opacity-30"
           style={{
             width: `${100 + i * 40}px`,
             height: `${100 + i * 40}px`,
-            backgroundColor: i % 2 === 0 ? color : secondary,
+            background: `radial-gradient(circle, ${i % 2 === 0 ? color : secondary} 0%, transparent 60%)`,
             left: `${20 + i * 10}%`,
             top: `${20 + i * 5}%`,
           }}
@@ -122,7 +123,8 @@ function FusionForm({ color, secondary }: { color: string; secondary: string }) 
       <motion.div
         animate={{ scale: [1, 1.3, 1], rotate: -360 }}
         transition={{ duration: 4, repeat: Infinity }}
-        className="absolute w-1/2 h-1/2 border border-white/20 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(56,189,248,0.3)]"
+        className="absolute w-1/2 h-1/2 border border-white/20 rounded-full flex items-center justify-center"
+        style={{ background: `radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 70%)` }}
       >
          <div className="w-1/3 h-1/3 rounded-full bg-white shadow-[0_0_30px_white]" />
       </motion.div>
@@ -145,8 +147,8 @@ function SupernovaForm({ color, secondary }: { color: string; secondary: string 
       <motion.div
         animate={{ scale: [1, 2, 1], opacity: [0.5, 0.2, 0.5] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute w-full h-full rounded-full blur-[60px]"
-        style={{ backgroundColor: color }}
+        className="absolute w-[150%] h-[150%] rounded-full"
+        style={{ background: `radial-gradient(circle, ${color} 0%, transparent 60%)` }}
       />
       <div className="relative w-1/4 h-1/4 bg-white rounded-full shadow-[0_0_100px_white,0_0_50px_orange]" />
       
@@ -161,7 +163,6 @@ function SupernovaForm({ color, secondary }: { color: string; secondary: string 
           style={{ 
             backgroundColor: secondary, 
             transform: `rotate(${i * 30}deg) translateX(40px)`,
-            boxShadow: `0 0 10px ${secondary}`
           }}
         />
       ))}

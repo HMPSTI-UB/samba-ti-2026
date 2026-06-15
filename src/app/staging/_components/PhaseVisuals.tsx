@@ -16,11 +16,11 @@ export function NebulaVisual({ color, secondary }: { color: string; secondary: s
             scale: [1, 1.3, 1],
           }}
           transition={{ duration: 6 + i, repeat: Infinity, ease: "linear" }}
-          className="absolute rounded-full blur-[50px] opacity-20"
+          className="absolute rounded-full opacity-20"
           style={{
             width: `${120 + i * 40}px`,
             height: `${120 + i * 40}px`,
-            backgroundColor: i % 2 === 0 ? color : secondary,
+            background: `radial-gradient(circle, ${i % 2 === 0 ? color : secondary} 0%, transparent 60%)`,
             left: `${10 + i * 15}%`,
             top: `${10 + i * 10}%`,
           }}
@@ -42,7 +42,8 @@ export function FusionVisual({ color, secondary }: { color: string; secondary: s
       <motion.div
         animate={{ scale: [1, 1.4, 1], rotate: -360 }}
         transition={{ duration: 5, repeat: Infinity }}
-        className="absolute w-1/2 h-1/2 border border-white/10 rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(56,189,248,0.2)]"
+        className="absolute w-1/2 h-1/2 border border-white/10 rounded-full flex items-center justify-center"
+        style={{ background: `radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 70%)` }}
       >
          <div className="w-1/4 h-1/4 rounded-full bg-white shadow-[0_0_40px_white]" />
       </motion.div>
@@ -59,8 +60,8 @@ export function SupernovaVisual({ color, secondary }: { color: string; secondary
       <motion.div
         animate={{ scale: [1, 2.5, 1], opacity: [0.4, 0.1, 0.4] }}
         transition={{ duration: 3, repeat: Infinity }}
-        className="absolute w-full h-full rounded-full blur-[70px]"
-        style={{ backgroundColor: color }}
+        className="absolute w-[150%] h-[150%] rounded-full"
+        style={{ background: `radial-gradient(circle, ${color} 0%, transparent 60%)` }}
       />
       <div className="relative w-1/5 h-1/5 bg-white rounded-full shadow-[0_0_120px_white,0_0_60px_orange]" />
       {[...Array(16)].map((_, i) => (
@@ -69,7 +70,7 @@ export function SupernovaVisual({ color, secondary }: { color: string; secondary
           animate={{ scaleX: [0, 1.8, 0], opacity: [0, 0.8, 0] }}
           transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
           className="absolute h-[1px] w-[250px] origin-left"
-          style={{ backgroundColor: secondary, transform: `rotate(${i * 22.5}deg) translateX(50px)`, boxShadow: `0 0 15px ${secondary}` }}
+          style={{ backgroundColor: secondary, transform: `rotate(${i * 22.5}deg) translateX(50px)` }}
         />
       ))}
     </div>
@@ -87,10 +88,10 @@ export function ZenithVisual({ color, secondary }: { color: string; secondary: s
       <motion.div
         animate={{ 
           scale: [1, 1.1, 1],
-          filter: ["blur(40px)", "blur(60px)", "blur(40px)"]
         }}
         transition={{ duration: 4, repeat: Infinity }}
-        className="w-3/4 h-3/4 rounded-full bg-gradient-to-br from-star-gold to-electric-blue opacity-30"
+        className="absolute w-[120%] h-[120%] rounded-full opacity-30"
+        style={{ background: `radial-gradient(circle, #FACC15 0%, #38BDF8 40%, transparent 70%)` }}
       />
       <div className="relative z-10 text-star-gold">
          <Star className="w-20 h-20 filter drop-shadow-[0_0_30px_#FACC15]" fill="#FACC15" />

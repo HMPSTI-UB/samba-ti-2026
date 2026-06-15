@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
-import StarBackground from "./StarBackground";
+
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -82,7 +82,7 @@ export default function Footer() {
           <ul className="space-y-4">
             <li className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-electric-blue flex-shrink-0" />
-              <span className="text-muted-text text-sm">Fakultas Ilmu Komputer, Universitas Brawijaya</span>
+              <span className="text-muted-text text-sm">Gedung Fakultas Vokasi Dieng, Universitas Brawijaya</span>
             </li>
             <li className="flex items-center space-x-3">
               <Mail className="w-5 h-5 text-electric-blue flex-shrink-0" />

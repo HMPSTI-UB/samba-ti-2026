@@ -97,13 +97,7 @@ export default function JourneyTimeline() {
             <h2 className="font-heading text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">
               FASE <span className="text-gradient-blue-purple">EVOLUSI</span>
             </h2>
-            <div className="h-1.5 w-24 bg-electric-blue/30 mx-auto rounded-full mb-6 relative overflow-hidden">
-               <motion.div 
-                 animate={{ x: [-100, 100] }}
-                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                 className="absolute inset-0 bg-electric-blue"
-               />
-            </div>
+            <div className="h-1.5 w-24 bg-electric-blue/30 mx-auto rounded-full mb-6"></div>
             <p className="text-muted-text max-w-xl mx-auto text-lg">
               Witness the transformation from a stardust collective to the highest point of brilliance.
             </p>
@@ -112,10 +106,7 @@ export default function JourneyTimeline() {
 
         {/* Main Content Area */}
         <div className="p-8 md:p-12 bg-midnight-navy/20 backdrop-blur-sm relative overflow-hidden mb-16 rounded-[3rem]">
-          {/* Subtle Background Text */}
-          <div className="absolute -bottom-10 -left-10 opacity-[0.03] select-none pointer-events-none">
-             <span className="font-heading font-black text-[180px] leading-none uppercase">{activePhase.id}</span>
-          </div>
+
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             {/* Left: Visual State */}
@@ -123,16 +114,16 @@ export default function JourneyTimeline() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activePhase.id}
-                  initial={{ opacity: 0, scale: 0.8, rotate: -10, filter: "blur(20px)" }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, scale: 1.1, rotate: 10, filter: "blur(20px)" }}
+                  initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 1.1, rotate: 10 }}
                   transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                   className="relative w-full h-full flex items-center justify-center"
                 >
                   {/* Decorative Glow */}
                   <div 
-                    className="absolute inset-10 rounded-full blur-[100px] opacity-20"
-                    style={{ backgroundColor: activePhase.accent }}
+                    className="absolute inset-10 rounded-full opacity-20"
+                    style={{ background: `radial-gradient(circle, ${activePhase.accent} 0%, transparent 70%)` }}
                   />
 
                   {activePhase.id === "nebula" && <NebulaVisual color={activePhase.accent} secondary={activePhase.secondary} />}
@@ -140,10 +131,7 @@ export default function JourneyTimeline() {
                   {activePhase.id === "supernova" && <SupernovaVisual color={activePhase.accent} secondary={activePhase.secondary} />}
                   {activePhase.id === "zenith" && <ZenithVisual color={activePhase.accent} secondary={activePhase.secondary} />}
 
-                  {/* Technical Badge Overlay */}
-                  <div className="absolute bottom-4 right-4 bg-midnight-navy/80 border border-white/10 px-4 py-2 rounded-xl backdrop-blur-xl shadow-2xl">
-                     <span className="font-heading font-black text-[10px] tracking-[0.3em] text-white/50 uppercase">Active State: {activePhase.id}</span>
-                  </div>
+
                 </motion.div>
               </AnimatePresence>
             </div>

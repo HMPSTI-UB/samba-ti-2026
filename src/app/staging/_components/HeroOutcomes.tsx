@@ -82,14 +82,14 @@ export default function HeroOutcomes() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeOutcome.id}
-                  initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                   className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center"
                 >
                   {/* Decorative Background Blob */}
-                  <div className={`absolute inset-0 opacity-20 blur-[100px] bg-gradient-to-br ${activeOutcome.color} transition-all duration-700`} />
+                  <div className={`absolute inset-0 opacity-20 bg-gradient-to-br ${activeOutcome.color} transition-all duration-700`} style={{ background: "radial-gradient(circle, currentColor 0%, transparent 70%)" }} />
                   
                   <div className={`w-32 h-32 rounded-3xl mb-8 flex items-center justify-center bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl relative z-10 ${activeOutcome.shadow}`}>
                     <ActiveIcon className="w-16 h-16 text-soft-white drop-shadow-lg" />

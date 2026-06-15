@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import StarBackground from "@/components/StarBackground";
+
 
 export default function CTASection() {
   return (
     <section className="py-32 px-6 text-center relative overflow-hidden">
-      <StarBackground />
+
       {/* Portal Wormhole Effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] -z-10">
         <motion.div 
@@ -15,7 +15,7 @@ export default function CTASection() {
             scale: [1, 1.2, 1],
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--color-electric-blue)_0%,_transparent_70%)] opacity-20 blur-[100px]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--color-electric-blue)_0%,_transparent_70%)] opacity-20"
         />
         <motion.div 
           animate={{ 
@@ -23,7 +23,7 @@ export default function CTASection() {
             scale: [1.2, 1, 1.2],
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-20 bg-[radial-gradient(circle_at_center,_var(--color-cosmic-purple)_0%,_transparent_70%)] opacity-10 blur-[80px]"
+          className="absolute inset-20 bg-[radial-gradient(circle_at_center,_var(--color-cosmic-purple)_0%,_transparent_70%)] opacity-10"
         />
       </div>
       

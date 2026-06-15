@@ -13,7 +13,7 @@ import CTASection from "./_components/CTASection";
 export default function Home() {
   return (
     <main className="relative">
-      <CosmicBackground />
+      {/* <CosmicBackground /> */}
       <Navbar />
       
       <Hero />

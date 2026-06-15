@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Orbitron, Montserrat } from "next/font/google";
 import "./globals.css";
+import StarBackground from "@/components/StarBackground";
 
 const orbitron = Orbitron({
   variable: "--font-heading",
@@ -27,7 +28,8 @@ export default function RootLayout({
       lang="id"
       className={`${orbitron.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body scanlines">
+      <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body scanlines relative">
+        <StarBackground />
         {children}
       </body>
     </html>

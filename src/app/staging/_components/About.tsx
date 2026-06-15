@@ -78,13 +78,7 @@ export default function About() {
 
           {/* Bottom Interactive Hint */}
           <div className="mt-10 flex items-center justify-center">
-             <div className="h-1 w-24 bg-white/10 rounded-full relative overflow-hidden">
-                <motion.div 
-                  animate={{ x: [-100, 100] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-electric-blue to-transparent"
-                />
-             </div>
+             <div className="h-1 w-24 bg-white/10 rounded-full"></div>
           </div>
         </motion.div>
 

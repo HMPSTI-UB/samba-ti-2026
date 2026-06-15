@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { Rocket, ChevronRight } from "lucide-react";
 import HeroVisual from "./HeroVisual";
-import StarBackground from "@/components/StarBackground";
+
 
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-36 md:pt-24 lg:pt-20 px-6 overflow-hidden">
-      <StarBackground />
+
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Content */}

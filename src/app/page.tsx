@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import CosmicBackground from "@/components/CosmicBackground";
-import StarBackground from "@/components/StarBackground";
+
 import FlyingRocket from "@/components/FlyingRocket";
 
 export default function ComingSoon() {
@@ -61,8 +61,8 @@ export default function ComingSoon() {
       transition={{ duration: 1.5, ease: "easeOut" }}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <CosmicBackground />
-      <StarBackground />
+      {/* <CosmicBackground /> */}
+
       <FlyingRocket />
       
       <div className="z-10 flex flex-col items-center justify-center p-6 text-center w-full max-w-7xl mx-auto">
