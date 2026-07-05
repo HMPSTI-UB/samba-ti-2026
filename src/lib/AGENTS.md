@@ -7,7 +7,8 @@ src/lib/
   api/
     types.ts     # Standard API response shapes
     errors.ts    # ApiError class (holds field-level validation errors)
-    client.ts    # Axios instance with interceptors
+    client.ts    # Axios instance with interceptors (client components only)
+    server.ts    # fetch-based client for server components (RSC)
     auth.ts      # Auth API function stubs (login, register, getMe)
   query-client.ts   # TanStack QueryClient factory
   query-provider.tsx # React provider wrapping the app
@@ -128,6 +129,75 @@ Request → 401 → interceptor calls POST /api/auth/refresh
 ```
 
 Queued requests during refresh are held and retried automatically.
+
+## Server API Client (`server.ts`)
+
+For **Server Components** (RSC), use `serverApi` — a `fetch`-based wrapper that calls the backend directly via `API_URL` (skipping the `/api` proxy).
+
+```typescript
+// src/lib/api/events.ts (server-compatible)
+import { serverApi } from "@/lib/api/server";
+import type { ApiResponse, PaginatedResponse } from "./types";
+
+export type Event = {
+  id: string;
+  name: string;
+  date: string;
+  phase: "nebula" | "fusion" | "supernova" | "zenith";
+};
+
+export function getEvents(): Promise<PaginatedResponse<Event>> {
+  return serverApi.getPaginated<Event>("/events");
+}
+
+export function getEvent(id: string): Promise<ApiResponse<Event>> {
+  return serverApi.get<Event>(`/events/${id}`);
+}
+```
+
+### Usage in a Server Component
+
+```typescript
+import { getEvents } from "@/lib/api/events";
+
+export default async function EventsPage() {
+  const { data, pagination } = await getEvents();
+  return <EventList events={data} totalPages={pagination.total_pages} />;
+}
+```
+
+### Available methods
+
+| Method | Returns | Description |
+|---|---|---|
+| `get<T>(path)` | `Promise<ApiResponse<T>>` | GET request |
+| `post<T>(path, body?)` | `Promise<ApiResponse<T>>` | POST request |
+| `put<T>(path, body?)` | `Promise<ApiResponse<T>>` | PUT request |
+| `patch<T>(path, body?)` | `Promise<ApiResponse<T>>` | PATCH request |
+| `delete<T>(path)` | `Promise<ApiResponse<T>>` | DELETE request |
+| `getPaginated<T>(path)` | `Promise<PaginatedResponse<T>>` | Paginated GET |
+
+### Options
+
+```typescript
+// Cache control (Next.js data cache)
+serverApi.get<Event>("/events", {
+  cache: "force-cache",            // default
+  next: { revalidate: 60 },        // ISR: revalidate every 60s
+});
+
+// Custom headers (e.g. for cookie forwarding)
+serverApi.get<Event>("/events", {
+  headers: { cookie: cookies().toString() },
+});
+```
+
+### When to use which
+
+| Client | Where | Transport | Base URL | 401 handling |
+|---|---|---|---|---|
+| `apiClient` (`client.ts`) | Client components (`"use client"`) | Axios | `/api` (proxy) | Auto-refresh + redirect |
+| `serverApi` (`server.ts`) | Server components (RSC) | `fetch` | `API_URL` (direct) | Throw `ApiError` only |
 
 ## Env Variable
 
