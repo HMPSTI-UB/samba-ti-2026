@@ -11,12 +11,27 @@
   --color-muted-text: #94A3B8;
   --color-card-bg: rgba(15, 23, 42, 0.72);
   --color-border-glow: rgba(56, 189, 248, 0.28);
-  
+
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-secondary: #38BDF8;
+  --color-secondary-hover: #0EA5E9;
+  --color-accent: #FB923C;
+  --color-accent-hover: #F97316;
+  --color-destructive: #EF4444;
+  --color-destructive-hover: #DC2626;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
   --font-heading: "var(--font-heading)";
   --font-body: "var(--font-body)";
 
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
-  
+
   @keyframes pulse-glow {
     0%, 100% { opacity: 0.5; filter: blur(8px); }
     50% { opacity: 0.8; filter: blur(12px); }

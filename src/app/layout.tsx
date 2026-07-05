@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Orbitron, Montserrat } from "next/font/google";
 import "./globals.css";
-import StarBackground from "@/components/StarBackground";
+import StarBackground from "@/components/common/star-background";
+import QueryProvider from "@/lib/query-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const orbitron = Orbitron({
   variable: "--font-heading",
@@ -16,6 +18,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "ZENITH | SAMBA TI 2026",
   description: "Zealous Evolution of New IT Heroes - Website Resmi SAMBA TI 2026",
+  icons: [{ rel: "icon", url: "/logo.png", type: "image/png" }],
 };
 
 export default function RootLayout({
@@ -30,7 +33,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body scanlines relative">
         <StarBackground />
-        {children}
+        <QueryProvider>{children}</QueryProvider>
+        <Toaster />
       </body>
     </html>
   );

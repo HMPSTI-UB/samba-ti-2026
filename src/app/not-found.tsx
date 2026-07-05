@@ -2,9 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import CosmicBackground from "@/components/CosmicBackground";
-
-import FlyingRocket from "@/components/FlyingRocket";
+import CosmicBackground from "@/components/common/cosmic-background";
+import FlyingRocket from "@/components/common/flying-rocket";
 
 export default function NotFound() {
   return (
