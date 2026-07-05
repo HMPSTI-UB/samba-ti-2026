@@ -38,7 +38,7 @@ Add a file in `src/lib/api/` — each resource gets its own file:
 
 ```typescript
 // src/lib/api/events.ts
-import { apiClient } from "./client";
+import { clientApi } from "./client";
 import type { ApiResponse, PaginatedResponse } from "./types";
 
 export type Event = {
@@ -49,11 +49,11 @@ export type Event = {
 };
 
 export function getEvents(): Promise<PaginatedResponse<Event>> {
-  return apiClient.get("/events") as Promise<PaginatedResponse<Event>>;
+  return clientApi.getPaginated<Event>("/events");
 }
 
 export function getEvent(id: string): Promise<ApiResponse<Event>> {
-  return apiClient.get(`/events/${id}`) as Promise<ApiResponse<Event>>;
+  return clientApi.get<Event>(`/events/${id}`);
 }
 ```
 
@@ -210,9 +210,8 @@ Set in `.env.local` (already gitignored by `.env*` pattern).
 ## Conventions
 
 - One file per resource in `src/lib/api/`
-- Each function uses `apiClient` (the shared Axios instance)
+- Client functions use `clientApi` (typed wrapper around Axios); server functions use `serverApi`
 - Type the response with `ApiResponse<T>` or `PaginatedResponse<T>`
-- Cast with `as Promise<...>` since the interceptor returns `response.data`
 - For mutations, always handle `ApiError` to support validation errors
 - Query keys should be structured arrays: `["events"]`, `["events", id]`, `["users", "me"]`
 - Prefer `useQuery` for reads, `useMutation` for writes

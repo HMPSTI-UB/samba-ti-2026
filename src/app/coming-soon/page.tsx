@@ -9,52 +9,29 @@ export default function ComingSoonPage() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const timerRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
   const secondsBoxRef = useRef<HTMLDivElement>(null);
   const glowRingRef = useRef<HTMLDivElement>(null);
 
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    const badge = badgeRef.current;
+    const title = titleRef.current;
+    const tagline = taglineRef.current;
+    const cards = timerRef.current?.querySelectorAll(".countdown-card");
+    const glow = glowRingRef.current;
+
+    if (!badge || !title || !tagline || !cards || !glow) return;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.fromTo(
-        badgeRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8 },
-      )
-        .fromTo(
-          titleRef.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 1 },
-          "-=0.4",
-        )
-        .fromTo(
-          taglineRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.7 },
-          "-=0.5",
-        )
-        .fromTo(
-          timerRef.current!.querySelectorAll(".countdown-card"),
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 },
-          "-=0.3",
-        )
-        .fromTo(
-          ctaRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6 },
-          "-=0.4",
-        );
+      tl.fromTo(badge, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(title, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }, "-=0.4")
+        .fromTo(tagline, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, "-=0.5")
+        .fromTo(cards, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.15 }, "-=0.3");
 
-      gsap.to(glowRingRef.current, {
-        rotation: 360,
-        duration: 25,
-        repeat: -1,
-        ease: "none",
-      });
+      gsap.to(glow, { rotation: 360, duration: 25, repeat: -1, ease: "none" });
     });
 
     return () => ctx.revert();

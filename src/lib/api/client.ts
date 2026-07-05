@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ApiError } from "./errors";
+import type { ApiResponse, PaginatedResponse } from "./types";
 
 const apiClient = axios.create({
   baseURL: "/api",
@@ -76,4 +77,24 @@ apiClient.interceptors.response.use(
   },
 );
 
-export { apiClient };
+const clientApi = {
+  get: <T>(path: string) =>
+    apiClient.get(path) as Promise<ApiResponse<T>>,
+
+  post: <T>(path: string, body?: unknown) =>
+    apiClient.post(path, body) as Promise<ApiResponse<T>>,
+
+  put: <T>(path: string, body?: unknown) =>
+    apiClient.put(path, body) as Promise<ApiResponse<T>>,
+
+  patch: <T>(path: string, body?: unknown) =>
+    apiClient.patch(path, body) as Promise<ApiResponse<T>>,
+
+  delete: <T>(path: string) =>
+    apiClient.delete(path) as Promise<ApiResponse<T>>,
+
+  getPaginated: <T>(path: string) =>
+    apiClient.get(path) as Promise<PaginatedResponse<T>>,
+};
+
+export { apiClient, clientApi };
