@@ -4,7 +4,7 @@ import type { ApiResponse, PaginatedResponse } from "./types";
 type FetchOptions = {
   headers?: Record<string, string>;
   cache?: RequestCache;
-  next?: NextFetchRequestConfig;
+  revalidate?: number | false;
 };
 
 function getBaseUrl(): string {
@@ -12,6 +12,7 @@ function getBaseUrl(): string {
   if (!url) throw new Error("API_URL environment variable is not set");
   return url.replace(/\/+$/, "");
 }
+
 
 async function request<T>(
   method: string,
@@ -27,14 +28,14 @@ async function request<T>(
     ...options?.headers,
   };
 
-  const res = await fetch(url, {
+  const fetchInit: RequestInit = {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
     cache: options?.cache,
-    next: options?.next,
-  });
+  };
 
+  const res = await fetch(url, fetchInit);
   const json = await res.json();
 
   if (!res.ok) {
@@ -50,6 +51,7 @@ async function request<T>(
 
   return json as T;
 }
+
 
 export const serverApi = {
   get: <T>(path: string, options?: FetchOptions) =>

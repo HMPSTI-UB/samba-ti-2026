@@ -6,8 +6,10 @@ export type User = {
   name: string;
   email: string;
   avatar?: string;
+  role: "admin" | "kaderisasi" | "spv" | "mahasiswa" | string;
 };
 
+/** Credentials login untuk Panitia (email + password) */
 export type LoginInput = {
   email: string;
   password: string;
