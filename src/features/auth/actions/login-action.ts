@@ -11,18 +11,12 @@ type LoginPayload = {
 };
 
 type AuthTokens = {
-  access_token: string;
-  refresh_token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-  };
+  accessToken: string;
+  refreshToken: string;
 };
 
 type LoginActionResult =
-  | { success: true; user: AuthTokens["user"] }
+  | { success: true }
   | { success: false; message: string; errors?: Record<string, string[]> };
 
 export async function loginAction(payload: LoginPayload): Promise<LoginActionResult> {
@@ -32,7 +26,7 @@ export async function loginAction(payload: LoginPayload): Promise<LoginActionRes
     const cookieStore = await cookies();
     const isProd = process.env.NODE_ENV === "production";
 
-    cookieStore.set("access_token", response.data.access_token, {
+    cookieStore.set("access_token", response.data.accessToken, {
       httpOnly: true,
       secure: isProd,
       sameSite: "lax",
@@ -40,7 +34,7 @@ export async function loginAction(payload: LoginPayload): Promise<LoginActionRes
       maxAge: 60 * 15, // 15 menit
     });
 
-    cookieStore.set("refresh_token", response.data.refresh_token, {
+    cookieStore.set("refresh_token", response.data.refreshToken, {
       httpOnly: true,
       secure: isProd,
       sameSite: "lax",
@@ -48,7 +42,7 @@ export async function loginAction(payload: LoginPayload): Promise<LoginActionRes
       maxAge: 60 * 60 * 24 * 7, // 7 hari
     });
 
-    return { success: true, user: response.data.user };
+    return { success: true };
   } catch (error) {
     if (error instanceof ApiError) {
       return {

@@ -22,7 +22,7 @@ export function useLogin() {
     onSuccess: (result) => {
       if (result.success) {
         toast.success("Login berhasil!", {
-          description: `Selamat datang, ${result.user.name}`,
+          description: "Mengarahkan ke dashboard...",
         });
         // Redirect ke portal setelah login berhasil
         router.push("/portal");
