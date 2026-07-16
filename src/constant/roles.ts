@@ -1,0 +1,18 @@
+export const ROLES = {
+  MAHASISWA: "mahasiswa",
+  SPV: "spv",
+  KADERISASI: "kaderisasi",
+  ADMIN: "admin",
+} as const;
+
+export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export const ROLE_ROUTES: Record<string, string> = {
+  [ROLES.MAHASISWA]: "/portal",
+  [ROLES.SPV]: "/dashboard/spv",
+  [ROLES.KADERISASI]: "/dashboard/kaderisasi",
+  [ROLES.ADMIN]: "/dashboard/admin",
+};
+
+export const DEFAULT_ROLE = ROLES.MAHASISWA;
+export const DEFAULT_ROUTE = ROLE_ROUTES[DEFAULT_ROLE];

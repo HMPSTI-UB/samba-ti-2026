@@ -1,0 +1,15 @@
+"use client";
+
+import { useUser } from "@/features/auth/hooks/use-user";
+
+export default function PortalPage() {
+  const { data, isLoading } = useUser();
+
+  if (isLoading) return null;
+
+  return (
+    <div>
+      <h1>Selamat datang, {data?.data.name}</h1>
+    </div>
+  );
+}

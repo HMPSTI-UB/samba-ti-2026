@@ -3,21 +3,7 @@
 import { cookies } from "next/headers";
 import { serverApi } from "@/lib/api/server";
 import { ApiError } from "@/lib/api/errors";
-
-
-type LoginPayload = {
-  email: string;
-  password: string;
-};
-
-type AuthTokens = {
-  accessToken: string;
-  refreshToken: string;
-};
-
-type LoginActionResult =
-  | { success: true }
-  | { success: false; message: string; errors?: Record<string, string[]> };
+import type { LoginPayload, LoginActionResult, AuthTokens } from "@/features/auth/types/action";
 
 export async function loginAction(payload: LoginPayload): Promise<LoginActionResult> {
   try {
@@ -31,7 +17,7 @@ export async function loginAction(payload: LoginPayload): Promise<LoginActionRes
       secure: isProd,
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 15, // 15 menit
+      maxAge: 60 * 15,
     });
 
     cookieStore.set("refresh_token", response.data.refreshToken, {
@@ -39,7 +25,7 @@ export async function loginAction(payload: LoginPayload): Promise<LoginActionRes
       secure: isProd,
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 hari
+      maxAge: 60 * 60 * 24 * 7,
     });
 
     return { success: true };
