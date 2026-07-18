@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { cn } from "@/lib/cn";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2 } from "lucide-react";
 import type { SafeUser } from "@/features/users/api/users";
 
 type Props = {
@@ -82,14 +82,16 @@ export default function UserTable({ data, onEdit, onDelete }: Props) {
         <div className="flex justify-end gap-2">
           <button
             onClick={() => onEdit(row.original)}
-            className="text-xs text-slate-500 hover:text-cosmic-purple transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-cosmic-purple bg-cosmic-purple/10 hover:bg-cosmic-purple/20 hover:text-electric-blue transition-colors"
           >
+            <Pencil size={14} />
             Edit
           </button>
           <button
             onClick={() => onDelete(row.original)}
-            className="text-xs text-slate-500 hover:text-destructive transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-800 transition-colors"
           >
+            <Trash2 size={14} />
             Hapus
           </button>
         </div>

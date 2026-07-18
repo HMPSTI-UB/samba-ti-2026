@@ -50,7 +50,7 @@ export default function DashboardSidebar({ open, onOpenChange }: { open: boolean
           collapsed && "md:w-16",
           // Mobile: fixed drawer that slides in from left
           "fixed inset-y-0 left-0",
-          open ? "translate-x-0" : "-translate-x-full",
+          open ? "max-md:translate-x-0" : "max-md:-translate-x-full",
         )}
       >
       {/* Logo */}
