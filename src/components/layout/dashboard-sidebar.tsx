@@ -54,27 +54,28 @@ export default function DashboardSidebar({ open, onOpenChange }: { open: boolean
         )}
       >
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-white/10">
+      <div className="flex items-start justify-between px-4 py-3 border-b border-white/10">
         {!collapsed && (
-          <Link href="/dashboard" className="flex items-center gap-2" onClick={() => onOpenChange(false)}>
-            <div className="w-8 h-8 bg-gradient-to-br from-electric-blue to-cosmic-purple rounded-lg flex items-center justify-center shadow-lg shadow-electric-blue/20">
-              <span className="font-heading font-bold text-white text-sm">Z</span>
+          <Link href="/dashboard" className="flex items-center gap-3" onClick={() => onOpenChange(false)}>
+            <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain shrink-0" />
+            <div className="leading-tight">
+              <span className="block text-[10px] font-medium text-electric-blue tracking-[0.15em] uppercase">
+                SAMBA TI 2026
+              </span>
+              <span className="block font-heading font-bold text-base text-soft-white tracking-tight">
+                ZENITH
+              </span>
             </div>
-            <span className="font-heading font-bold text-sm text-soft-white tracking-tight">
-              ZENITH
-            </span>
           </Link>
         )}
         {collapsed && (
           <Link href="/dashboard" className="mx-auto" onClick={() => onOpenChange(false)}>
-            <div className="w-8 h-8 bg-gradient-to-br from-electric-blue to-cosmic-purple rounded-lg flex items-center justify-center shadow-lg shadow-electric-blue/20">
-              <span className="font-heading font-bold text-white text-sm">Z</span>
-            </div>
+            <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
           </Link>
         )}
         <button
           onClick={() => onOpenChange(false)}
-          className="md:hidden p-1 rounded-lg text-muted-text hover:text-soft-white hover:bg-white/5 transition-colors"
+          className="md:hidden p-1 rounded-lg text-muted-text hover:text-soft-white hover:bg-white/5 transition-colors mt-1"
         >
           <X size={18} />
         </button>
