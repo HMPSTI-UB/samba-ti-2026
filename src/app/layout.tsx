@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Orbitron, Montserrat } from "next/font/google";
 import "./globals.css";
-import StarBackground from "@/components/common/star-background";
 import QueryProvider from "@/lib/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -31,8 +30,7 @@ export default function RootLayout({
       lang="id"
       className={`${orbitron.variable} ${montserrat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body scanlines relative">
-        <StarBackground />
+      <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body relative">
         <QueryProvider>{children}</QueryProvider>
         <Toaster />
       </body>

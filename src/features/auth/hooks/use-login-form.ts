@@ -4,17 +4,21 @@ import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { loginSchema, type LoginFormData } from "@/features/auth/validation/login-schema";
 import { useLogin } from "@/features/auth/hooks/use-login";
 import { getMe } from "@/lib/api/auth";
+import { useUserStore } from "@/stores/user.store";
 import { ROLE_ROUTES } from "@/constant/roles";
+
+function normalizeRole(role: string): string {
+  return role.toLowerCase();
+}
 
 export function useLoginForm() {
   const formId = useId();
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const setUser = useUserStore((s) => s.setUser);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -46,12 +50,15 @@ export function useLoginForm() {
             description: "Mengarahkan ke dashboard...",
           });
 
-          const userResponse = await queryClient.fetchQuery({
-            queryKey: ["user"],
-            queryFn: getMe,
-          });
+          const userResponse = await getMe();
+          if (!userResponse.success) {
+            toast.error("Gagal mengambil data user");
+            return;
+          }
 
-          const route = ROLE_ROUTES[userResponse.data.role] || ROLE_ROUTES.mahasiswa;
+          setUser(userResponse.data);
+
+          const route = ROLE_ROUTES[normalizeRole(userResponse.data.role)] || ROLE_ROUTES.mahasiswa;
           router.push(route);
         }
       },

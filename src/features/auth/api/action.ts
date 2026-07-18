@@ -7,7 +7,10 @@ import type { LoginPayload, LoginActionResult, AuthTokens } from "@/features/aut
 
 export async function loginAction(payload: LoginPayload): Promise<LoginActionResult> {
   try {
-    const response = await serverApi.post<AuthTokens>("/auth/login", payload);
+    const response = await serverApi.post<AuthTokens>("/auth/login", {
+      identifier: payload.email,
+      password: payload.password,
+    });
 
     const cookieStore = await cookies();
     const isProd = process.env.NODE_ENV === "production";
@@ -42,5 +45,25 @@ export async function loginAction(payload: LoginPayload): Promise<LoginActionRes
       success: false,
       message: "Koneksi ke server gagal. Coba lagi nanti.",
     };
+  }
+}
+
+export async function logoutAction(): Promise<{ success: boolean; message?: string }> {
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("access_token")?.value;
+
+    if (accessToken) {
+      await serverApi.post("/auth/logout", undefined, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    }
+
+    cookieStore.delete("access_token");
+    cookieStore.delete("refresh_token");
+
+    return { success: true };
+  } catch {
+    return { success: false, message: "Gagal logout" };
   }
 }

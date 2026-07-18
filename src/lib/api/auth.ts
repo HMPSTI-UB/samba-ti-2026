@@ -5,8 +5,12 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  avatar?: string;
-  role: "admin" | "kaderisasi" | "spv" | "mahasiswa" | string;
+  nim: string | null;
+  role: string;
+  status: boolean;
+  clusterId: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 /** Credentials login untuk Panitia (email + password) */

@@ -15,14 +15,32 @@ type SelectProps = {
   value?: string;
   onValueChange?: (value: string) => void;
   disabled?: boolean;
+  variant?: "dark" | "light";
   className?: string;
+};
+
+const variantStyles = {
+  dark: {
+    trigger:
+      "text-soft-white border-border-glow hover:border-electric-blue/50 focus-visible:ring-offset-deep-space",
+    content: "bg-midnight-navy border-border-glow",
+    item: "text-soft-white data-[highlighted]:bg-white/10",
+  },
+  light: {
+    trigger:
+      "text-slate-700 border-slate-200 hover:border-cosmic-purple/50 focus-visible:ring-offset-white bg-white",
+    content: "bg-white border-slate-200",
+    item: "text-slate-700 data-[highlighted]:bg-slate-100",
+  },
 };
 
 const Select = forwardRef<HTMLButtonElement, SelectProps>(
   (
-    { items, placeholder = "Pilih...", label, error, className, ...props },
+    { items, placeholder = "Pilih...", label, error, variant = "dark", className, ...props },
     ref,
   ) => {
+    const v = variantStyles[variant];
+
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
@@ -34,10 +52,10 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
           <SelectPrimitive.Trigger
             ref={ref}
             className={cn(
-              "flex h-10 w-full items-center justify-between rounded-lg border bg-transparent px-3 py-2 text-sm text-soft-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue focus-visible:ring-offset-1 focus-visible:ring-offset-deep-space disabled:cursor-not-allowed disabled:opacity-40",
+              "flex h-10 w-full items-center justify-between rounded-lg border bg-transparent px-3 py-2 text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-40",
               error
                 ? "border-destructive"
-                : "border-border-glow hover:border-electric-blue/50",
+                : v.trigger,
               className,
             )}
           >
@@ -64,8 +82,9 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
               position="popper"
               sideOffset={4}
               className={cn(
-                "z-50 min-w-[8rem] overflow-hidden rounded-lg border border-border-glow bg-midnight-navy p-1 shadow-xl backdrop-blur-xl",
+                "z-50 min-w-[8rem] overflow-hidden rounded-lg border p-1 shadow-xl",
                 "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+                v.content,
               )}
             >
               <SelectPrimitive.Viewport className="max-h-60">
@@ -74,8 +93,9 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
                     key={item.value}
                     value={item.value}
                     className={cn(
-                      "relative flex cursor-default select-none items-center rounded-md px-3 py-2 text-sm text-soft-white outline-none transition-colors",
-                      "data-[highlighted]:bg-white/10 data-[state=checked]:text-electric-blue",
+                      "relative flex cursor-default select-none items-center rounded-md px-3 py-2 text-sm outline-none transition-colors",
+                      "data-[state=checked]:text-electric-blue",
+                      v.item,
                     )}
                   >
                     <SelectPrimitive.ItemText>
