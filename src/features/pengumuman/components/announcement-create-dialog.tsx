@@ -1,0 +1,89 @@
+"use client";
+
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+
+const announcementSchema = z.object({
+  title: z.string().min(3, "Minimal 3 karakter").max(255, "Maksimal 255 karakter"),
+  desc: z.string().min(1, "Deskripsi tidak boleh kosong"),
+  targetType: z.enum(["ALL", "SPV", "MABA"]),
+});
+
+type FormData = z.infer<typeof announcementSchema>;
+
+type Props = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (data: FormData) => void;
+  isPending?: boolean;
+};
+
+export default function AnnouncementCreateDialog({ open, onOpenChange, onSubmit, isPending }: Props) {
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(announcementSchema),
+    defaultValues: { title: "", desc: "", targetType: "ALL" },
+  });
+
+  function handleOpenChange(open: boolean) {
+    if (!open) reset();
+    onOpenChange(open);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent title="Buat Pengumuman" description="Kirim pengumuman ke peserta">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <Input label="Judul" placeholder="Judul pengumuman" error={errors.title?.message} {...register("title")} />
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-muted-text">Isi Pengumuman</label>
+            <textarea
+              {...register("desc")}
+              rows={5}
+              placeholder="Tulis isi pengumuman di sini..."
+              className="w-full rounded-lg border border-border-glow bg-transparent px-3 py-2 text-sm text-soft-white placeholder:text-muted-text/50 focus:outline-none focus:ring-2 focus:ring-electric-blue resize-none"
+            />
+            {errors.desc && <p className="text-xs text-destructive">{errors.desc.message}</p>}
+          </div>
+
+          <Controller
+            name="targetType"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Target"
+                items={[
+                  { value: "ALL", label: "Semua" },
+                  { value: "SPV", label: "SPV" },
+                  { value: "MABA", label: "MABA" },
+                ]}
+                value={field.value}
+                onValueChange={field.onChange}
+              />
+            )}
+          />
+
+          <div className="flex justify-end gap-3 pt-2">
+            <Button type="button" variant="ghost" onClick={() => handleOpenChange(false)} disabled={isPending}>
+              Batal
+            </Button>
+            <Button type="submit" variant="primary" loading={isPending} disabled={isPending}>
+              Kirim
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

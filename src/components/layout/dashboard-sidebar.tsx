@@ -18,6 +18,8 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getUnreadCount } from "@/features/pengumuman/api/announcements";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -31,6 +33,13 @@ const navItems = [
 export default function DashboardSidebar({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+
+  const { data: unreadData } = useQuery({
+    queryKey: ["announcements", "unread-count"],
+    queryFn: getUnreadCount,
+    refetchInterval: 30_000,
+  });
+  const unreadCount = unreadData?.data?.unreadCount ?? 0;
 
   return (
     <>
@@ -91,7 +100,7 @@ export default function DashboardSidebar({ open, onOpenChange }: { open: boolean
               href={item.href}
               onClick={() => onOpenChange(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-body text-sm",
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-body text-sm relative",
                 isActive
                   ? "bg-cosmic-purple/20 text-electric-blue font-semibold"
                   : "text-muted-text hover:text-soft-white hover:bg-white/5",
@@ -100,6 +109,14 @@ export default function DashboardSidebar({ open, onOpenChange }: { open: boolean
             >
               <item.icon size={20} />
               {!collapsed && <span>{item.label}</span>}
+              {item.label === "Pengumuman" && unreadCount > 0 && (
+                <span className={cn(
+                  "ml-auto flex items-center justify-center min-w-[20px] h-5 rounded-full bg-destructive text-[10px] font-bold text-white px-1.5",
+                  collapsed && "ml-0 absolute -top-1 -right-1",
+                )}>
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
             </Link>
           );
         })}
