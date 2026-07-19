@@ -1,74 +1,166 @@
+"use client";
+
+import { useRef, useEffect } from "react";
 import Image from "next/image";
+import gsap from "gsap";
 import StarBackground from "@/components/common/star-background";
 
 export default function ComingSoonPage() {
+  const marsRef = useRef<HTMLDivElement>(null);
+  const earthRef = useRef<HTMLDivElement>(null);
+  const galaxyRef = useRef<HTMLDivElement>(null);
+  const planetRef = useRef<HTMLDivElement>(null);
+  const maskotRef = useRef<HTMLDivElement>(null);
+  const comingRef = useRef<HTMLSpanElement>(null);
+  const soonRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: "power3.out", force3D: true } });
+
+    tl.add("awal")
+      .fromTo(
+        earthRef.current,
+        { y: 300, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, force3D: true },
+        "awal",
+      )
+      .fromTo(
+        marsRef.current,
+        { y: 350, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, force3D: true },
+        "awal",
+      )
+      .fromTo(
+        comingRef.current,
+        { y: 100, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.7, force3D: true },
+        "-=0.3",
+      )
+      .fromTo(
+        soonRef.current,
+        { y: 100, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.7, force3D: true },
+        "-=0.4",
+      )
+      .add("grupGalaxy")
+      .fromTo(
+        galaxyRef.current,
+        { x: -600 },
+        { x: 0, duration: 0.9, force3D: true },
+        "grupGalaxy",
+      )
+      .fromTo(
+        planetRef.current,
+        { x: 600 },
+        { x: 0, duration: 0.9, force3D: true },
+        "grupGalaxy",
+      )
+      .fromTo(
+        maskotRef.current,
+        { x: 700 },
+        { x: 0, duration: 1, force3D: true },
+      );
+  }, []);
+
   return (
     <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <StarBackground />
-      <div className="absolute bottom-0 left-0 w-full h-[800px] pointer-events-none scale-80 -translate-x-[60px] translate-y-[180px] rotate-[9.48deg] origin-bottom-left">
-        <Image
-          src="/assets/hero/mars-ground.svg"
-          alt="Mars Ground"
-          fill
-          className="object-cover object-left-bottom"
-        />
-      </div>
-      <div className="absolute bottom-0 right-0 w-[300px] h-[300px] pointer-events-none scale-[2.5] origin-bottom-right translate-y-[400px] translate-x-[100px]">
-        <div className="absolute inset-[50px] rounded-full animate-rotate-glow blur-lg"
-          style={{
-            background: "conic-gradient(from 0deg, #38BDF8, #ffffff, #38BDF8, #ffffff, #38BDF8)",
-          }}
-        />
-        <Image
-          src="/assets/hero/earth.svg"
-          alt="Earth"
-          fill
-          className="object-contain object-right-bottom relative z-10"
-        />
-      </div>
-      <div className="absolute top-0 left-0 w-[500px] h-[300px] pointer-events-none scale-75 -rotate-[15deg] origin-top-left translate-y-[100px]">
-        <div
-          className="absolute inset-[-20%] rounded-full blur-2xl"
-          style={{
-            background:
-              "radial-gradient(circle, #ec4899, transparent 70%)",
-          }}
-        />
-        <Image
-          src="/assets/hero/galaxy.svg"
-          alt="Galaxy"
-          fill
-          className="object-contain object-top-left relative z-10"
-        />
-      </div>
-      <div className="absolute top-0 right-0 w-[450px] h-[450px] pointer-events-none -translate-y-[200px] translate-x-[100px]">
-        <div
-          className="absolute inset-[-20%] rounded-full blur-2xl"
-          style={{
-            background:
-              "radial-gradient(circle, #a855f7, transparent 70%)",
-          }}
-        />
-        <Image
-          src="/assets/hero/purple-planet.svg"
-          alt="Purple Planet"
-          fill
-          className="object-contain object-top-right relative z-10"
-        />
-      </div>
-      <div className="absolute right-0 w-[250px] h-[180px] pointer-events-none top-1/2 -translate-y-1/2 -translate-x-[30px] origin-right">
-        <div className="relative w-full h-full animate-float scale-150 origin-right">
+
+      <div
+        ref={marsRef}
+        className="absolute bottom-0 left-0 w-full h-[800px] pointer-events-none opacity-0 will-change-transform"
+      >
+        <div className="w-full h-full scale-80 -translate-x-[60px] translate-y-[180px] rotate-[9.48deg] origin-bottom-left">
           <Image
-            src="/assets/hero/maskot.svg"
-            alt="Maskot"
+            src="/assets/hero/mars-ground.svg"
+            alt="Mars Ground"
             fill
-            className="object-contain object-right"
+            className="object-cover object-left-bottom"
           />
         </div>
       </div>
+
+      <div
+        ref={earthRef}
+        className="absolute bottom-0 right-0 w-[300px] h-[300px] pointer-events-none opacity-0 will-change-transform"
+      >
+        <div className="w-full h-full scale-[2.5] origin-bottom-right translate-y-[400px] translate-x-[100px]">
+          <div
+            className="absolute inset-[50px] rounded-full animate-rotate-glow blur-lg"
+            style={{
+              background:
+                "conic-gradient(from 0deg, #38BDF8, #ffffff, #38BDF8, #ffffff, #38BDF8)",
+            }}
+          />
+          <Image
+            src="/assets/hero/earth.svg"
+            alt="Earth"
+            fill
+            className="object-contain object-right-bottom relative z-10"
+          />
+        </div>
+      </div>
+
+      <div
+        ref={galaxyRef}
+        className="absolute top-0 left-0 w-[500px] h-[300px] pointer-events-none will-change-transform"
+      >
+        <div className="w-full h-full scale-75 -rotate-[15deg] origin-top-left translate-y-[100px]">
+          <div
+            className="absolute inset-[-20%] rounded-full blur-2xl"
+            style={{
+              background: "radial-gradient(circle, #ec4899, transparent 70%)",
+            }}
+          />
+          <Image
+            src="/assets/hero/galaxy.svg"
+            alt="Galaxy"
+            fill
+            className="object-contain object-top-left relative z-10"
+          />
+        </div>
+      </div>
+
+      <div
+        ref={planetRef}
+        className="absolute top-0 right-0 w-[450px] h-[450px] pointer-events-none will-change-transform"
+      >
+        <div className="w-full h-full -translate-y-[200px] translate-x-[100px]">
+          <div
+            className="absolute inset-[-20%] rounded-full blur-2xl"
+            style={{
+              background: "radial-gradient(circle, #a855f7, transparent 70%)",
+            }}
+          />
+          <Image
+            src="/assets/hero/purple-planet.svg"
+            alt="Purple Planet"
+            fill
+            className="object-contain object-top-right relative z-10"
+          />
+        </div>
+      </div>
+
+      <div
+        ref={maskotRef}
+        className="absolute right-0 w-[250px] h-[180px] pointer-events-none top-1/2 will-change-transform"
+      >
+        <div className="w-full h-full -translate-y-1/2 -translate-x-[30px] origin-right">
+          <div className="relative w-full h-full animate-float scale-150 origin-right">
+            <Image
+              src="/assets/hero/maskot.svg"
+              alt="Maskot"
+              fill
+              className="object-contain object-right"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-col items-center leading-none gap-[10px]">
         <span
-          className="text-[160px] text-star-gold uppercase tracking-[10px]"
+          ref={comingRef}
+          className="text-[160px] text-star-gold uppercase tracking-[10px] opacity-0 will-change-transform"
           style={{
             fontFamily: "var(--font-display)",
             textShadow:
@@ -78,7 +170,8 @@ export default function ComingSoonPage() {
           Coming
         </span>
         <span
-          className="text-[160px] text-star-gold uppercase tracking-[10px]"
+          ref={soonRef}
+          className="text-[160px] text-star-gold uppercase tracking-[10px] opacity-0 will-change-transform"
           style={{
             fontFamily: "var(--font-display)",
             textShadow:
