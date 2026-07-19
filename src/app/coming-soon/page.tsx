@@ -36,50 +36,50 @@ export default function ComingSoonPage() {
       .fromTo(
         earthRef.current,
         { y: 300, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, force3D: true },
+        { y: 0, opacity: 1, duration: 1.2, force3D: true },
         "awal",
       )
       .fromTo(
         marsRef.current,
         { y: 350, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, force3D: true },
+        { y: 0, opacity: 1, duration: 1.3, force3D: true },
         "awal",
       )
       .fromTo(
-        comingRef.current,
-        { y: 100, scale: 0.9, opacity: 0 },
-        { y: 0, scale: 1, opacity: 1, duration: 0.7, force3D: true },
-        "-=0.3",
-      )
-      .fromTo(
-        subRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5 },
-        "-=0.5",
-      )
-      .fromTo(
-        soonRef.current,
-        { y: 100, scale: 0.9, opacity: 0 },
-        { y: 0, scale: 1, opacity: 1, duration: 0.7, force3D: true },
-        "-=0.4",
-      )
-      .add("grupGalaxy")
-      .fromTo(
         galaxyRef.current,
         { x: -600 },
-        { x: 0, duration: 0.9, force3D: true },
-        "grupGalaxy",
+        { x: 0, duration: 1.3, force3D: true },
+        "awal",
       )
       .fromTo(
         planetRef.current,
         { x: 600 },
-        { x: 0, duration: 0.9, force3D: true },
-        "grupGalaxy",
+        { x: 0, duration: 1.3, force3D: true },
+        "awal",
+      )
+      .add("textStart", "awal+=0.8")
+      .fromTo(
+        comingRef.current,
+        { y: 100, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 1.0, force3D: true },
+        "textStart",
+      )
+      .fromTo(
+        subRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        "textStart+=0.2",
+      )
+      .fromTo(
+        soonRef.current,
+        { y: 100, scale: 0.9, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 1.0, force3D: true },
+        "textStart",
       )
       .fromTo(
         maskotRef.current,
         { x: 700 },
-        { x: 0, duration: 1, force3D: true },
+        { x: 0, duration: 1.5, force3D: true },
       );
   }, [loaded]);
 
