@@ -30,11 +30,23 @@
   --font-heading: "var(--font-heading)";
   --font-body: "var(--font-body)";
 
+
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-rotate-glow: rotate-glow 6s linear infinite;
+  --animate-float: float 3s ease-in-out infinite;
 
   @keyframes pulse-glow {
     0%, 100% { opacity: 0.5; filter: blur(8px); }
     50% { opacity: 0.8; filter: blur(12px); }
+  }
+
+  @keyframes rotate-glow {
+    to { rotate: 360deg; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateX(0px); }
+    50% { transform: translateX(10px); }
   }
 }
 
