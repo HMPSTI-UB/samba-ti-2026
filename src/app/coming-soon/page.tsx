@@ -17,36 +17,55 @@ export default function ComingSoonPage() {
   const subRef = useRef<HTMLSpanElement>(null);
   const comingRef = useRef<HTMLSpanElement>(null);
   const soonRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loaded) return;
 
-    requestAnimationFrame(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out", force3D: true } });
+    const ctx = gsap.context(() => {
+      gsap.set([
+        earthRef.current,
+        marsRef.current,
+        subRef.current,
+        comingRef.current,
+        soonRef.current,
+      ], { opacity: 0 });
 
-      tl.add("awal")
-        .fromTo(earthRef.current, { y: 300, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2 }, "awal")
-        .fromTo(marsRef.current, { y: 350, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3 }, "awal")
-        .fromTo(galaxyRef.current, { x: -600, opacity: 1 }, { x: 0, duration: 1.3 }, "awal")
-        .fromTo(planetRef.current, { x: 600, opacity: 1 }, { x: 0, duration: 1.3 }, "awal")
+      gsap.set(earthRef.current, { y: 300 });
+      gsap.set(marsRef.current, { y: 350 });
+      gsap.set(subRef.current, { y: 30 });
+      gsap.set(comingRef.current, { y: 100, scale: 0.9 });
+      gsap.set(soonRef.current, { y: 100, scale: 0.9 });
+      gsap.set(galaxyRef.current, { x: -600, opacity: 1 });
+      gsap.set(planetRef.current, { x: 600, opacity: 1 });
+      gsap.set(maskotRef.current, { x: 700, opacity: 1 });
+
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .add("awal")
+        .to(earthRef.current, { y: 0, opacity: 1, duration: 1.2 }, "awal")
+        .to(marsRef.current, { y: 0, opacity: 1, duration: 1.3 }, "awal")
+        .to(galaxyRef.current, { x: 0, duration: 1.3 }, "awal")
+        .to(planetRef.current, { x: 0, duration: 1.3 }, "awal")
         .add("textStart", "awal+=0.8")
-        .fromTo(comingRef.current, { y: 100, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 1.0 }, "textStart")
-        .fromTo(subRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, "textStart+=0.2")
-        .fromTo(soonRef.current, { y: 100, scale: 0.9, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 1.0 }, "textStart")
-        .fromTo(maskotRef.current, { x: 700, opacity: 1 }, { x: 0, duration: 1.5 });
-    });
+        .to(comingRef.current, { y: 0, scale: 1, opacity: 1, duration: 1.0 }, "textStart")
+        .to(subRef.current, { y: 0, opacity: 1, duration: 0.8 }, "textStart+=0.2")
+        .to(soonRef.current, { y: 0, scale: 1, opacity: 1, duration: 1.0 }, "textStart")
+        .to(maskotRef.current, { x: 0, duration: 1.5 });
+    }, containerRef);
+
+    return () => ctx.kill();
   }, [loaded]);
 
   return (
     <>
       <LoadingScreen onComplete={() => setLoaded(true)} />
 
-      <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <main ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <StarBackground />
 
         <div
           ref={marsRef}
-          className="hidden md:block absolute bottom-0 left-0 w-full h-[800px] pointer-events-none opacity-0"
+          className="absolute bottom-0 left-0 w-full h-[800px] pointer-events-none invisible md:visible opacity-0"
         >
           <div className="w-full h-full scale-80 -translate-x-[60px] translate-y-[180px] rotate-[9.48deg] origin-bottom-left">
             <Image
@@ -83,7 +102,7 @@ export default function ComingSoonPage() {
           ref={galaxyRef}
           className="absolute top-0 left-0 w-[220px] h-[130px] md:w-[500px] md:h-[300px] pointer-events-none opacity-0"
         >
-          <div className="w-full h-full scale-[0.5] md:scale-75 -rotate-[15deg] origin-top-left translate-y-[80px] -translate-x-[10px] md:translate-y-[100px] md:translate-x-0">
+          <div className="w-full h-full scale-[0.7] md:scale-75 -rotate-[15deg] origin-top-left translate-y-[80px] -translate-x-[10px] md:translate-y-[100px] md:translate-x-0">
             <div
               className="absolute inset-[-20%] rounded-full blur-2xl"
               style={{
@@ -121,7 +140,7 @@ export default function ComingSoonPage() {
 
         <div
           ref={maskotRef}
-          className="absolute right-0 w-[272px] h-[192px] md:w-[250px] md:h-[180px] pointer-events-none bottom-[80px] md:top-1/2 opacity-0"
+          className="absolute right-0 w-[150px] h-[106px] md:w-[250px] md:h-[180px] pointer-events-none bottom-[380px] short:bottom-[20px] md:top-[calc(50%-150px)] opacity-0"
         >
           <div className="w-full h-full md:-translate-y-1/2 md:-translate-x-[30px] origin-right">
             <div className="relative w-full h-full animate-float scale-100 md:scale-150 origin-right">
@@ -144,13 +163,13 @@ export default function ComingSoonPage() {
           </span>
           <span
             ref={comingRef}
-            className="text-[64px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display coming-shadow opacity-0"
+            className="text-[80px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display coming-shadow opacity-0"
           >
             Coming
           </span>
           <span
             ref={soonRef}
-            className="text-[64px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display soon-shadow opacity-0"
+            className="text-[80px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display soon-shadow opacity-0"
           >
             Soon
           </span>

@@ -15,35 +15,36 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const maskotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const tl = gsap.timeline({
-      defaults: { ease: "power3.out", force3D: true },
-      onComplete,
-    });
+    const ctx = gsap.context(() => {
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .fromTo(loadingTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 })
+        .to(dotsRef.current, { opacity: 1, duration: 0.3 })
+        .fromTo(
+          maskotRef.current,
+          { x: 1200, rotation: -25, opacity: 1 },
+          { x: 0, rotation: 0, opacity: 1, duration: 1.2, ease: "power2.out" },
+        )
+        .to(maskotRef.current, {
+          x: 30,
+          duration: 0.8,
+          repeat: 3,
+          yoyo: true,
+          ease: "sine.inOut",
+        })
+        .to(maskotRef.current, {
+          x: -1200,
+          rotation: -25,
+          duration: 1,
+          ease: "power2.in",
+        })
+        .to(overlayRef.current, {
+          opacity: 0,
+          duration: 0.5,
+          onComplete,
+        });
+    }, overlayRef);
 
-    tl.fromTo(loadingTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 })
-      .to(dotsRef.current, { opacity: 1, duration: 0.3 })
-      .fromTo(
-        maskotRef.current,
-        { x: 1200, rotation: -25, opacity: 1 },
-        { x: 0, rotation: 0, opacity: 1, duration: 1.2, ease: "power2.out" },
-      )
-      .to(maskotRef.current, {
-        x: 30,
-        duration: 0.8,
-        repeat: 3,
-        yoyo: true,
-        ease: "sine.inOut",
-      })
-      .to(maskotRef.current, {
-        x: -1200,
-        rotation: -25,
-        duration: 1,
-        ease: "power2.in",
-      })
-      .to(overlayRef.current, {
-        opacity: 0,
-        duration: 0.5,
-      });
+    return () => ctx.kill();
   }, [onComplete]);
 
   return (

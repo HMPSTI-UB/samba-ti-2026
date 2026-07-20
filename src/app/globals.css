@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-media --short (max-height: 640px);
+
 @theme {
   --color-deep-space: #050816;
   --color-midnight-navy: #0B1026;
