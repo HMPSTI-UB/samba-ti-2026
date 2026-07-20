@@ -140,7 +140,7 @@ export default function ComingSoonPage() {
 
         <div
           ref={maskotRef}
-          className="absolute right-0 w-[150px] h-[106px] md:w-[250px] md:h-[180px] pointer-events-none bottom-[380px] short:bottom-[20px] md:top-[calc(50%-150px)] opacity-0"
+          className="absolute right-0 w-[180px] h-[127px] md:w-[250px] md:h-[180px] pointer-events-none bottom-20 short:bottom-[10px] md:top-[calc(50%-150px)] opacity-0"
         >
           <div className="w-full h-full md:-translate-y-1/2 md:-translate-x-[30px] origin-right">
             <div className="relative w-full h-full animate-float scale-100 md:scale-150 origin-right">
