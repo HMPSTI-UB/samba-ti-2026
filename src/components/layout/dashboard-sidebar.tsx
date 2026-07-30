@@ -9,30 +9,44 @@ import {
   LayoutDashboard,
   Users,
   ClipboardCheck,
-  Calendar,
   Megaphone,
-  Settings,
   LogOut,
   ChevronLeft,
   ChevronRight,
   X,
+  Layers,
 } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUnreadCount } from "@/features/pengumuman/api/announcements";
 
-const navItems = [
+type NavItem = { label: string; href: string; icon: React.ComponentType<{ size?: number }> };
+
+const ALL_NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Peserta", href: "/dashboard/admin/users", icon: Users },
+  { label: "Cluster", href: "/dashboard/clusters", icon: Layers },
+  { label: "User", href: "/dashboard/users", icon: Users },
   { label: "Tugas", href: "/dashboard/tugas", icon: ClipboardCheck },
-  { label: "Jadwal", href: "/dashboard/jadwal", icon: Calendar },
   { label: "Pengumuman", href: "/dashboard/pengumuman", icon: Megaphone },
-  { label: "Pengaturan", href: "/dashboard/pengaturan", icon: Settings },
 ];
+
+function getNavItems(role: string): NavItem[] {
+  const roleLower = role.toLowerCase();
+  const adminOnly = ["/dashboard/users"];
+  const adminKaderisasi = ["/dashboard/clusters"];
+  if (roleLower === "admin") return ALL_NAV_ITEMS;
+  if (roleLower === "kaderisasi") return ALL_NAV_ITEMS.filter((i) => !adminOnly.includes(i.href));
+  if (roleLower === "spv") return ALL_NAV_ITEMS.filter((i) => !adminOnly.includes(i.href) && !adminKaderisasi.includes(i.href));
+  return [];
+}
 
 export default function DashboardSidebar({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const pathname = usePathname();
+  const user = useUserStore((s) => s.user);
+  const role = user?.role ?? "";
   const [collapsed, setCollapsed] = useState(false);
+
+  const navItems = getNavItems(role);
 
   const { data: unreadData } = useQuery({
     queryKey: ["announcements", "unread-count"],

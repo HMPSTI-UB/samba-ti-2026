@@ -35,8 +35,8 @@ export default function Footer() {
         {/* Brand Info */}
         <div className="lg:col-span-1">
           <div className="flex flex-col">
-            <h2 className="font-heading font-black text-2xl tracking-tighter mb-2">SAMBA TI <span className="text-electric-blue">2026</span></h2>
-            <p className="font-heading text-sm font-bold tracking-widest text-star-gold mb-6">ZENITH</p>
+            <h2 className="font-poppins font-black text-2xl tracking-tighter mb-2">SAMBA TI <span className="text-electric-blue">2026</span></h2>
+            <p className="font-poppins text-sm font-bold tracking-widest text-star-gold mb-6">ZENITH</p>
             <p className="text-muted-text text-sm leading-relaxed mb-6">
               Ruang inkubasi visioner yang mengantarkan mahasiswa baru menuju Zenith potensi mereka sebagai New IT Heroes.
             </p>
@@ -56,7 +56,7 @@ export default function Footer() {
 
         {/* Useful Links */}
         <div>
-          <h3 className="font-heading font-bold text-lg mb-6 text-soft-white">Tautan Berguna</h3>
+          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">Tautan Berguna</h3>
           <ul className="space-y-4">
             <li><Link href="#about" className="text-muted-text text-sm hover:text-electric-blue transition-colors">About Mission</Link></li>
             <li><Link href="#journey" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Journey Phase</Link></li>
@@ -67,7 +67,7 @@ export default function Footer() {
 
         {/* Resources */}
         <div>
-          <h3 className="font-heading font-bold text-lg mb-6 text-soft-white">Sumber Daya</h3>
+          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">Sumber Daya</h3>
           <ul className="space-y-4">
             <li><a href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Buku Panduan</a></li>
             <li><a href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Virtual Background</a></li>
@@ -78,7 +78,7 @@ export default function Footer() {
 
         {/* Contact */}
         <div>
-          <h3 className="font-heading font-bold text-lg mb-6 text-soft-white">Hubungi Kami</h3>
+          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">Hubungi Kami</h3>
           <ul className="space-y-4">
             <li className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-electric-blue flex-shrink-0" />

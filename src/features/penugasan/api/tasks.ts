@@ -1,5 +1,5 @@
 import { clientApi } from "@/lib/api/client";
-import type { Task, Submission, CreateTaskInput } from "@/features/penugasan/types";
+import type { Task, Submission, CreateTaskInput, UpdateTaskInput } from "@/features/penugasan/types";
 
 export function getTasks() {
   return clientApi.get<Task[]>("/tasks");
@@ -10,7 +10,16 @@ export function getTask(id: string) {
 }
 
 export function createTask(data: CreateTaskInput) {
-  return clientApi.post<Task>("/kaderisasi/tasks", data);
+  return clientApi.post<Task>("/tasks", data);
+}
+
+export function updateTask(data: UpdateTaskInput) {
+  const { id, ...body } = data;
+  return clientApi.patch<Task>(`/tasks/${id}`, body);
+}
+
+export function deleteTask(id: string) {
+  return clientApi.delete<{ message: string }>(`/tasks/${id}`);
 }
 
 export function submitTask(taskId: string, data: Record<string, string>) {

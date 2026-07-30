@@ -5,11 +5,13 @@ import {
   getTasks,
   getTask,
   createTask,
+  updateTask,
+  deleteTask,
   submitTask,
   getSubmissions,
   reviewSubmission,
 } from "@/features/penugasan/api/tasks";
-import type { CreateTaskInput } from "@/features/penugasan/types";
+import type { CreateTaskInput, UpdateTaskInput } from "@/features/penugasan/types";
 
 export function useTasks() {
   return useQuery({
@@ -30,6 +32,26 @@ export function useCreateTask() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data: CreateTaskInput) => createTask(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+}
+
+export function useUpdateTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UpdateTaskInput) => updateTask(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+}
+
+export function useDeleteTask() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tasks"] });
     },

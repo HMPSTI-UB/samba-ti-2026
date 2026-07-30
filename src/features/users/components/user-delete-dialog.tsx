@@ -17,9 +17,9 @@ export default function UserDeleteDialog({ open, onOpenChange, user, onConfirm, 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent title="Hapus User" description="Yakin ingin menghapus user ini?">
-        <p className="text-sm text-muted-text">
-          User <span className="font-medium text-soft-white">{user.name}</span> ({user.email}) akan
+      <DialogContent title="Hapus User" description="Yakin ingin menghapus user ini?" variant="light">
+        <p className="text-sm text-slate-500">
+          User <span className="font-medium text-slate-900">{user.name}</span> ({user.email}) akan
           dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.
         </p>
         <div className="mt-4 flex justify-end gap-3">

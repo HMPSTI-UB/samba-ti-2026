@@ -15,7 +15,7 @@ import type { ApiError } from "@/lib/api/errors";
 
 const LIMIT = 20;
 
-export default function AdminUsersPage() {
+export default function UsersPage() {
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");

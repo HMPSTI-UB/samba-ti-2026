@@ -29,7 +29,7 @@ export default function StarBackground() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed inset-0 z-[-1] overflow-hidden bg-deep-space pointer-events-none">
+    <div className="absolute inset-0 z-[-1] overflow-hidden bg-deep-space pointer-events-none">
       <style dangerouslySetInnerHTML={{__html: `
         .stars-small { width: 1px; height: 1px; background: transparent; box-shadow: ${starShadows.small}; animation: animStar 100s linear infinite; }
         .stars-small:after { content: " "; position: absolute; top: 2000px; width: 1px; height: 1px; background: transparent; box-shadow: ${starShadows.small}; }

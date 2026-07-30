@@ -86,15 +86,15 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
       </Table>
 
       <Dialog open={!!selected} onOpenChange={(open) => { if (!open) { setSelected(null); setFeedback(""); } }}>
-        <DialogContent title="Detail Submission" description={selected?.mabaName ?? ""}>
+        <DialogContent title="Detail Submission" description={selected?.mabaName ?? ""} variant="light">
           {selected && (
             <div className="space-y-4">
               <div className="space-y-3">
                 {Object.entries(selected.data).map(([key, value]) => (
                   <div key={key}>
-                    <label className="block text-xs font-medium text-muted-text mb-1">{key}</label>
-                    <div className="rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-sm text-soft-white">
-                      {value || <span className="text-muted-text/40">—</span>}
+                    <label className="block text-xs font-medium text-slate-500 mb-1">{key}</label>
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
+                      {value || <span className="text-slate-400">—</span>}
                     </div>
                   </div>
                 ))}

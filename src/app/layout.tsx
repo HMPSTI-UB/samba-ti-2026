@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Orbitron, Montserrat, Freeman } from "next/font/google";
+import { Orbitron, Montserrat, Freeman, Sonsie_One, Poppins } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/lib/query-provider";
 import { Toaster } from "@/components/ui/toaster";
+import Navbar from "@/components/layout/navbar";
+
 
 const orbitron = Orbitron({
   variable: "--font-heading",
@@ -20,6 +22,18 @@ const freeman = Freeman({
   weight: "400",
 });
 
+const sonsieOne = Sonsie_One({
+  variable: "--font-sonsie",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: "SAMBA TI 2026",
   description:
@@ -35,10 +49,13 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${orbitron.variable} ${montserrat.variable} ${freeman.variable} h-full antialiased`}
+      className={`${orbitron.variable} ${montserrat.variable} ${freeman.variable} ${sonsieOne.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body relative">
-        <QueryProvider>{children}</QueryProvider>
+        <Navbar />
+        <QueryProvider>
+          {children}
+        </QueryProvider>
         <Toaster />
       </body>
     </html>

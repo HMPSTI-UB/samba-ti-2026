@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Send, ClipboardList } from "lucide-react";
+import { Plus, Send, ClipboardList, LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/stores/user.store";
-import { useTasks, useCreateTask, useSubmissions, useReviewSubmission } from "@/features/penugasan/hooks/use-tasks";
+import { useTasks, useCreateTask, useUpdateTask, useDeleteTask, useSubmissions, useReviewSubmission } from "@/features/penugasan/hooks/use-tasks";
 import TaskTable from "@/features/penugasan/components/task-table";
+import CampaignTable from "@/features/penugasan/components/campaign-table";
 import CreateTaskDialog from "@/features/penugasan/components/create-task-dialog";
+import EditTaskDialog from "@/features/penugasan/components/edit-task-dialog";
+import DeleteTaskDialog from "@/features/penugasan/components/delete-task-dialog";
 import SubmissionViewer from "@/features/penugasan/components/submission-viewer";
 import FormRenderer from "@/features/penugasan/components/form-renderer";
 import { toast } from "sonner";
-import type { Task, CreateTaskInput } from "@/features/penugasan/types";
+import type { Task, CreateTaskInput, UpdateTaskInput } from "@/features/penugasan/types";
 
 export default function TugasPage() {
   const user = useUserStore((s) => s.user);
@@ -19,13 +22,20 @@ export default function TugasPage() {
   const isSpv = role.toUpperCase() === "SPV";
   const isMaba = role.toUpperCase() === "MABA";
 
+  const [view, setView] = useState<"list" | "campaign">("list");
   const [createOpen, setCreateOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [editTask, setEditTask] = useState<Task | null>(null);
+  const [deleteTask, setDeleteTask] = useState<Task | null>(null);
   const [formValues, setFormValues] = useState<Record<string, string>>({});
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const { data: tasksRes, isLoading: tasksLoading } = useTasks();
   const createMutation = useCreateTask();
+  const updateMutation = useUpdateTask();
+  const deleteMutation = useDeleteTask();
   const { data: submissionsRes, isLoading: subsLoading } = useSubmissions();
   const reviewMutation = useReviewSubmission();
 
@@ -39,6 +49,28 @@ export default function TugasPage() {
         setCreateOpen(false);
       },
       onError: () => toast.error("Gagal membuat tugas"),
+    });
+  }
+
+  function handleUpdate(data: UpdateTaskInput) {
+    updateMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success("Tugas berhasil diupdate");
+        setEditOpen(false);
+        setEditTask(null);
+      },
+      onError: () => toast.error("Gagal mengupdate tugas"),
+    });
+  }
+
+  function handleDelete(id: string) {
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        toast.success("Tugas berhasil dihapus");
+        setDeleteOpen(false);
+        setDeleteTask(null);
+      },
+      onError: () => toast.error("Gagal menghapus tugas"),
     });
   }
 
@@ -91,23 +123,73 @@ export default function TugasPage() {
         )}
       </div>
 
-      {/* Kaderisasi: Task Table */}
+      {/* Kaderisasi: Tab View + Content */}
       {isKaderisasi && (
-        <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-900">Daftar Tugas</h2>
+        <>
+          {/* Tabs */}
+          <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 w-fit">
+            <button
+              onClick={() => setView("list")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                view === "list"
+                  ? "bg-slate-900 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <List size={16} />
+              Semua Tugas
+            </button>
+            <button
+              onClick={() => setView("campaign")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                view === "campaign"
+                  ? "bg-slate-900 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <LayoutGrid size={16} />
+              Campaign ZENITH
+            </button>
           </div>
-          <div className="p-5">
-            <TaskTable
+
+          {view === "list" ? (
+            <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+              <div className="px-5 py-4 border-b border-slate-100">
+                <h2 className="text-sm font-semibold text-slate-900">Daftar Tugas</h2>
+              </div>
+              <div className="p-5">
+                <TaskTable
+                  data={tasks}
+                  onSelect={(task) => {
+                    setSelectedTask(task);
+                    setFormValues({});
+                    setFormErrors({});
+                  }}
+                  onEdit={(task) => {
+                    setEditTask(task);
+                    setEditOpen(true);
+                  }}
+                  onDelete={(task) => {
+                    setDeleteTask(task);
+                    setDeleteOpen(true);
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <CampaignTable
               data={tasks}
-              onSelect={(task) => {
-                setSelectedTask(task);
-                setFormValues({});
-                setFormErrors({});
+              onEdit={(task) => {
+                setEditTask(task);
+                setEditOpen(true);
+              }}
+              onDelete={(task) => {
+                setDeleteTask(task);
+                setDeleteOpen(true);
               }}
             />
-          </div>
-        </div>
+          )}
+        </>
       )}
 
       {/* SPV: Submission Viewer */}
@@ -139,7 +221,14 @@ export default function TugasPage() {
           {tasks.map((task) => (
             <div key={task.id} className="rounded-xl border border-slate-200 bg-white overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100">
-                <h3 className="text-sm font-semibold text-slate-900">{task.title}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-slate-900">{task.title}</h3>
+                  {task.letter && (
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                      {task.letter}
+                    </span>
+                  )}
+                </div>
                 {task.deadline && (
                   <p className="text-xs text-slate-400 mt-0.5">
                     Deadline: {new Date(task.deadline).toLocaleDateString("id-ID", {
@@ -194,12 +283,28 @@ export default function TugasPage() {
         </div>
       )}
 
-      {/* Create Task Dialog */}
+      {/* Dialogs */}
       <CreateTaskDialog
         open={createOpen}
         onOpenChange={setCreateOpen}
         onSubmit={handleCreate}
         isPending={createMutation.isPending}
+      />
+
+      <EditTaskDialog
+        open={editOpen}
+        onOpenChange={(open) => { setEditOpen(open); if (!open) setEditTask(null); }}
+        task={editTask}
+        onSubmit={handleUpdate}
+        isPending={updateMutation.isPending}
+      />
+
+      <DeleteTaskDialog
+        open={deleteOpen}
+        onOpenChange={(open) => { setDeleteOpen(open); if (!open) setDeleteTask(null); }}
+        task={deleteTask}
+        onConfirm={handleDelete}
+        isPending={deleteMutation.isPending}
       />
     </div>
   );

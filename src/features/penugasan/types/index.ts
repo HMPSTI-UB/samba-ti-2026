@@ -1,3 +1,6 @@
+export const CAMPAIGN_LETTERS = ["Z", "E", "N", "I", "T", "H"] as const;
+export type CampaignLetter = (typeof CAMPAIGN_LETTERS)[number];
+
 export type FormField = {
   key: string;
   label: string;
@@ -12,6 +15,7 @@ export type Task = {
   description: string;
   termsConditions: string;
   formFields: FormField[];
+  letter: CampaignLetter;
   deadline: string;
   createdBy: string;
   createdAt: string;
@@ -33,5 +37,8 @@ export type CreateTaskInput = {
   description: string;
   termsConditions: string;
   formFields: FormField[];
+  letter: CampaignLetter;
   deadline: string;
 };
+
+export type UpdateTaskInput = Partial<CreateTaskInput> & { id: string };
