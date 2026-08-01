@@ -9,8 +9,8 @@ Next.js App Router pages, layouts, and route-level files:
 - `page.tsx` — Countdown coming-soon page at `/`
 - `not-found.tsx` — Custom 404 page
 - `auth/` — Auth shell (login, register) at `/auth/*`
-- `(maba)/app/` — MABA (mahasiswa baru) app at `/app/*` — `dashboard`, `tugas`
-- `(backdoor)/dashboard/` — Panitia admin area at `/dashboard/*` — `admin`, `spv`, `kaderisasi`, `users`, `clusters`, `tugas`, `pengumuman`
+- `(maba)/app/` — MABA (mahasiswa baru) app at `/app/*` — `dashboard`, `penugasan`, `cluster`, `timeline`, `pengumuman`, `profil`
+- `(backdoor)/dashboard/` — Panitia admin area at `/dashboard/*` — `dashboard`, `users`, `clusters`, `tugas`, `pengumuman`
 
 ### Route groups (access by role, enforced in `src/proxy.ts`)
 

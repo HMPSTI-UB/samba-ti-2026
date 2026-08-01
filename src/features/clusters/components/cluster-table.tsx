@@ -32,8 +32,8 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
       enableSorting: true,
       cell: ({ getValue, row }) => (
         <div>
-          <span className="font-medium text-slate-900">{getValue<string>()}</span>
-          <span className="ml-2 text-xs text-slate-400">({row.original.slug})</span>
+          <span className="font-medium text-soft-white">{getValue<string>()}</span>
+          <span className="ml-2 text-xs text-muted-text">({row.original.slug})</span>
         </div>
       ),
     },
@@ -43,7 +43,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
       enableSorting: true,
       cell: ({ getValue }) => (
         <div className="flex items-center gap-1.5">
-          <Shield size={14} className="text-slate-400" />
+          <Shield size={14} className="text-muted-text" />
           <span className="text-sm">{getValue<string | null>() ?? "—"}</span>
         </div>
       ),
@@ -54,7 +54,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
       enableSorting: true,
       cell: ({ getValue }) => (
         <div className="flex items-center gap-1.5">
-          <Users size={14} className="text-slate-400" />
+          <Users size={14} className="text-muted-text" />
           <span className="text-sm font-medium">{getValue<number>()}</span>
         </div>
       ),
@@ -75,7 +75,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
             Buka Grup
           </a>
         ) : (
-          <span className="text-sm text-slate-400">—</span>
+          <span className="text-sm text-muted-text">—</span>
         );
       },
     },
@@ -84,7 +84,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
       header: "Dibuat",
       enableSorting: true,
       cell: ({ getValue }) => (
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-muted-text">
           {new Date(getValue<string>()).toLocaleDateString("id-ID", {
             day: "numeric",
             month: "short",
@@ -100,7 +100,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
         <div className="flex justify-end gap-1">
           <button
             onClick={() => onManageMembers(row.original)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-muted-text bg-white/10 hover:bg-white/20 transition-colors"
             title="Atur Anggota"
           >
             <Users size={13} />
@@ -121,7 +121,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
           </button>
           <button
             onClick={() => onDelete(row.original)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 transition-colors"
             title="Hapus"
           >
             <Trash2 size={13} />
@@ -154,7 +154,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
                 <div className="flex items-center gap-1">
                   {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
-                    <ArrowUpDown size={12} className="text-slate-400" />
+                    <ArrowUpDown size={12} className="text-muted-text" />
                   )}
                 </div>
               </TH>
@@ -174,7 +174,7 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
         ))}
         {data.length === 0 && (
           <TR>
-            <TD colSpan={columns.length} className="text-center text-slate-400 py-10">
+            <TD colSpan={columns.length} className="text-center text-muted-text py-10">
               Belum ada cluster
             </TD>
           </TR>

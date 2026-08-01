@@ -16,21 +16,21 @@ type Props = {
 export default function ClusterDeleteDialog({ open, onOpenChange, cluster, onConfirm, isPending }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent title="Hapus Cluster" description="" variant="light">
+      <DialogContent title="Hapus Cluster" description="">
         <div className="flex flex-col items-center text-center py-4">
           <div className="rounded-full bg-red-500/10 p-4 mb-4">
             <AlertTriangle size={28} className="text-red-500" />
           </div>
-          <p className="text-sm text-slate-900 font-medium">
+          <p className="text-sm text-soft-white font-medium">
             Hapus cluster ini?
           </p>
-          <p className="text-xs text-slate-500 mt-1">
-            Cluster <strong className="text-slate-900">{cluster?.name}</strong> akan dihapus secara permanen.
+          <p className="text-xs text-muted-text mt-1">
+            Cluster <strong className="text-soft-white">{cluster?.name}</strong> akan dihapus secara permanen.
             Anggota di dalamnya akan kehilangan cluster.
           </p>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+        <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
           <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} disabled={isPending}>
             Batal
           </Button>

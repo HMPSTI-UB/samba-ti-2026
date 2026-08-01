@@ -53,7 +53,7 @@ export default function UserTable({ data, onEdit, onDelete }: Props) {
           MABA: "bg-star-gold/10 text-star-gold",
         };
         return (
-          <span className={cn("inline-block rounded-full px-2.5 py-0.5 text-xs font-medium", colors[role] ?? "bg-slate-100 text-slate-600")}>
+          <span className={cn("inline-block rounded-full px-2.5 py-0.5 text-xs font-medium", colors[role] ?? "bg-white/10 text-muted-text")}>
             {role}
           </span>
         );
@@ -68,7 +68,7 @@ export default function UserTable({ data, onEdit, onDelete }: Props) {
         return (
           <span className={cn(
             "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium",
-            active ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700",
+            active ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400",
           )}>
             {active ? "Aktif" : "Nonaktif"}
           </span>
@@ -89,7 +89,7 @@ export default function UserTable({ data, onEdit, onDelete }: Props) {
           </button>
           <button
             onClick={() => onDelete(row.original)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-800 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 hover:text-red-300 transition-colors"
           >
             <Trash2 size={14} />
             Hapus
@@ -122,7 +122,7 @@ export default function UserTable({ data, onEdit, onDelete }: Props) {
                 <div className="flex items-center gap-1">
                   {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
-                    <ArrowUpDown size={12} className="text-slate-400" />
+                    <ArrowUpDown size={12} className="text-muted-text" />
                   )}
                 </div>
               </TH>
@@ -142,7 +142,7 @@ export default function UserTable({ data, onEdit, onDelete }: Props) {
         ))}
         {data.length === 0 && (
           <TR>
-            <TD colSpan={columns.length} className="text-center text-slate-400 py-10">
+            <TD colSpan={columns.length} className="text-center text-muted-text py-10">
               Tidak ada user ditemukan
             </TD>
           </TR>

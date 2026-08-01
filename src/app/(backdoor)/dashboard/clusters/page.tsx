@@ -92,12 +92,12 @@ export default function ClustersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Cluster</h1>
-          <p className="text-sm text-slate-500 mt-1">Kelola cluster dan anggotanya</p>
+          <h1 className="text-2xl font-bold text-soft-white">Cluster</h1>
+          <p className="text-sm text-muted-text mt-1">Kelola cluster dan anggotanya</p>
         </div>
         {(isAdmin || isKaderisasi) && (
           <div className="flex items-center gap-2">
-            <Button variant="primary" onClick={() => setImportOpen(true)} className="gap-2 !bg-white !text-slate-700 !border !border-slate-300 hover:!bg-slate-50 !shadow-none">
+            <Button variant="outline" onClick={() => setImportOpen(true)} className="gap-2">
               <Upload className="w-4 h-4" />
               Import MABA
             </Button>
@@ -109,9 +109,9 @@ export default function ClustersPage() {
         )}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+      <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
         {isLoading ? (
-          <div className="p-10 text-center text-sm text-slate-400">Memuat data...</div>
+          <div className="p-10 text-center text-sm text-muted-text">Memuat data...</div>
         ) : (
           <ClusterTable
             data={clusters}

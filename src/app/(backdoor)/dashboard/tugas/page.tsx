@@ -107,8 +107,8 @@ export default function TugasPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Tugas</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <h1 className="text-xl font-bold text-soft-white">Tugas</h1>
+          <p className="text-sm text-muted-text mt-0.5">
             {isKaderisasi && "Buat dan kelola tugas untuk MABA"}
             {isSpv && "Review submission MABA di cluster Anda"}
             {isMaba && "Kerjakan tugas yang diberikan"}
@@ -127,13 +127,13 @@ export default function TugasPage() {
       {isKaderisasi && (
         <>
           {/* Tabs */}
-          <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 w-fit">
+          <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-card-bg p-1 w-fit">
             <button
               onClick={() => setView("list")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 view === "list"
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-sun-gold text-black shadow-sm"
+                  : "text-muted-text hover:text-soft-white"
               }`}
             >
               <List size={16} />
@@ -143,8 +143,8 @@ export default function TugasPage() {
               onClick={() => setView("campaign")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 view === "campaign"
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-sun-gold text-black shadow-sm"
+                  : "text-muted-text hover:text-soft-white"
               }`}
             >
               <LayoutGrid size={16} />
@@ -153,9 +153,9 @@ export default function TugasPage() {
           </div>
 
           {view === "list" ? (
-            <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-              <div className="px-5 py-4 border-b border-slate-100">
-                <h2 className="text-sm font-semibold text-slate-900">Daftar Tugas</h2>
+            <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
+              <div className="px-5 py-4 border-b border-white/10">
+                <h2 className="text-sm font-semibold text-soft-white">Daftar Tugas</h2>
               </div>
               <div className="p-5">
                 <TaskTable
@@ -194,9 +194,9 @@ export default function TugasPage() {
 
       {/* SPV: Submission Viewer */}
       {isSpv && (
-        <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-900">Submission MABA</h2>
+        <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/10">
+            <h2 className="text-sm font-semibold text-soft-white">Submission MABA</h2>
           </div>
           <div className="p-5">
             <SubmissionViewer
@@ -213,24 +213,24 @@ export default function TugasPage() {
         <div className="space-y-4">
           {tasks.length === 0 && !tasksLoading && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <ClipboardList size={32} className="text-slate-400 mb-3" />
-              <p className="text-sm text-slate-500">Belum ada tugas</p>
+              <ClipboardList size={32} className="text-muted-text mb-3" />
+              <p className="text-sm text-muted-text">Belum ada tugas</p>
             </div>
           )}
 
           {tasks.map((task) => (
-            <div key={task.id} className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-              <div className="px-5 py-4 border-b border-slate-100">
+            <div key={task.id} className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
+              <div className="px-5 py-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-slate-900">{task.title}</h3>
+                  <h3 className="text-sm font-semibold text-soft-white">{task.title}</h3>
                   {task.letter && (
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold bg-white/10 text-muted-text border border-white/10">
                       {task.letter}
                     </span>
                   )}
                 </div>
                 {task.deadline && (
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-muted-text mt-0.5">
                     Deadline: {new Date(task.deadline).toLocaleDateString("id-ID", {
                       day: "numeric", month: "long", year: "numeric",
                     })}
@@ -240,17 +240,17 @@ export default function TugasPage() {
 
               <div className="p-5 space-y-4">
                 <div>
-                  <p className="text-sm text-slate-600 whitespace-pre-wrap">{task.description}</p>
+                  <p className="text-sm text-soft-white whitespace-pre-wrap">{task.description}</p>
                   {task.termsConditions && (
-                    <div className="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3">
-                      <p className="text-xs font-medium text-amber-800 mb-1">Syarat & Ketentuan</p>
-                      <p className="text-xs text-amber-700 whitespace-pre-wrap">{task.termsConditions}</p>
+                    <div className="mt-3 rounded-lg bg-amber-500/10 border border-amber-500/30 p-3">
+                      <p className="text-xs font-medium text-amber-300 mb-1">Syarat & Ketentuan</p>
+                      <p className="text-xs text-amber-400 whitespace-pre-wrap">{task.termsConditions}</p>
                     </div>
                   )}
                 </div>
 
                 {selectedTask?.id === task.id ? (
-                  <div className="space-y-4 pt-2 border-t border-slate-100">
+                  <div className="space-y-4 pt-2 border-t border-white/10">
                     <FormRenderer
                       fields={task.formFields}
                       values={formValues}

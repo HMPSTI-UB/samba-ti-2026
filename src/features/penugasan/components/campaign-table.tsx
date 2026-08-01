@@ -15,12 +15,12 @@ type Props = {
 };
 
 const LETTER_COLORS: Record<CampaignLetter, string> = {
-  Z: "bg-purple-100 text-purple-700 border-purple-200",
-  E: "bg-blue-100 text-blue-700 border-blue-200",
-  N: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  I: "bg-amber-100 text-amber-700 border-amber-200",
-  T: "bg-rose-100 text-rose-700 border-rose-200",
-  H: "bg-cyan-100 text-cyan-700 border-cyan-200",
+  Z: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  E: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  N: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  I: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  T: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+  H: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
 };
 
 export default function CampaignTable({ data, onEdit, onDelete }: Props) {
@@ -46,8 +46,8 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
       {CAMPAIGN_LETTERS.map((letter) => {
         const tasks = grouped[letter];
         return (
-          <div key={letter} className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-            <div className="px-5 py-3 border-b border-slate-100 flex items-center justify-between">
+          <div key={letter} className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
+            <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className={cn(
                   "inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold border",
@@ -56,10 +56,10 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
                   {letter}
                 </span>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900">
+                  <h3 className="text-sm font-semibold text-soft-white">
                     Letter {letter}
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-text">
                     {tasks.length} tugas
                   </p>
                 </div>
@@ -68,8 +68,8 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
 
             {tasks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-center">
-                <FileText size={24} className="text-slate-300 mb-2" />
-                <p className="text-sm text-slate-400">Belum ada tugas</p>
+                <FileText size={24} className="text-muted-text mb-2" />
+                <p className="text-sm text-muted-text">Belum ada tugas</p>
               </div>
             ) : (
               <Table>
@@ -84,9 +84,9 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
                 <TBody>
                   {tasks.map((task) => (
                     <TR key={task.id}>
-                      <TD className="font-medium text-slate-900">{task.title}</TD>
+                      <TD className="font-medium text-soft-white">{task.title}</TD>
                       <TD>
-                        <span className="inline-flex items-center gap-1.5 text-sm text-slate-500">
+                        <span className="inline-flex items-center gap-1.5 text-sm text-muted-text">
                           <Clock size={14} />
                           {new Date(task.deadline).toLocaleDateString("id-ID", {
                             day: "numeric",
@@ -95,7 +95,7 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
                           })}
                         </span>
                       </TD>
-                      <TD className="text-sm text-slate-400">
+                      <TD className="text-sm text-muted-text">
                         {new Date(task.createdAt).toLocaleDateString("id-ID", {
                           day: "numeric",
                           month: "short",
@@ -109,7 +109,7 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
                             variant="ghost"
                             size="sm"
                             onClick={() => onEdit(task)}
-                            className="text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                            className="text-muted-text hover:text-soft-white hover:bg-white/10"
                           >
                             <Pencil size={14} />
                           </Button>
@@ -117,7 +117,7 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
                             variant="ghost"
                             size="sm"
                             onClick={() => onDelete(task)}
-                            className="text-red-400 hover:text-red-600 hover:bg-red-50"
+                            className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                           >
                             <Trash2 size={14} />
                           </Button>
@@ -134,11 +134,11 @@ export default function CampaignTable({ data, onEdit, onDelete }: Props) {
 
       {totalTasks === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="rounded-full bg-slate-100 p-4 mb-4">
-            <FileText size={32} className="text-slate-400" />
+          <div className="rounded-full bg-white/10 p-4 mb-4">
+            <FileText size={32} className="text-muted-text" />
           </div>
-          <p className="text-sm font-medium text-slate-700">Belum ada tugas di campaign</p>
-          <p className="text-xs text-slate-400 mt-1">Buat tugas baru untuk memulai campaign ZENITH.</p>
+          <p className="text-sm font-medium text-soft-white">Belum ada tugas di campaign</p>
+          <p className="text-xs text-muted-text mt-1">Buat tugas baru untuk memulai campaign ZENITH.</p>
         </div>
       )}
     </div>

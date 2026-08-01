@@ -70,7 +70,7 @@ export default function ClusterFormDialog({ open, onOpenChange, editingCluster, 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent title={editingCluster ? "Edit Cluster" : "Buat Cluster Baru"} variant="light">
+      <DialogContent title={editingCluster ? "Edit Cluster" : "Buat Cluster Baru"}>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           <Input
             label="Nama Cluster"
@@ -78,7 +78,7 @@ export default function ClusterFormDialog({ open, onOpenChange, editingCluster, 
             error={errors.name?.message}
             {...register("name")}
           />
-          <p className="-mt-3 text-xs text-slate-400">
+          <p className="-mt-3 text-xs text-muted-text">
             Slug: <span className="font-mono">{toSlug(nameValue) || "-"}</span>
           </p>
           <Input label="Link Grup WhatsApp (opsional)" placeholder="https://chat.whatsapp.com/..." error={errors.whatsappGroupLink?.message} {...register("whatsappGroupLink")} />

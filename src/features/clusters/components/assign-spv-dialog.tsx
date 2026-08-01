@@ -46,12 +46,12 @@ export default function AssignSpvDialog({ open, onOpenChange, cluster, onAssign,
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent title="Assign SPV" description={`Pilih SPV untuk ${cluster?.name ?? ""}`} variant="light">
+      <DialogContent title="Assign SPV" description={`Pilih SPV untuk ${cluster?.name ?? ""}`}>
         <div className="space-y-4">
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-text" />
             <input
-              className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 pl-9 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue"
+              className="flex h-10 w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 pl-9 text-sm text-soft-white placeholder:text-muted-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue"
               placeholder="Cari SPV..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -60,9 +60,9 @@ export default function AssignSpvDialog({ open, onOpenChange, cluster, onAssign,
 
           <div className="max-h-60 overflow-y-auto space-y-1">
             {isLoading ? (
-              <p className="text-sm text-slate-400 text-center py-8">Memuat...</p>
+              <p className="text-sm text-muted-text text-center py-8">Memuat...</p>
             ) : filtered.length === 0 ? (
-              <p className="text-sm text-slate-400 text-center py-8">Tidak ada SPV ditemukan</p>
+              <p className="text-sm text-muted-text text-center py-8">Tidak ada SPV ditemukan</p>
             ) : (
               filtered.map((spv) => (
                 <button
@@ -72,20 +72,20 @@ export default function AssignSpvDialog({ open, onOpenChange, cluster, onAssign,
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors",
                     selectedId === spv.id
                       ? "bg-cosmic-purple/10 border border-cosmic-purple/30"
-                      : "hover:bg-slate-50 border border-transparent",
+                      : "hover:bg-white/5 border border-transparent",
                   )}
                 >
                   <div className={cn(
                     "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
                     selectedId === spv.id
                       ? "bg-cosmic-purple text-white"
-                      : "bg-slate-100 text-slate-500",
+                      : "bg-white/10 text-muted-text",
                   )}>
                     <Shield size={14} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">{spv.name}</p>
-                    <p className="text-xs text-slate-500 truncate">{spv.email}</p>
+                    <p className="text-sm font-medium text-soft-white truncate">{spv.name}</p>
+                    <p className="text-xs text-muted-text truncate">{spv.email}</p>
                   </div>
                   {selectedId === spv.id && (
                     <div className="w-5 h-5 rounded-full bg-cosmic-purple flex items-center justify-center">
@@ -100,7 +100,7 @@ export default function AssignSpvDialog({ open, onOpenChange, cluster, onAssign,
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 mt-4">
+        <div className="flex justify-end gap-3 pt-4 border-t border-white/10 mt-4">
           <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} disabled={isPending}>
             Batal
           </Button>

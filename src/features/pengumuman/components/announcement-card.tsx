@@ -29,8 +29,8 @@ export default function AnnouncementCard({ item, onMarkRead, isPending }: Props)
       className={cn(
         "rounded-xl border p-5 transition-all",
         item.isRead
-          ? "border-slate-200 bg-white"
-          : "border-cosmic-purple/30 bg-cosmic-purple/[0.03]",
+          ? "border-white/10 bg-card-bg"
+          : "border-cosmic-purple/30 bg-cosmic-purple/[0.08]",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -51,16 +51,16 @@ export default function AnnouncementCard({ item, onMarkRead, isPending }: Props)
             </span>
           </div>
 
-          <h3 className="text-sm font-semibold text-slate-900 leading-snug">
+          <h3 className="text-sm font-semibold text-soft-white leading-snug">
             {item.title}
           </h3>
 
-          <p className="text-sm text-slate-500 line-clamp-3 leading-relaxed">
+          <p className="text-sm text-muted-text line-clamp-3 leading-relaxed">
             {item.desc}
           </p>
 
           <div className="flex items-center gap-4 pt-1">
-            <span className="flex items-center gap-1 text-xs text-slate-400">
+            <span className="flex items-center gap-1 text-xs text-muted-text">
               <Clock size={12} />
               {new Date(item.createdAt).toLocaleDateString("id-ID", {
                 day: "numeric",

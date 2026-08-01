@@ -9,9 +9,9 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export const ROLE_ROUTES: Record<string, string> = {
   [ROLES.MAHASISWA]: "/app/dashboard",
-  [ROLES.SPV]: "/dashboard/spv",
-  [ROLES.KADERISASI]: "/dashboard/kaderisasi",
-  [ROLES.ADMIN]: "/dashboard/admin",
+  [ROLES.SPV]: "/dashboard",
+  [ROLES.KADERISASI]: "/dashboard",
+  [ROLES.ADMIN]: "/dashboard",
 };
 
 export const DEFAULT_ROLE = ROLES.MAHASISWA;

@@ -23,22 +23,21 @@ export default function UserFilter({
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div className="relative flex-1 min-w-[200px]">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-text" />
         <input
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Cari nama..."
-          className="w-full h-10 pl-9 pr-8 rounded-lg border border-slate-200 bg-white text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cosmic-purple/20 focus:border-cosmic-purple"
+          className="w-full h-10 pl-9 pr-8 rounded-lg border border-white/10 bg-transparent text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue/30 focus:border-electric-blue/50"
         />
         {search && (
-          <button onClick={() => onSearchChange("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+          <button onClick={() => onSearchChange("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-text hover:text-soft-white">
             <X size={16} />
           </button>
         )}
       </div>
 
       <Select
-        variant="light"
         items={[
           { value: "", label: "Semua Role" },
           { value: "ADMIN", label: "Admin" },
@@ -52,7 +51,6 @@ export default function UserFilter({
       />
 
       <Select
-        variant="light"
         items={[
           { value: "", label: "Semua Status" },
           { value: "true", label: "Aktif" },

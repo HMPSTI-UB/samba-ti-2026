@@ -33,11 +33,11 @@ export default function AnnouncementList({
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
-            className="h-32 rounded-xl border border-slate-200 bg-white animate-pulse p-5"
+            className="h-32 rounded-xl border border-white/10 bg-card-bg animate-pulse p-5"
           >
-            <div className="h-4 w-1/3 bg-slate-200 rounded mb-3" />
-            <div className="h-3 w-2/3 bg-slate-200 rounded mb-2" />
-            <div className="h-3 w-1/2 bg-slate-200 rounded" />
+            <div className="h-4 w-1/3 bg-white/10 rounded mb-3" />
+            <div className="h-3 w-2/3 bg-white/10 rounded mb-2" />
+            <div className="h-3 w-1/2 bg-white/10 rounded" />
           </div>
         ))}
       </div>
@@ -47,11 +47,11 @@ export default function AnnouncementList({
   if (data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="rounded-full bg-slate-100 p-4 mb-4">
-          <Megaphone size={32} className="text-slate-400" />
+        <div className="rounded-full bg-white/10 p-4 mb-4">
+          <Megaphone size={32} className="text-muted-text" />
         </div>
-        <p className="text-sm font-medium text-slate-700">Belum ada pengumuman</p>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-sm font-medium text-soft-white">Belum ada pengumuman</p>
+        <p className="text-xs text-muted-text mt-1">
           Pengumuman akan muncul di sini setelah dibuat.
         </p>
       </div>

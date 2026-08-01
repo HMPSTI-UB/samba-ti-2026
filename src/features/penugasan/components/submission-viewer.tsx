@@ -10,9 +10,9 @@ import { Eye, CheckCircle, XCircle } from "lucide-react";
 import type { Submission } from "@/features/penugasan/types";
 
 const statusColors: Record<string, string> = {
-  PENDING: "bg-amber-50 text-amber-700",
-  ACCEPTED: "bg-emerald-50 text-emerald-700",
-  REJECTED: "bg-red-50 text-red-700",
+  PENDING: "bg-amber-500/10 text-amber-400",
+  ACCEPTED: "bg-emerald-500/10 text-emerald-400",
+  REJECTED: "bg-red-500/10 text-red-400",
 };
 
 type Props = {
@@ -35,8 +35,8 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
   if (submissions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Eye size={32} className="text-slate-400 mb-3" />
-        <p className="text-sm text-slate-500">Belum ada submission</p>
+        <Eye size={32} className="text-muted-text mb-3" />
+        <p className="text-sm text-muted-text">Belum ada submission</p>
       </div>
     );
   }
@@ -55,13 +55,13 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
         <TBody>
           {submissions.map((sub) => (
             <TR key={sub.id}>
-              <TD className="font-medium text-slate-900">{sub.mabaName}</TD>
+              <TD className="font-medium text-soft-white">{sub.mabaName}</TD>
               <TD>
                 <span className={cn("inline-block rounded-full px-2.5 py-0.5 text-xs font-medium", statusColors[sub.status])}>
                   {sub.status === "PENDING" ? "Menunggu" : sub.status === "ACCEPTED" ? "Diterima" : "Ditolak"}
                 </span>
               </TD>
-              <TD className="text-sm text-slate-500">
+              <TD className="text-sm text-muted-text">
                 {new Date(sub.submittedAt).toLocaleDateString("id-ID", {
                   day: "numeric",
                   month: "short",
@@ -86,15 +86,15 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
       </Table>
 
       <Dialog open={!!selected} onOpenChange={(open) => { if (!open) { setSelected(null); setFeedback(""); } }}>
-        <DialogContent title="Detail Submission" description={selected?.mabaName ?? ""} variant="light">
+        <DialogContent title="Detail Submission" description={selected?.mabaName ?? ""}>
           {selected && (
             <div className="space-y-4">
               <div className="space-y-3">
                 {Object.entries(selected.data).map(([key, value]) => (
                   <div key={key}>
-                    <label className="block text-xs font-medium text-slate-500 mb-1">{key}</label>
-                    <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900">
-                      {value || <span className="text-slate-400">—</span>}
+                    <label className="block text-xs font-medium text-muted-text mb-1">{key}</label>
+                    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white">
+                      {value || <span className="text-muted-text">—</span>}
                     </div>
                   </div>
                 ))}

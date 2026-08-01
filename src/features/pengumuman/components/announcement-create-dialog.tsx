@@ -42,17 +42,17 @@ export default function AnnouncementCreateDialog({ open, onOpenChange, onSubmit,
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent title="Buat Pengumuman" description="Kirim pengumuman ke peserta" variant="light">
+      <DialogContent title="Buat Pengumuman" description="Kirim pengumuman ke peserta">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input label="Judul" placeholder="Judul pengumuman" error={errors.title?.message} {...register("title")} />
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700">Isi Pengumuman</label>
+            <label className="text-sm font-medium text-soft-white">Isi Pengumuman</label>
             <textarea
               {...register("desc")}
               rows={5}
               placeholder="Tulis isi pengumuman di sini..."
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-electric-blue resize-none"
+              className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue resize-none"
             />
             {errors.desc && <p className="text-xs text-destructive">{errors.desc.message}</p>}
           </div>

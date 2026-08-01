@@ -28,7 +28,7 @@ export default function Pagination({ page, totalPages, total, onPageChange }: Pa
 
   return (
     <div className="flex items-center justify-between px-2 py-4">
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-muted-text">
         {total === 0 ? "Tidak ada data" : `${total} total`}
       </p>
       <div className="flex items-center gap-1">
@@ -38,15 +38,15 @@ export default function Pagination({ page, totalPages, total, onPageChange }: Pa
           className={cn(
             "inline-flex h-8 w-8 items-center justify-center rounded-md text-sm transition-colors",
             page <= 1
-              ? "text-slate-300 cursor-not-allowed"
-              : "text-slate-600 hover:bg-slate-100",
+              ? "text-white/20 cursor-not-allowed"
+              : "text-muted-text hover:bg-white/10 hover:text-soft-white",
           )}
         >
           <ChevronLeft size={16} />
         </button>
         {getPages().map((p, i) =>
           p === "..." ? (
-            <span key={`ellipsis-${i}`} className="px-2 text-sm text-slate-400">
+            <span key={`ellipsis-${i}`} className="px-2 text-sm text-muted-text">
               ...
             </span>
           ) : (
@@ -56,8 +56,8 @@ export default function Pagination({ page, totalPages, total, onPageChange }: Pa
               className={cn(
                 "inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors",
                 p === page
-                  ? "bg-cosmic-purple/10 text-cosmic-purple"
-                  : "text-slate-600 hover:bg-slate-100",
+                  ? "bg-sun-gold text-black"
+                  : "text-muted-text hover:bg-white/10 hover:text-soft-white",
               )}
             >
               {p}
@@ -70,8 +70,8 @@ export default function Pagination({ page, totalPages, total, onPageChange }: Pa
           className={cn(
             "inline-flex h-8 w-8 items-center justify-center rounded-md text-sm transition-colors",
             page >= totalPages
-              ? "text-slate-300 cursor-not-allowed"
-              : "text-slate-600 hover:bg-slate-100",
+              ? "text-white/20 cursor-not-allowed"
+              : "text-muted-text hover:bg-white/10 hover:text-soft-white",
           )}
         >
           <ChevronRight size={16} />

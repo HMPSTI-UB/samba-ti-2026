@@ -106,8 +106,8 @@ export default function UsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Manajemen User</h1>
-          <p className="text-sm text-slate-500 mt-1">Kelola semua akun pengguna</p>
+          <h1 className="text-2xl font-bold text-soft-white">Manajemen User</h1>
+          <p className="text-sm text-muted-text mt-1">Kelola semua akun pengguna</p>
         </div>
         <Button variant="primary" onClick={() => { setEditingUser(null); setFormOpen(true); }}>
           <Plus className="w-4 h-4" />
@@ -124,9 +124,9 @@ export default function UsersPage() {
         onStatusChange={(v) => { setStatus(v); setPage(1); }}
       />
 
-      <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
+      <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
         {isLoading ? (
-          <div className="p-10 text-center text-sm text-slate-400">Memuat data...</div>
+          <div className="p-10 text-center text-sm text-muted-text">Memuat data...</div>
         ) : (
           <UserTable
             data={data?.data ?? []}

@@ -14,7 +14,7 @@ export default function AnnouncementFilter({ unreadOnly, onToggle }: Props) {
       className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
         unreadOnly
           ? "bg-cosmic-purple/10 text-cosmic-purple border border-cosmic-purple/30"
-          : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300"
+          : "bg-transparent text-muted-text border border-white/10 hover:border-white/30"
       }`}
     >
       <Filter size={16} />

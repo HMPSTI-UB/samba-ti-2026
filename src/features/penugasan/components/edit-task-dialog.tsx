@@ -78,7 +78,7 @@ export default function EditTaskDialog({ open, onOpenChange, task, onSubmit, isP
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent title="Edit Tugas" description="Edit tugas yang sudah ada" variant="light">
+      <DialogContent title="Edit Tugas" description="Edit tugas yang sudah ada">
         <div className="space-y-4 max-h-[65vh] overflow-y-auto pr-1">
           <Input label="Judul Tugas" placeholder="Contoh: Cerita Pengalaman PKKMB" value={title} onChange={(e) => setTitle(e.target.value)} error={errors.title} />
           <Input label="Deskripsi" placeholder="Penjelasan tugas" value={description} onChange={(e) => setDescription(e.target.value)} error={errors.description} />
@@ -95,7 +95,7 @@ export default function EditTaskDialog({ open, onOpenChange, task, onSubmit, isP
           <FormBuilder fields={formFields} onChange={setFormFields} />
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 mt-4">
+        <div className="flex justify-end gap-3 pt-4 border-t border-white/10 mt-4">
           <Button type="button" variant="ghost" onClick={() => handleOpenChange(false)} disabled={isPending}>
             Batal
           </Button>

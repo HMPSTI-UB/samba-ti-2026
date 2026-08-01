@@ -58,8 +58,8 @@ export default function PengumumanPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Pengumuman</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <h1 className="text-xl font-bold text-soft-white">Pengumuman</h1>
+          <p className="text-sm text-muted-text mt-0.5">
             Kelola pengumuman untuk peserta
           </p>
         </div>

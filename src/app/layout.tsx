@@ -52,7 +52,7 @@ export default function RootLayout({
       lang="id"
       className={`${orbitron.variable} ${montserrat.variable} ${freeman.variable} ${sonsieOne.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body relative">
+      <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-poppins relative">
         <Navbar />
         <QueryProvider>
           <SmoothScroll>{children}</SmoothScroll>

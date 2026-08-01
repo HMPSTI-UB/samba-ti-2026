@@ -130,7 +130,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent title="Import MABA" variant="light" className={cn(step === "preview" && "max-w-2xl")}>
+      <DialogContent title="Import MABA" className={cn(step === "preview" && "max-w-2xl")}>
         {step === "upload" && (
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -139,13 +139,13 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
             onClick={() => inputRef.current?.click()}
             className={cn(
               "flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-10 cursor-pointer transition-colors",
-              dragOver ? "border-electric-blue bg-electric-blue/5" : "border-slate-300 hover:border-slate-400",
+              dragOver ? "border-electric-blue bg-electric-blue/5" : "border-white/20 hover:border-white/40",
             )}
           >
-            <Upload size={32} className="text-slate-400" />
+            <Upload size={32} className="text-muted-text" />
             <div className="text-center">
-              <p className="text-sm font-medium text-slate-700">Klik atau taruh file CSV di sini</p>
-              <p className="text-xs text-slate-400 mt-1">Format: Nama lengkap, NIM, Email pribadi, Jenis Kelamin</p>
+              <p className="text-sm font-medium text-soft-white">Klik atau taruh file CSV di sini</p>
+              <p className="text-xs text-muted-text mt-1">Format: Nama lengkap, NIM, Email pribadi, Jenis Kelamin</p>
             </div>
             <input
               ref={inputRef}
@@ -160,27 +160,27 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
         {step === "preview" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-slate-500">
-                Ditemukan <strong className="text-slate-900">{previewRows.length}</strong> data valid
+              <p className="text-sm text-muted-text">
+                Ditemukan <strong className="text-soft-white">{previewRows.length}</strong> data valid
                 {file && <span className="ml-1">dari <FileText size={14} className="inline" /> {file.name}</span>}
               </p>
             </div>
 
             {previewErrors.length > 0 && (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-                <p className="text-xs font-medium text-amber-800 mb-1">Peringatan ({previewErrors.length})</p>
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                <p className="text-xs font-medium text-amber-300 mb-1">Peringatan ({previewErrors.length})</p>
                 <ul className="space-y-0.5">
                   {previewErrors.map((e, i) => (
-                    <li key={i} className="text-xs text-amber-700">{e}</li>
+                    <li key={i} className="text-xs text-amber-400">{e}</li>
                   ))}
                 </ul>
               </div>
             )}
 
-            <div className="max-h-60 overflow-y-auto rounded-lg border border-slate-200">
+            <div className="max-h-60 overflow-y-auto rounded-lg border border-white/10">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="bg-slate-50 text-left text-slate-500">
+                  <tr className="bg-white/5 text-left text-muted-text">
                     <th className="px-3 py-2 font-medium">#</th>
                     <th className="px-3 py-2 font-medium">Nama</th>
                     <th className="px-3 py-2 font-medium">NIM</th>
@@ -188,21 +188,21 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
                     <th className="px-3 py-2 font-medium">Gender</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-white/10">
                   {previewRows.slice(0, 50).map((row, i) => (
-                    <tr key={i} className="hover:bg-slate-50">
-                      <td className="px-3 py-2 text-slate-400">{i + 1}</td>
-                      <td className="px-3 py-2 font-medium text-slate-900">{row.name}</td>
-                      <td className="px-3 py-2 text-slate-600">{row.nim}</td>
-                      <td className="px-3 py-2 text-slate-600">{row.email}</td>
+                    <tr key={i} className="hover:bg-white/5">
+                      <td className="px-3 py-2 text-muted-text">{i + 1}</td>
+                      <td className="px-3 py-2 font-medium text-soft-white">{row.name}</td>
+                      <td className="px-3 py-2 text-muted-text">{row.nim}</td>
+                      <td className="px-3 py-2 text-muted-text">{row.email}</td>
                       <td className="px-3 py-2">
                         <span className={cn(
                           "inline-block rounded-full px-2 py-0.5 text-xs font-medium",
                           row.gender.toLowerCase().includes("perempuan")
-                            ? "bg-pink-50 text-pink-700"
+                            ? "bg-pink-500/10 text-pink-400"
                             : row.gender.toLowerCase().includes("laki")
-                              ? "bg-blue-50 text-blue-700"
-                              : "bg-slate-100 text-slate-500",
+                              ? "bg-blue-500/10 text-blue-400"
+                              : "bg-white/10 text-muted-text",
                         )}>
                           {row.gender || "-"}
                         </span>
@@ -211,7 +211,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
                   ))}
                   {previewRows.length > 50 && (
                     <tr>
-                      <td colSpan={5} className="px-3 py-2 text-center text-slate-400 italic">
+                      <td colSpan={5} className="px-3 py-2 text-center text-muted-text italic">
                         ... dan {previewRows.length - 50} lainnya
                       </td>
                     </tr>
@@ -240,10 +240,10 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
                 <XCircle size={28} className="text-red-500 shrink-0" />
               )}
               <div>
-                <p className="text-sm font-medium text-slate-900">
+                <p className="text-sm font-medium text-soft-white">
                   {result.created > 0 ? "Import berhasil!" : "Import gagal"}
                 </p>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-muted-text mt-0.5">
                   {result.created} berhasil dibuat
                   {result.skipped > 0 && `, ${result.skipped} dilewati (duplikat)`}
                 </p>
@@ -251,24 +251,24 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
             </div>
 
             {result.errors.length > 0 && (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
-                <p className="text-xs font-medium text-amber-800 mb-1">
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                <p className="text-xs font-medium text-amber-300 mb-1">
                   <AlertTriangle size={12} className="inline mr-1" />
                   {result.errors.length} error validasi
                 </p>
                 <ul className="space-y-0.5 max-h-24 overflow-y-auto">
                   {result.errors.map((e, i) => (
-                    <li key={i} className="text-xs text-amber-700">Baris {e.row}: {e.reason}</li>
+                    <li key={i} className="text-xs text-amber-400">Baris {e.row}: {e.reason}</li>
                   ))}
                 </ul>
               </div>
             )}
 
             {result.users.length > 0 && (
-              <div className="rounded-lg border border-slate-200 p-3">
+              <div className="rounded-lg border border-white/10 p-3">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs font-medium text-slate-500">
-                    {result.users.length} akun dibuat — <span className="text-amber-600">simpan password ini!</span>
+                  <p className="text-xs font-medium text-muted-text">
+                    {result.users.length} akun dibuat — <span className="text-amber-400">simpan password ini!</span>
                   </p>
                   <Button
                     variant="ghost"
@@ -280,21 +280,21 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
                     Download CSV
                   </Button>
                 </div>
-                <div className="max-h-40 overflow-y-auto rounded border border-slate-100">
+                <div className="max-h-40 overflow-y-auto rounded border border-white/10">
                   <table className="w-full text-xs">
                     <thead>
-                      <tr className="bg-slate-50 text-left text-slate-500">
+                      <tr className="bg-white/5 text-left text-muted-text">
                         <th className="px-2 py-1.5 font-medium">Nama</th>
                         <th className="px-2 py-1.5 font-medium">NIM</th>
                         <th className="px-2 py-1.5 font-medium">Password</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-white/10">
                       {result.users.map((u, i) => (
-                        <tr key={i} className="hover:bg-slate-50">
-                          <td className="px-2 py-1.5 text-slate-900">{u.name}</td>
-                          <td className="px-2 py-1.5 text-slate-600">{u.nim}</td>
-                          <td className="px-2 py-1.5 font-mono text-slate-700">{u.password}</td>
+                        <tr key={i} className="hover:bg-white/5">
+                          <td className="px-2 py-1.5 text-soft-white">{u.name}</td>
+                          <td className="px-2 py-1.5 text-muted-text">{u.nim}</td>
+                          <td className="px-2 py-1.5 font-mono text-soft-white">{u.password}</td>
                         </tr>
                       ))}
                     </tbody>

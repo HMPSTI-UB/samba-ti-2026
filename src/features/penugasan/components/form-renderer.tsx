@@ -14,7 +14,7 @@ export default function FormRenderer({ fields, values, onChange, errors }: Props
     <div className="space-y-4">
       {fields.map((field) => (
         <div key={field.key}>
-          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+          <label className="block text-sm font-medium text-soft-white mb-1.5">
             {field.label}
             {field.isRequired && <span className="text-destructive ml-0.5">*</span>}
           </label>
@@ -24,7 +24,7 @@ export default function FormRenderer({ fields, values, onChange, errors }: Props
               value={values[field.key] ?? ""}
               onChange={(e) => onChange(field.key, e.target.value)}
               placeholder={field.placeholder || field.label}
-              className="w-full h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cosmic-purple/20 focus:border-cosmic-purple"
+              className="w-full h-10 rounded-lg border border-white/10 bg-transparent px-3 text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue/30 focus:border-electric-blue/50"
             />
           )}
 
@@ -34,7 +34,7 @@ export default function FormRenderer({ fields, values, onChange, errors }: Props
               onChange={(e) => onChange(field.key, e.target.value)}
               placeholder={field.placeholder || field.label}
               rows={4}
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cosmic-purple/20 focus:border-cosmic-purple resize-none"
+              className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue/30 focus:border-electric-blue/50 resize-none"
             />
           )}
 

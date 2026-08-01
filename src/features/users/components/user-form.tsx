@@ -58,7 +58,7 @@ export default function UserFormDialog({ open, onOpenChange, editingUser, onSubm
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent title={editingUser ? "Edit User" : "Tambah User"} variant="light">
+      <DialogContent title={editingUser ? "Edit User" : "Tambah User"}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input label="Nama" placeholder="Nama lengkap" error={errors.name?.message} {...register("name")} />
           <Input label="Email" type="email" placeholder="email@example.com" error={errors.email?.message} {...register("email")} />
@@ -77,7 +77,6 @@ export default function UserFormDialog({ open, onOpenChange, editingUser, onSubm
             control={control}
             render={({ field }) => (
               <Select
-                variant="light"
                 label="Role"
                 items={[
                   { value: "ADMIN", label: "Admin" },

@@ -8,6 +8,7 @@
   --color-cosmic-purple: #7C3AED;
   --color-electric-blue: #38BDF8;
   --color-star-gold: #FACC15;
+  --color-sun-gold: #F8B41D;
   --color-supernova-orange: #FB923C;
   --color-soft-white: #F8FAFC;
   --color-muted-text: #94A3B8;
@@ -64,7 +65,7 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body), system-ui, sans-serif;
+  font-family: var(--font-poppins), system-ui, sans-serif;
   overflow-x: hidden;
 }
 

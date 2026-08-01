@@ -70,31 +70,31 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent title="Atur Anggota" description={cluster?.name ?? ""} variant="light">
+      <DialogContent title="Atur Anggota" description={cluster?.name ?? ""}>
         <div className="space-y-4">
           {/* Current Members */}
           <div>
-            <h4 className="text-sm font-medium text-slate-900 mb-2">
+            <h4 className="text-sm font-medium text-soft-white mb-2">
               Anggota Saat Ini ({currentMembers.length})
             </h4>
             <div className="max-h-40 overflow-y-auto space-y-1">
               {membersLoading ? (
                 <div className="flex items-center justify-center py-4">
-                  <Loader2 size={16} className="animate-spin text-slate-400" />
+                  <Loader2 size={16} className="animate-spin text-muted-text" />
                 </div>
               ) : currentMembers.length === 0 ? (
-                <p className="text-xs text-slate-400 text-center py-4">Belum ada anggota</p>
+                <p className="text-xs text-muted-text text-center py-4">Belum ada anggota</p>
               ) : (
                 currentMembers.map((m: any) => (
-                  <div key={m.id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50">
+                  <div key={m.id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/5">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-slate-900 truncate">{m.name}</p>
-                      <p className="text-xs text-slate-500 truncate">{m.email} {m.nim ? `· ${m.nim}` : ""}</p>
+                      <p className="text-sm font-medium text-soft-white truncate">{m.name}</p>
+                      <p className="text-xs text-muted-text truncate">{m.email} {m.nim ? `· ${m.nim}` : ""}</p>
                     </div>
                     <button
                       onClick={() => handleRemoveMember(m.id)}
                       disabled={removeMutation.isPending}
-                      className="p-1 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      className="p-1 rounded text-muted-text hover:text-red-400 hover:bg-red-500/10 transition-colors"
                     >
                       <X size={14} />
                     </button>
@@ -105,15 +105,15 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
           </div>
 
           {/* Divider */}
-          <div className="border-t border-slate-200" />
+          <div className="border-t border-white/10" />
 
           {/* Add Members */}
           <div>
-            <h4 className="text-sm font-medium text-slate-900 mb-2">Tambah Anggota</h4>
+            <h4 className="text-sm font-medium text-soft-white mb-2">Tambah Anggota</h4>
             <div className="relative mb-3">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-text" />
               <input
-                className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 pl-9 text-sm text-slate-700 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue"
+                className="flex h-10 w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 pl-9 text-sm text-soft-white placeholder:text-muted-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue"
                 placeholder="Cari MABA..."
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
@@ -123,10 +123,10 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
             <div className="max-h-52 overflow-y-auto space-y-1">
               {mabasLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 size={16} className="animate-spin text-slate-400" />
+                  <Loader2 size={16} className="animate-spin text-muted-text" />
                 </div>
               ) : filteredMabas.length === 0 ? (
-                <p className="text-xs text-slate-400 text-center py-8">
+                <p className="text-xs text-muted-text text-center py-8">
                   {search ? "Tidak ditemukan" : "Semua MABA sudah menjadi anggota"}
                 </p>
               ) : (
@@ -138,20 +138,20 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
                       "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
                       selectedIds.has(m.id)
                         ? "bg-electric-blue/10 border border-electric-blue/30"
-                        : "hover:bg-slate-50 border border-transparent",
+                        : "hover:bg-white/5 border border-transparent",
                     )}
                   >
                     <div className={cn(
                       "w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors",
                       selectedIds.has(m.id)
                         ? "bg-electric-blue border-electric-blue"
-                        : "border-slate-300",
+                        : "border-white/20",
                     )}>
                       {selectedIds.has(m.id) && <Check size={12} className="text-white" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-slate-900 truncate">{m.name}</p>
-                      <p className="text-xs text-slate-500 truncate">{m.email} {m.nim ? `· ${m.nim}` : ""}</p>
+                      <p className="text-sm font-medium text-soft-white truncate">{m.name}</p>
+                      <p className="text-xs text-muted-text truncate">{m.email} {m.nim ? `· ${m.nim}` : ""}</p>
                     </div>
                   </button>
                 ))
@@ -164,17 +164,17 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1}
-                  className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40"
+                  className="text-xs text-muted-text hover:text-soft-white disabled:opacity-40"
                 >
                   Sebelumnya
                 </button>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-muted-text">
                   {page} / {totalPages}
                 </span>
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages}
-                  className="text-xs text-slate-500 hover:text-slate-700 disabled:opacity-40"
+                  className="text-xs text-muted-text hover:text-soft-white disabled:opacity-40"
                 >
                   Selanjutnya
                 </button>
@@ -183,7 +183,7 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 mt-4">
+        <div className="flex justify-end gap-3 pt-4 border-t border-white/10 mt-4">
           <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
             Tutup
           </Button>
