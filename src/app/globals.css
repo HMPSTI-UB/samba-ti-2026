@@ -37,16 +37,12 @@
 
 
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
-  --animate-rotate-glow: rotate-glow 6s linear infinite;
+
   --animate-float: float 3s ease-in-out infinite;
 
   @keyframes pulse-glow {
     0%, 100% { opacity: 0.5; filter: blur(8px); }
     50% { opacity: 0.8; filter: blur(12px); }
-  }
-
-  @keyframes rotate-glow {
-    to { rotate: 360deg; }
   }
 
   @keyframes float {
@@ -59,24 +55,6 @@
   perspective: 1000px;
 }
 
-.scanlines {
-  position: relative;
-}
-
-.scanlines::after {
-  content: " ";
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-  z-index: 9999;
-  background-size: 100% 4px, 3px 100%;
-  pointer-events: none;
-  opacity: 0.1;
-}
 
 :root {
   --background: #050816;

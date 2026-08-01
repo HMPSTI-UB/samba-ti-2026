@@ -9,6 +9,8 @@ const variantStyles = {
     "bg-secondary text-white hover:bg-secondary-hover shadow-lg shadow-secondary/30",
   accent:
     "bg-accent text-white hover:bg-accent-hover shadow-lg shadow-accent/30",
+  warning:
+    "bg-yellow-500 text-black hover:bg-yellow-600 shadow-lg shadow-yellow-500/30",
   ghost: "bg-transparent text-soft-white hover:bg-white/10",
   outline:
     "border border-border-glow bg-transparent text-soft-white hover:bg-white/5",

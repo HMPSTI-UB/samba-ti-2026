@@ -17,7 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="text-sm font-medium text-muted-text"
+            className="text-sm font-medium text-white"
           >
             {label}
           </label>
@@ -31,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               rightIcon && "pr-10",
               error
                 ? "border-destructive focus-visible:ring-destructive"
-                : "border-border-glow hover:border-electric-blue/50",
+                : "border-white/80 hover:border-white",
               className,
             )}
             aria-invalid={!!error}

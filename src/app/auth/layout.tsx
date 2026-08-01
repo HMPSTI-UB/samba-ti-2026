@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Login Panitia | ZENITH SAMBA TI 2026",
@@ -9,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-deep-space">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-deep-space py-8">
       <div
         className="nebula w-[600px] h-[600px] -top-48 -left-48"
         style={{ background: "radial-gradient(circle, #7C3AED 0%, transparent 70%)" }}
@@ -23,20 +22,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         style={{ background: "radial-gradient(circle, #0B1026 0%, transparent 60%)", opacity: 0.4 }}
       />
 
-      <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="flex justify-center mb-8">
-          <Image
-            src="/logo.png"
-            alt="ZENITH SAMBA TI 2026"
-            width={100}
-            height={100}
-            priority
-            className="object-contain"
-          />
-        </div>
-        <div className="glass-panel p-8 md:p-10">{children}</div>
-        <div className="mx-auto mt-4 h-px w-3/4 bg-gradient-to-r from-transparent via-electric-blue to-transparent" />
-      </div>
+      <div className="relative z-10 w-full">{children}</div>
     </div>
   );
 }

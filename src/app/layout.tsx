@@ -3,7 +3,8 @@ import { Orbitron, Montserrat, Freeman, Sonsie_One, Poppins } from "next/font/go
 import "./globals.css";
 import QueryProvider from "@/lib/query-provider";
 import { Toaster } from "@/components/ui/toaster";
-import Navbar from "@/components/layout/navbar";
+import Navbar from "@/components/layout/navbar-controller";
+import SmoothScroll from "@/components/common/smooth-scroll";
 
 
 const orbitron = Orbitron({
@@ -54,7 +55,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-body relative">
         <Navbar />
         <QueryProvider>
-          {children}
+          <SmoothScroll>{children}</SmoothScroll>
         </QueryProvider>
         <Toaster />
       </body>

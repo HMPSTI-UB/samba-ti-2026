@@ -8,7 +8,16 @@ Next.js App Router pages, layouts, and route-level files:
 - `globals.css` — Tailwind v4 + custom CSS tokens
 - `page.tsx` — Countdown coming-soon page at `/`
 - `not-found.tsx` — Custom 404 page
-- `staging/` — Full marketing landing page at `/staging`
+- `auth/` — Auth shell (login, register) at `/auth/*`
+- `(maba)/app/` — MABA (mahasiswa baru) app at `/app/*` — `dashboard`, `tugas`
+- `(backdoor)/dashboard/` — Panitia admin area at `/dashboard/*` — `admin`, `spv`, `kaderisasi`, `users`, `clusters`, `tugas`, `pengumuman`
+
+### Route groups (access by role, enforced in `src/proxy.ts`)
+
+| URL prefix | Role | Folder |
+|---|---|---|
+| `/app/*` | MABA only | `(maba)/app/` |
+| `/dashboard/*` | Panitia only (ADMIN/KADERISASI/SPV) | `(backdoor)/dashboard/` |
 
 ## Conventions
 

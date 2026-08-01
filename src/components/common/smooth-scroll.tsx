@@ -18,8 +18,6 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
     lenisRef.current = lenis;
 
-    lenis.on("scroll", gsap.update);
-
     requestAnimationFrame(function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);

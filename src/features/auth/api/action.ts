@@ -8,7 +8,7 @@ import type { LoginPayload, LoginActionResult, AuthTokens } from "@/features/aut
 export async function loginAction(payload: LoginPayload): Promise<LoginActionResult> {
   try {
     const response = await serverApi.post<AuthTokens>("/auth/login", {
-      identifier: payload.email,
+      identifier: payload.identifier,
       password: payload.password,
     });
 

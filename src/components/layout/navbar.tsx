@@ -32,7 +32,7 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="w-px h-6 bg-white/10 mx-2" />
-          <Link href="/portal" className="py-2 px-6 text-sm font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">
+          <Link href="/app/dashboard" className="py-2 px-6 text-sm font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">
             Masuk Portal
           </Link>
         </div>
@@ -61,7 +61,7 @@ export default function Navbar() {
             <Link href="/" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Home</Link>
             <Link href="#journey" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Journey</Link>
             <Link href="#schedule" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Schedule</Link>
-            <Link href="/portal" onClick={() => setIsOpen(false)} className="text-center py-3 font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">Masuk Portal</Link>
+            <Link href="/app/dashboard" onClick={() => setIsOpen(false)} className="text-center py-3 font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">Masuk Portal</Link>
           </motion.div>
         )}
       </AnimatePresence>

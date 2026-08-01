@@ -8,7 +8,7 @@ export const ROLES = {
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export const ROLE_ROUTES: Record<string, string> = {
-  [ROLES.MAHASISWA]: "/portal",
+  [ROLES.MAHASISWA]: "/app/dashboard",
   [ROLES.SPV]: "/dashboard/spv",
   [ROLES.KADERISASI]: "/dashboard/kaderisasi",
   [ROLES.ADMIN]: "/dashboard/admin",

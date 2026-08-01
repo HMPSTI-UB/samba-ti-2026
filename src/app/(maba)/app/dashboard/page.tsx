@@ -2,7 +2,7 @@
 
 import { useUser } from "@/features/auth/hooks/use-user";
 
-export default function PortalPage() {
+export default function MabaDashboardPage() {
   const { data, isLoading } = useUser();
 
   if (isLoading) return null;

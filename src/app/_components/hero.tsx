@@ -5,7 +5,6 @@ import Image from "next/image";
 import gsap from "gsap";
 import StarBackground from "@/components/common/star-background";
 import LoadingScreen from "@/components/common/loading-screen";
-import { Button } from "@/components/ui/button";
 
 export default function Hero({
   loaded,
@@ -77,18 +76,13 @@ export default function Hero({
           { y: 0, scale: 1, opacity: 1, duration: 1.0 },
           "textStart",
         )
-        .to(maskotRef.current, { x: 0, duration: 1.5 })
-        .add("ctaStart", "textStart+=1.2")
         .to(
           subtitleRef.current,
           { y: 0, opacity: 1, duration: 0.8 },
-          "ctaStart",
+          "textStart",
         )
-        .to(
-          ctaRef.current,
-          { y: 0, opacity: 1, duration: 0.8 },
-          "ctaStart+=0.2",
-        );
+        .to(ctaRef.current, { y: 0, opacity: 1, duration: 0.8 }, "textStart")
+        .to(maskotRef.current, { x: 0, duration: 1.5 });
     }, containerRef);
 
     return () => ctx.kill();
@@ -113,6 +107,9 @@ export default function Hero({
               src="/assets/hero/mars-ground-2.svg"
               alt="Mars Ground"
               fill
+              sizes="100vw"
+              quality={75}
+              priority
               className="object-cover object-left-bottom"
             />
           </div>
@@ -124,16 +121,19 @@ export default function Hero({
         >
           <div className="w-full h-full scale-[1.5] md:scale-[2.5] origin-bottom-left md:origin-bottom-right translate-y-[230px] -translate-x-[100px] md:translate-y-[400px] md:translate-x-[100px]">
             <div
-              className="absolute inset-[50px] rounded-full animate-rotate-glow blur-lg"
+              className="absolute inset-[50px] rounded-full blur-lg opacity-60"
               style={{
                 background:
-                  "conic-gradient(from 0deg, #38BDF8, #ffffff, #38BDF8, #ffffff, #38BDF8)",
+                  "radial-gradient(circle at 30% 30%, #38BDF8, #ffffff 40%, #38BDF8 70%, transparent)",
               }}
             />
             <Image
               src="/assets/hero/earth.svg"
               alt="Earth"
               fill
+              sizes="(max-width: 768px) 315px, 300px"
+              quality={75}
+              priority
               className="object-contain object-left-bottom md:object-right-bottom relative z-10"
             />
           </div>
@@ -154,6 +154,9 @@ export default function Hero({
               src="/assets/hero/galaxy.svg"
               alt="Galaxy"
               fill
+              sizes="(max-width: 768px) 220px, 500px"
+              quality={75}
+              priority
               className="object-contain object-top-left relative z-10"
             />
           </div>
@@ -174,6 +177,9 @@ export default function Hero({
               src="/assets/hero/purple-planet.svg"
               alt="Purple Planet"
               fill
+              sizes="(max-width: 768px) 180px, 450px"
+              quality={75}
+              priority
               className="object-contain object-top-right relative z-10"
             />
           </div>
@@ -189,6 +195,9 @@ export default function Hero({
                 src="/assets/hero/maskot.svg"
                 alt="Maskot"
                 fill
+                sizes="(max-width: 768px) 180px, 250px"
+                quality={75}
+                priority
                 className="object-contain object-right"
               />
             </div>
@@ -208,27 +217,20 @@ export default function Hero({
           >
             ZENITH
           </span>
-          {/* <span
-            ref={soonRef}
-            className="text-[80px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display soon-shadow opacity-0"
-          >
-            2026
-          </span> */}
           <span
             ref={subtitleRef}
-            className="text-[40px]  font-poppins text-white   text-center opacity-0"
+            className="text-base md:text-[40px]  font-poppins text-white   text-center opacity-0"
           >
             Zealous Evolution of
             <br />
             New IT Heroes
           </span>
-          <Button
+          <button
             ref={ctaRef}
-            className="bg-yellow-500 text-black border-1 uppercase border-black mt-4 hover:bg-yellow-600 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.5)] active:scale-95 transition-all duration-300 opacity-0"
-            size="lg"
+            className="bg-yellow-500 text-black uppercase border border-black mt-4 hover:bg-yellow-600 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.5)] active:scale-95 transition-colors duration-200 h-10 md:h-12 px-7 text-sm md:text-base rounded-full font-semibold opacity-0"
           >
             Mulai Perjalananmu!
-          </Button>
+          </button>
         </div>
       </section>
     </>

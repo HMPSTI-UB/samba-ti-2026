@@ -61,6 +61,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           src="/assets/hero/maskot.svg"
           alt="Maskot"
           fill
+          sizes="300px"
           className="object-contain"
         />
       </div>

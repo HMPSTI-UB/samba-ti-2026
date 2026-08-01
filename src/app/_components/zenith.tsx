@@ -3,19 +3,19 @@ import Image from "next/image";
 export default function Zenith() {
   return (
     <section className="min-h-screen ">
-      <div className="relative  pt-120">
+      <div className="relative  pt-70 md:pt-120">
         <div className="relative w-fit mx-auto z-30">
           <Image
             src={"/assets/hero/about-card.png"}
             width={900}
             height={600}
             alt=""
-            className="mx-auto  "
+            className="mx-auto  scale-90 md:scale-100"
           />
-          <h2 className="font-poppins text-3xl text-white absolute left-1/2 -translate-x-1/2 top-2 font-bold">
+          <h2 className="font-poppins text-lg md:text-3xl text-white absolute left-1/2 -translate-x-1/2 top-2 md:top-2 font-bold">
             FILOSOFI
           </h2>
-          <p className="font-poppins text-white absolute left-1/2 -translate-x-1/2 top-20 text-2xl tracking-wide text-justify w-7/10">
+          <p className="font-poppins text-white absolute left-1/2 -translate-x-1/2 top-11 md:top-20 text-[10px] md:text-2xl tracking-wide text-justify w-7/10">
             Dalam astronomi, Zenith adalah titik tertinggi di langit. Dalam
             konteks SAMBA TI, Zenith adalah komitmen kolektif untuk membawa maba
             dari titik nol (ground level) menuju performa dan pencapaian
@@ -36,55 +36,26 @@ export default function Zenith() {
           width={252}
           height={252}
           alt=""
-          className="absolute top-50 right-0 z-10 scale-115"
+          className="absolute top-10 md:top-50  -right-20 md:right-0 z-10 scale-50 md:scale-115"
         />
       </div>
       <div className="relative w-full ">
-        <div className="absolute -top-40 -right-190 -rotate-10">
-          <h3 className="text-white absolute text-2xl font-bold left-93 top-65 z-99">
-            Visi
-          </h3>
-          <p className="text-white absolute text-md font-bold left-62  top-95 z-99 w-100 text-justify">
-            Mewujudkan SAMBA TI sebagai ruang inkubasi yang visioner demi
-            mengantarkan mahasiswa baru menuju ”Zenith” (titik tertinggi)
-            potensi mereka, membentuk IT heroes baru yang adaptif,
-            berintegritas, dan siap menjadi navigator arah perkembangan
-            teknologi di masa depan.
-          </p>
-
+        <div className="absolute -top-10 md:-top-100 -right-110 md:-right-235 -rotate-5">
           <Image
-            src={"/assets/hero/station.png"}
-            width={1600}
-            height={100}
+            src={"/assets/hero/visi.svg"}
+            width={2000}
+            height={1200}
             alt=""
-            className="-rotate-5"
+            className="scale-120 md:scale-70"
           />
         </div>
-        <div className="absolute top-20 -left-200 rotate-5">
-          <h3 className="text-white absolute text-2xl font-bold right-114 top-67 z-99">
-            Misi
-          </h3>
-          <ol className="text-white absolute text-sm font-bold right-62  top-100 z-99 w-100 text-justify list-decimal">
-            <li className="">
-              Menyambut dan menyatukan keberagaman latar belakang mahasiswa baru
-              ke dalam satu ekosistem TI yang suportif dan inklusif.
-            </li>
-            <li>
-              Memperkenalkan Program Studi Teknologi Informasi kepada mahasiswa
-              baru angkatan 26.
-            </li>
-            <li>
-              Menanamkan nilai-nilai kreatifitas, respect, solidaritas, dan
-              kemampuan problem solving kepada mahasiswa baru.
-            </li>
-          </ol>
-
+        <div className="absolute top-80 md:top-10 -left-110 md:-left-240">
           <Image
-            src={"/assets/hero/station.png"}
-            width={1600}
-            height={100}
+            src={"/assets/hero/misi.svg"}
+            width={2000}
+            height={1200}
             alt=""
-            className="-rotate-5"
+            className=" scale-120 md:scale-70"
           />
         </div>
       </div>

@@ -3,13 +3,13 @@ import Image from "next/image";
 export default function Logo() {
   return (
     <section className="">
-      <div className="grid grid-cols-4 px-50 place-items-center gap-20">
-        <div className="col-span-3">
-          <h2 className="text-6xl font-bold  text-white font-poppins tracking-wide leading-20">
+      <div className="grid grid-cols-4 px-10 md:px-50 place-items-center gap-20">
+        <div className="col-span-4  md:col-span-3">
+          <h2 className="text-3xl md:text-6xl font-bold  text-white font-poppins tracking-wide leading-10 md:leading-20">
             Filosofi Logo SAMBA TI Zenith 2026
           </h2>
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 hidden md:block">
           <Image
             src={"/logo.png"}
             width={400}

@@ -13,14 +13,15 @@ export default function LoginForm() {
     <form id={`${formId}-login-form`} onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="space-y-5">
         <Input
-          label="Email"
-          type="email"
-          placeholder="email@student.ub.ac.id"
-          error={errors.email?.message}
-          autoComplete="email"
+          id="identifier"
+          label="Email / NIM / Username"
+          type="text"
+          placeholder="Email / NIM / Username"
+          error={errors.identifier?.message}
+          autoComplete="username"
           required
           disabled={isPending}
-          {...register("email")}
+          {...register("identifier")}
         />
 
         <Input
@@ -52,11 +53,11 @@ export default function LoginForm() {
         <div className="pt-2">
           <Button
             type="submit"
-            variant="primary"
+            variant="warning"
             size="lg"
             loading={isPending}
             disabled={isPending}
-            className="w-full"
+            className="w-full rounded-lg"
           >
             {!isPending && <LogIn className="w-4 h-4" />}
             {isPending ? "Memproses..." : "Masuk"}
