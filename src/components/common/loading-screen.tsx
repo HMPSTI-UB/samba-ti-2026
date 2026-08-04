@@ -16,6 +16,12 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(overlayRef.current, { opacity: 0, duration: 0 });
+        onComplete();
+        return;
+      }
+
       gsap.timeline({ defaults: { ease: "power3.out" } })
         .fromTo(loadingTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 })
         .to(dotsRef.current, { opacity: 1, duration: 0.3 })

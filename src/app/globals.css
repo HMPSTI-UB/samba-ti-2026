@@ -111,35 +111,34 @@ body {
 
 .coming-shadow {
   text-shadow:
-    3px 3px 0 #ff0000,
-    6px 6px 0 #cc0000,
-    9px 9px 0 #aa0000,
-    12px 12px 0 #880000,
-    15px 15px 0 #660000;
+    2px 2px 0 #ff0000,
+    5px 5px 0 #cc0000;
 }
 
 .soon-shadow {
   text-shadow:
-    3px 3px 0 #ff0000,
-    6px 6px 0 #cc0000,
-    9px 9px 0 #aa0000,
-    12px 12px 0 #880000,
-    15px 15px 0 #660000;
+    2px 2px 0 #ff0000,
+    5px 5px 0 #cc0000;
 }
 
 @media (max-width: 767px) {
   .coming-shadow {
-    text-shadow:
-      2px 2px 0 #ff0000,
-      4px 4px 0 #cc0000,
-      6px 6px 0 #aa0000;
+    text-shadow: 2px 2px 0 #ff0000;
   }
 
   .soon-shadow {
-    text-shadow:
-      2px 2px 0 #ff0000,
-      4px 4px 0 #cc0000,
-      6px 6px 0 #aa0000;
+    text-shadow: 2px 2px 0 #ff0000;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

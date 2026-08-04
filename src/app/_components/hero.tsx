@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import StarBackground from "@/components/common/star-background";
@@ -29,6 +29,25 @@ export default function Hero({
     if (!loaded) return;
 
     const ctx = gsap.context(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(
+          [
+            earthRef.current,
+            marsRef.current,
+            galaxyRef.current,
+            planetRef.current,
+            maskotRef.current,
+            subRef.current,
+            comingRef.current,
+            soonRef.current,
+            subtitleRef.current,
+            ctaRef.current,
+          ],
+          { opacity: 1, x: 0, y: 0, scale: 1, willChange: "auto" },
+        );
+        return;
+      }
+
       gsap.set(
         [
           earthRef.current,
@@ -53,8 +72,23 @@ export default function Hero({
       gsap.set(planetRef.current, { x: 600, opacity: 1 });
       gsap.set(maskotRef.current, { x: 700, opacity: 1 });
 
+      const layers = [
+        earthRef.current,
+        marsRef.current,
+        galaxyRef.current,
+        planetRef.current,
+        maskotRef.current,
+      ];
+
       gsap
-        .timeline({ defaults: { ease: "power3.out" } })
+        .timeline({
+          defaults: { ease: "power3.out" },
+          onComplete: () => {
+            layers.forEach((el) => {
+              if (el) el.style.willChange = "auto";
+            });
+          },
+        })
         .add("awal")
         .to(earthRef.current, { y: 0, opacity: 1, duration: 1.2 }, "awal")
         .to(marsRef.current, { y: 0, opacity: 1, duration: 1.3 }, "awal")
@@ -101,6 +135,7 @@ export default function Hero({
         <div
           ref={marsRef}
           className="absolute bottom-0 left-0 w-full h-[800px] pointer-events-none invisible md:visible opacity-0"
+          style={{ willChange: "transform" }}
         >
           <div className="w-full h-full scale-80 -translate-x-[60px] translate-y-[180px] rotate-[9.48deg] origin-bottom-left">
             <Image
@@ -118,10 +153,11 @@ export default function Hero({
         <div
           ref={earthRef}
           className="absolute bottom-0 left-0 md:right-0 md:left-auto w-[315px] h-[315px] md:w-[300px] md:h-[300px] pointer-events-none opacity-0"
+          style={{ willChange: "transform" }}
         >
           <div className="w-full h-full scale-[1.5] md:scale-[2.5] origin-bottom-left md:origin-bottom-right translate-y-[230px] -translate-x-[100px] md:translate-y-[400px] md:translate-x-[100px]">
             <div
-              className="absolute inset-[50px] rounded-full blur-lg opacity-60"
+              className="absolute inset-[50px] rounded-full opacity-60"
               style={{
                 background:
                   "radial-gradient(circle at 30% 30%, #38BDF8, #ffffff 40%, #38BDF8 70%, transparent)",
@@ -142,10 +178,11 @@ export default function Hero({
         <div
           ref={galaxyRef}
           className="absolute top-0 left-0 w-[220px] h-[130px] md:w-[500px] md:h-[300px] pointer-events-none opacity-0"
+          style={{ willChange: "transform" }}
         >
           <div className="w-full h-full scale-[0.7] md:scale-75 -rotate-[15deg] origin-top-left translate-y-[80px] -translate-x-[10px] md:translate-y-[100px] md:translate-x-0">
             <div
-              className="absolute inset-[-20%] rounded-full blur-2xl"
+              className="absolute inset-[-20%] rounded-full opacity-70"
               style={{
                 background: "radial-gradient(circle, #ec4899, transparent 70%)",
               }}
@@ -165,10 +202,11 @@ export default function Hero({
         <div
           ref={planetRef}
           className="absolute top-0 right-0 w-[180px] h-[180px] md:w-[450px] md:h-[450px] pointer-events-none opacity-0"
+          style={{ willChange: "transform" }}
         >
           <div className="w-full h-full -translate-y-[50px] translate-x-[60px] md:-translate-y-[200px] md:translate-x-[100px]">
             <div
-              className="absolute inset-[-20%] rounded-full blur-2xl"
+              className="absolute inset-[-20%] rounded-full opacity-70"
               style={{
                 background: "radial-gradient(circle, #a855f7, transparent 70%)",
               }}
@@ -188,6 +226,7 @@ export default function Hero({
         <div
           ref={maskotRef}
           className="absolute right-0 w-[180px] h-[127px] md:w-[250px] md:h-[180px] pointer-events-none bottom-20 short:bottom-[10px] md:top-[calc(50%-150px)] opacity-0"
+          style={{ willChange: "transform" }}
         >
           <div className="w-full h-full md:-translate-y-1/2 md:-translate-x-[30px] origin-right">
             <div className="relative w-full h-full animate-float scale-100 md:scale-150 origin-right">

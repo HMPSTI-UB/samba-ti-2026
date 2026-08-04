@@ -9,6 +9,10 @@ export default function About({ loaded }: { loaded: boolean }) {
   useEffect(() => {
     let tween: gsap.core.Tween | null = null;
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
       tween = gsap.to(carouselRef.current, {
         xPercent: -50,
@@ -61,17 +65,18 @@ export default function About({ loaded }: { loaded: boolean }) {
       />
       <div className="bg-[#2D160E] w-[1200px] md:w-[2000px] h-50 left-1/2 -translate-x-1/2  rounded-[110%] absolute top-30  md:top-70 z-10"></div>
       <div className="overflow-hidden mt-30">
-        <div ref={carouselRef} className="flex gap-1 w-max">
+        <div ref={carouselRef} className="flex gap-1 w-max" style={{ willChange: "transform" }}>
           {[...Array(6), ...Array(6)].map((_, idx) => (
             <Image
               key={idx}
               src={`/assets/past/img${(idx % 6) + 1}.png`}
               width={480}
               height={320}
-              sizes="480px"
-              quality={75}
+              sizes="(max-width: 767px) 240px, 480px"
+              quality={70}
+              loading="lazy"
               alt={`Image ${(idx % 6) + 1}`}
-              className="w-120 shrink-0"
+              className="w-40 sm:w-60 md:w-120 shrink-0"
             />
           ))}
         </div>
