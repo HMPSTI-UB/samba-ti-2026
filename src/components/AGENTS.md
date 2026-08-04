@@ -17,12 +17,18 @@ components/
 | `star-background.tsx` | `StarBackground` | Client (CSS animation) |
 | `cosmic-background.tsx` | `CosmicBackground` | Client (tsParticles) |
 | `flying-rocket.tsx` | `FlyingRocket` | Client (three.js) |
+| `sweet-alert.tsx` | `SweetAlert` | Client (success/error dialog with image + OK + auto-close) |
+| `sweet-alert-provider.tsx` | `SweetAlertProvider` / `useSweetAlert` | Client (context `{ success, error }`; replaces sonner toaster) |
+| `post-login-alert.tsx` | `PostLoginAlert` | Client (shows SweetAlert once after login) |
+| `confirm-dialog.tsx` | `ConfirmDialog` | Client (generic confirmation dialog) |
+| `avatar-upload.tsx` | `AvatarUpload` | Client (profile photo picker + preview + upload to S3 via presigned URL + `updateMe`) |
 
 ### `layout/`
 | File | Component | Type |
 |---|---|---|
 | `navbar.tsx` | `Navbar` | Client |
 | `footer.tsx` | `Footer` | Server |
+| `notification-dropdown.tsx` | `NotificationDropdown` | Client (bell popover with recent announcements + mark read + mark all read + "Lihat Semua") |
 
 ## Conventions
 

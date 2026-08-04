@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Upload, Download, CheckCircle, XCircle, Loader2, AlertTriangle, FileText } from "lucide-react";
+import { Upload, Download, CheckCircle, XCircle, AlertTriangle, FileText } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
+import { ApiError } from "@/lib/api/errors";
 import { useImportMaba } from "@/features/clusters/hooks/use-import-maba";
 import type { ImportMabaResult } from "@/features/clusters/api/import";
 
@@ -13,6 +15,7 @@ type CsvPreviewRow = {
   nim: string;
   email: string;
   gender: string;
+  duplicate: boolean;
 };
 
 type Props = {
@@ -36,6 +39,7 @@ function parseCsvPreview(text: string): { rows: CsvPreviewRow[]; errors: string[
 
   const rows: CsvPreviewRow[] = [];
   const errors: string[] = [];
+  const seenNims = new Set<string>();
 
   for (let i = 1; i < lines.length; i++) {
     const cols = lines[i].split(",").map((c) => c.trim().replace(/^"|"$/g, ""));
@@ -47,11 +51,22 @@ function parseCsvPreview(text: string): { rows: CsvPreviewRow[]; errors: string[
     if (!name && !nim && !email) continue;
     if (!name) { errors.push(`Baris ${i + 1}: Nama kosong`); continue; }
     if (!/^\d{15}$/.test(nim)) { errors.push(`Baris ${i + 1}: NIM "${nim}" tidak valid`); continue; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errors.push(`Baris ${i + 1}: Email "${email}" tidak valid`); continue; }
 
-    rows.push({ name, nim, email, gender });
+    const duplicate = seenNims.has(nim);
+    seenNims.add(nim);
+    rows.push({ name, nim, email, gender, duplicate });
   }
 
   return { rows, errors };
+}
+
+function genderLabel(raw: string): string {
+  const n = raw.trim().toLowerCase();
+  if (!n) return "-";
+  if (n.includes("perempuan") || n === "p" || n === "female" || n === "wanita" || n === "cewek") return "Perempuan";
+  if (n.includes("laki") || n === "l" || n === "male" || n === "pria" || n === "cowok") return "Laki-laki";
+  return raw;
 }
 
 function downloadCsv(users: ImportMabaResult["users"], filename: string) {
@@ -77,6 +92,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
   const [result, setResult] = useState<ImportMabaResult | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const importMutation = useImportMaba();
+  const { error: alertError } = useSweetAlert();
   const [dragOver, setDragOver] = useState(false);
 
   function reset() {
@@ -117,16 +133,24 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
   }
 
   function handleImport() {
-    if (!file) return;
-    importMutation.mutate(file, {
+    const rows = previewRows
+      .filter((r) => !r.duplicate)
+      .map((r) => ({ name: r.name, nim: r.nim, email: r.email, gender: r.gender }));
+    if (rows.length === 0) return;
+    importMutation.mutate(rows, {
       onSuccess: (res) => {
         setResult(res.data ?? res as unknown as ImportMabaResult);
         setStep("result");
+      },
+      onError: (err) => {
+        alertError(err instanceof ApiError ? err.message : "Gagal mengimpor data");
       },
     });
   }
 
   const isPending = importMutation.isPending;
+  const importableCount = previewRows.filter((r) => !r.duplicate).length;
+  const duplicateCount = previewRows.length - importableCount;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -161,7 +185,10 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-text">
-                Ditemukan <strong className="text-soft-white">{previewRows.length}</strong> data valid
+                <strong className="text-soft-white">{importableCount}</strong> data akan di-import
+                {duplicateCount > 0 && (
+                  <span className="text-amber-400">, {duplicateCount} duplikat NIM dilewati</span>
+                )}
                 {file && <span className="ml-1">dari <FileText size={14} className="inline" /> {file.name}</span>}
               </p>
             </div>
@@ -186,32 +213,46 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
                     <th className="px-3 py-2 font-medium">NIM</th>
                     <th className="px-3 py-2 font-medium">Email</th>
                     <th className="px-3 py-2 font-medium">Gender</th>
+                    <th className="px-3 py-2 font-medium">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10">
                   {previewRows.slice(0, 50).map((row, i) => (
-                    <tr key={i} className="hover:bg-white/5">
+                    <tr key={i} className={cn("hover:bg-white/5", row.duplicate && "bg-amber-500/5")}>
                       <td className="px-3 py-2 text-muted-text">{i + 1}</td>
-                      <td className="px-3 py-2 font-medium text-soft-white">{row.name}</td>
-                      <td className="px-3 py-2 text-muted-text">{row.nim}</td>
-                      <td className="px-3 py-2 text-muted-text">{row.email}</td>
+                      <td className={cn("px-3 py-2 font-medium text-soft-white", row.duplicate && "line-through opacity-60")}>{row.name}</td>
+                      <td className={cn("px-3 py-2 text-muted-text", row.duplicate && "opacity-60")}>{row.nim}</td>
+                      <td className={cn("px-3 py-2 text-muted-text", row.duplicate && "opacity-60")}>{row.email}</td>
                       <td className="px-3 py-2">
                         <span className={cn(
                           "inline-block rounded-full px-2 py-0.5 text-xs font-medium",
-                          row.gender.toLowerCase().includes("perempuan")
+                          genderLabel(row.gender) === "Perempuan"
                             ? "bg-pink-500/10 text-pink-400"
-                            : row.gender.toLowerCase().includes("laki")
+                            : genderLabel(row.gender) === "Laki-laki"
                               ? "bg-blue-500/10 text-blue-400"
                               : "bg-white/10 text-muted-text",
                         )}>
-                          {row.gender || "-"}
+                          {genderLabel(row.gender)}
                         </span>
+                      </td>
+                      <td className="px-3 py-2">
+                        {row.duplicate ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-400">
+                            <AlertTriangle size={10} />
+                            Duplikat
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-400">
+                            <CheckCircle size={10} />
+                            Akan di-import
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}
                   {previewRows.length > 50 && (
                     <tr>
-                      <td colSpan={5} className="px-3 py-2 text-center text-muted-text italic">
+                      <td colSpan={6} className="px-3 py-2 text-center text-muted-text italic">
                         ... dan {previewRows.length - 50} lainnya
                       </td>
                     </tr>
@@ -224,8 +265,8 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
               <Button type="button" variant="ghost" onClick={() => setStep("upload")} disabled={isPending}>
                 Ganti File
               </Button>
-              <Button type="button" variant="primary" onClick={handleImport} loading={isPending} disabled={isPending || previewRows.length === 0}>
-                Import {previewRows.length} Data
+              <Button type="button" variant="primary" onClick={handleImport} loading={isPending} disabled={isPending || importableCount === 0}>
+                Import {importableCount} Data
               </Button>
             </div>
           </div>
@@ -245,7 +286,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
                 </p>
                 <p className="text-xs text-muted-text mt-0.5">
                   {result.created} berhasil dibuat
-                  {result.skipped > 0 && `, ${result.skipped} dilewati (duplikat)`}
+                  {result.skipped > 0 && `, ${result.skipped} dilewati (NIM sudah terdaftar)`}
                 </p>
               </div>
             </div>
@@ -254,7 +295,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
               <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
                 <p className="text-xs font-medium text-amber-300 mb-1">
                   <AlertTriangle size={12} className="inline mr-1" />
-                  {result.errors.length} error validasi
+                  {result.errors.length} data tidak bisa di-import
                 </p>
                 <ul className="space-y-0.5 max-h-24 overflow-y-auto">
                   {result.errors.map((e, i) => (

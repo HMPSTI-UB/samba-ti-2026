@@ -3,11 +3,15 @@ import { clientApi } from "@/lib/api/client";
 export type SafeUser = {
   id: string;
   name: string;
+  username: string | null;
   email: string;
   nim: string | null;
+  gender: string | null;
   role: string;
   status: boolean;
   clusterId: string | null;
+  avatarUrl: string | null;
+  avatarKey: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -23,6 +27,7 @@ export function getUsers(params: {
   search?: string;
   role?: string;
   status?: string;
+  clusterId?: string;
   page: number;
   limit: number;
 }) {
@@ -30,6 +35,7 @@ export function getUsers(params: {
   if (params.search) searchParams.set("search", params.search);
   if (params.role) searchParams.set("role", params.role);
   if (params.status !== undefined && params.status !== "") searchParams.set("status", params.status);
+  if (params.clusterId) searchParams.set("clusterId", params.clusterId);
   searchParams.set("page", String(params.page));
   searchParams.set("limit", String(params.limit));
 
@@ -41,12 +47,17 @@ export function createUser(data: {
   email: string;
   password?: string;
   nim?: string;
+  gender?: "L" | "P";
+  username?: string;
   role: string;
 }) {
   return clientApi.post<{ data: { user: SafeUser; plainPassword: string } }>("/users", data);
 }
 
-export function updateUser(id: string, data: { name?: string; email?: string }) {
+export function updateUser(
+  id: string,
+  data: { name?: string; email?: string; username?: string; gender?: "L" | "P" | null; status?: boolean },
+) {
   return clientApi.patch<{ data: SafeUser }>(`/users/${id}`, data);
 }
 

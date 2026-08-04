@@ -8,7 +8,7 @@ import { useAnnouncements, useCreateAnnouncement, useMarkAsRead } from "@/featur
 import AnnouncementList from "@/features/pengumuman/components/announcement-list";
 import AnnouncementFilter from "@/features/pengumuman/components/announcement-filter";
 import AnnouncementCreateDialog from "@/features/pengumuman/components/announcement-create-dialog";
-import { toast } from "sonner";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 
 export default function PengumumanPage() {
   const user = useUserStore((s) => s.user);
@@ -27,22 +27,23 @@ export default function PengumumanPage() {
 
   const createMutation = useCreateAnnouncement();
   const markReadMutation = useMarkAsRead();
+  const { success: alertSuccess, error: alertError } = useSweetAlert();
 
   async function handleCreate(data: { title: string; desc: string; targetType: "ALL" | "SPV" | "MABA" }) {
     createMutation.mutate(data, {
       onSuccess: () => {
-        toast.success("Pengumuman berhasil dikirim");
+        alertSuccess("Pengumuman berhasil dikirim");
         setCreateOpen(false);
       },
       onError: () => {
-        toast.error("Gagal mengirim pengumuman");
+        alertError("Gagal mengirim pengumuman");
       },
     });
   }
 
   function handleMarkRead(id: string) {
     markReadMutation.mutate(id, {
-      onError: () => toast.error("Gagal menandai pengumuman"),
+      onError: () => alertError("Gagal menandai pengumuman"),
     });
   }
 

@@ -4,11 +4,14 @@ import type { ApiResponse } from "./types";
 export type User = {
   id: string;
   name: string;
+  username: string | null;
   email: string;
   nim: string | null;
   role: string;
   status: boolean;
   clusterId: string | null;
+  avatarUrl: string | null;
+  avatarKey: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -36,6 +39,10 @@ export function register(data: RegisterInput): Promise<ApiResponse<User>> {
 
 export function getMe(): Promise<ApiResponse<User>> {
   return apiClient.get("/auth/me") as Promise<ApiResponse<User>>;
+}
+
+export function updateMe(data: { name?: string; avatarUrl?: string | null; avatarKey?: string | null }): Promise<ApiResponse<User>> {
+  return apiClient.patch("/auth/me", data) as Promise<ApiResponse<User>>;
 }
 
 export function refresh(): Promise<void> {

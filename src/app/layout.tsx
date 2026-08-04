@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Orbitron, Montserrat, Freeman, Sonsie_One, Poppins } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/lib/query-provider";
-import { Toaster } from "@/components/ui/toaster";
+import SweetAlertProvider from "@/components/common/sweet-alert-provider";
 import Navbar from "@/components/layout/navbar-controller";
 import SmoothScroll from "@/components/common/smooth-scroll";
 
@@ -55,9 +55,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-deep-space text-soft-white font-poppins relative">
         <Navbar />
         <QueryProvider>
-          <SmoothScroll>{children}</SmoothScroll>
+          <SweetAlertProvider>
+            <SmoothScroll>{children}</SmoothScroll>
+          </SweetAlertProvider>
         </QueryProvider>
-        <Toaster />
       </body>
     </html>
   );

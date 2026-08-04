@@ -11,7 +11,7 @@ import ClusterDeleteDialog from "@/features/clusters/components/cluster-delete-d
 import AssignSpvDialog from "@/features/clusters/components/assign-spv-dialog";
 import ManageMembersDialog from "@/features/clusters/components/manage-members-dialog";
 import ImportMabaDialog from "@/features/clusters/components/import-maba-dialog";
-import { toast } from "sonner";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import type { Cluster, ClusterFormValues } from "@/features/clusters/types";
 
 export default function ClustersPage() {
@@ -35,16 +35,17 @@ export default function ClustersPage() {
   const updateMutation = useUpdateCluster();
   const deleteMutation = useDeleteCluster();
   const assignMutation = useAssignSpv();
+  const { success: alertSuccess, error: alertError } = useSweetAlert();
 
   const clusters = clustersRes?.data ?? [];
 
   function handleCreate(data: ClusterFormValues) {
     createMutation.mutate(data, {
       onSuccess: () => {
-        toast.success("Cluster berhasil dibuat");
+        alertSuccess("Cluster berhasil dibuat");
         setCreateOpen(false);
       },
-      onError: () => toast.error("Gagal membuat cluster"),
+      onError: () => alertError("Gagal membuat cluster"),
     });
   }
 
@@ -54,11 +55,11 @@ export default function ClustersPage() {
       { id: editingCluster.id, data },
       {
         onSuccess: () => {
-          toast.success("Cluster berhasil diupdate");
+          alertSuccess("Cluster berhasil diupdate");
           setEditOpen(false);
           setEditingCluster(null);
         },
-        onError: () => toast.error("Gagal mengupdate cluster"),
+        onError: () => alertError("Gagal mengupdate cluster"),
       },
     );
   }
@@ -66,11 +67,11 @@ export default function ClustersPage() {
   function handleDelete(id: string) {
     deleteMutation.mutate(id, {
       onSuccess: () => {
-        toast.success("Cluster berhasil dihapus");
+        alertSuccess("Cluster berhasil dihapus");
         setDeleteOpen(false);
         setDeletingCluster(null);
       },
-      onError: () => toast.error("Gagal menghapus cluster"),
+      onError: () => alertError("Gagal menghapus cluster"),
     });
   }
 
@@ -79,11 +80,11 @@ export default function ClustersPage() {
       { clusterId, spvId },
       {
         onSuccess: () => {
-          toast.success("SPV berhasil diassign");
+          alertSuccess("SPV berhasil diassign");
           setAssignOpen(false);
           setSelectedCluster(null);
         },
-        onError: () => toast.error("Gagal assign SPV"),
+        onError: () => alertError("Gagal assign SPV"),
       },
     );
   }

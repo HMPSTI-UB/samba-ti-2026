@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/user.store";
 import { ROLE_ROUTES } from "@/constant/roles";
 import AppShell from "@/components/layout/app-shell";
-import { PANITIA_NAV_ITEMS } from "@/constant/dashboard-nav";
+import { PANITIA_NAV_ITEMS, SPV_NAV_ITEMS } from "@/constant/dashboard-nav";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -17,5 +17,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [user, router]);
 
-  return <AppShell navItems={PANITIA_NAV_ITEMS}>{children}</AppShell>;
+  const isSpv = user?.role?.toUpperCase() === "SPV";
+  const navItems = isSpv ? SPV_NAV_ITEMS : PANITIA_NAV_ITEMS;
+
+  return <AppShell navItems={navItems}>{children}</AppShell>;
 }

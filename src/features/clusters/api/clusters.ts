@@ -1,5 +1,5 @@
 import { clientApi } from "@/lib/api/client";
-import type { Cluster, ClusterMember, ClusterFormValues } from "@/features/clusters/types";
+import type { Cluster, ClusterMember, ClusterFormValues, ClusterDetail } from "@/features/clusters/types";
 
 export function getClusters() {
   return clientApi.get<Cluster[]>("/clusters");
@@ -9,12 +9,24 @@ export function getCluster(id: string) {
   return clientApi.get<Cluster>(`/clusters/${id}`);
 }
 
+export function getClusterDetail(id: string) {
+  return clientApi.get<ClusterDetail>(`/clusters/${id}/detail`);
+}
+
+export function getMyCluster() {
+  return clientApi.get<Cluster>("/spv/cluster");
+}
+
 export function createCluster(data: ClusterFormValues) {
   return clientApi.post<Cluster>("/clusters", data);
 }
 
 export function updateCluster(id: string, data: Partial<ClusterFormValues>) {
   return clientApi.patch<Cluster>(`/clusters/${id}`, data);
+}
+
+export function updateClusterWhatsappLink(clusterId: string, whatsappGroupLink: string | null) {
+  return clientApi.patch<Cluster>(`/clusters/${clusterId}/whatsapp-link`, { whatsappGroupLink });
 }
 
 export function deleteCluster(id: string) {
@@ -45,6 +57,7 @@ export function getAvailableMabas(params: { search?: string; page?: number; limi
   const searchParams = new URLSearchParams();
   if (params.search) searchParams.set("search", params.search);
   searchParams.set("role", "MABA");
+  searchParams.set("unassigned", "true");
   searchParams.set("page", String(params.page ?? 1));
   searchParams.set("limit", String(params.limit ?? 50));
 

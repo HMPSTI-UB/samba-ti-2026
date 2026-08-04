@@ -43,8 +43,9 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
         />
         <DialogPrimitive.Content
           ref={ref}
+          data-lenis-prevent
           className={cn(
-            "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-xl border p-6 shadow-2xl backdrop-blur-2xl",
+            "fixed left-1/2 top-1/2 z-50 flex max-h-[85vh] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border p-6 shadow-2xl backdrop-blur-2xl",
             v.content,
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
             className,
@@ -61,7 +62,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
               {description}
             </DialogPrimitive.Description>
           )}
-          <div className="mt-4">{children}</div>
+          <div className="mt-4 min-h-0 flex-1 overflow-y-auto px-2 -mx-2">{children}</div>
           <DialogPrimitive.Close
             className={cn(
               "absolute right-4 top-4 rounded-full p-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue",

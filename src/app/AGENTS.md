@@ -10,7 +10,7 @@ Next.js App Router pages, layouts, and route-level files:
 - `not-found.tsx` — Custom 404 page
 - `auth/` — Auth shell (login, register) at `/auth/*`
 - `(maba)/app/` — MABA (mahasiswa baru) app at `/app/*` — `dashboard`, `penugasan`, `cluster`, `timeline`, `pengumuman`, `profil`
-- `(backdoor)/dashboard/` — Panitia admin area at `/dashboard/*` — `dashboard`, `users`, `clusters`, `tugas`, `pengumuman`
+- `(backdoor)/dashboard/` — Panitia admin area at `/dashboard/*` — `dashboard`, `users`, `clusters`, `tugas`, `pengumuman`; `cluster/` (SPV own cluster) + `cluster/maba/[id]/` (per-member task breakdown)
 
 ### Route groups (access by role, enforced in `src/proxy.ts`)
 

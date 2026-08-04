@@ -9,10 +9,11 @@ import {
 } from "@/features/pengumuman/api/announcements";
 import type { AnnouncementFilters, CreateAnnouncementInput } from "@/features/pengumuman/types";
 
-export function useAnnouncements(filters: AnnouncementFilters) {
+export function useAnnouncements(filters: AnnouncementFilters, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ["announcements", filters],
     queryFn: () => getAnnouncements(filters),
+    enabled: options?.enabled,
   });
 }
 

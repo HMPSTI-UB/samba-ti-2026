@@ -8,6 +8,16 @@ export type ImportUserResult = {
   gender: string | null;
 };
 
+export type ImportMabaRow = {
+  name: string;
+  nim: string;
+  email: string;
+  gender: string;
+  username?: string;
+  status?: string | boolean;
+  clusterName?: string;
+};
+
 export type ImportMabaResult = {
   created: number;
   skipped: number;
@@ -15,8 +25,6 @@ export type ImportMabaResult = {
   users: ImportUserResult[];
 };
 
-export function importMaba(file: File) {
-  const formData = new FormData();
-  formData.append("file", file);
-  return clientApi.post<ImportMabaResult>("/clusters/import/maba", formData);
+export function importMaba(rows: ImportMabaRow[], options?: { seed?: boolean }) {
+  return clientApi.post<ImportMabaResult>("/clusters/import/maba", { rows, seed: options?.seed ?? false });
 }

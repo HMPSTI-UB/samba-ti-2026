@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Search, UserPlus, X, Check, Loader2 } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { useAvailableMabas, useClusterMembers, useAddClusterMembers, useRemoveClusterMember } from "@/features/clusters/hooks/use-clusters";
 import type { Cluster } from "@/features/clusters/types";
 
@@ -24,6 +24,7 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
   const { data: membersRes, isLoading: membersLoading } = useClusterMembers(cluster?.id ?? "");
   const addMutation = useAddClusterMembers();
   const removeMutation = useRemoveClusterMember();
+  const { success: alertSuccess, error: alertError } = useSweetAlert();
 
   const mabas = (mabasRes as any)?.data ?? [];
   const totalMabas = (mabasRes as any)?.total ?? 0;
@@ -57,13 +58,25 @@ export default function ManageMembersDialog({ open, onOpenChange, cluster }: Pro
     if (!cluster || selectedIds.size === 0) return;
     addMutation.mutate(
       { clusterId: cluster.id, userIds: Array.from(selectedIds) },
-      { onSuccess: () => setSelectedIds(new Set()) },
+      {
+        onSuccess: () => {
+          alertSuccess("Anggota berhasil ditambahkan");
+          setSelectedIds(new Set());
+        },
+        onError: (err: Error) => alertError(err.message),
+      },
     );
   }
 
   function handleRemoveMember(userId: string) {
     if (!cluster) return;
-    removeMutation.mutate({ clusterId: cluster.id, userId });
+    removeMutation.mutate(
+      { clusterId: cluster.id, userId },
+      {
+        onSuccess: () => alertSuccess("Anggota berhasil dikeluarkan"),
+        onError: (err: Error) => alertError(err.message),
+      },
+    );
   }
 
   const totalPages = Math.ceil(totalMabas / 50);

@@ -9,9 +9,10 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { cn } from "@/lib/cn";
-import { ArrowUpDown, Pencil, Trash2, Users, Shield, Link } from "lucide-react";
+import { ArrowUpDown, Pencil, Trash2, Users, Shield, Link, Eye } from "lucide-react";
 import type { Cluster } from "@/features/clusters/types";
 
 type Props = {
@@ -24,6 +25,7 @@ type Props = {
 
 export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onManageMembers }: Props) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const router = useRouter();
 
   const columns: ColumnDef<Cluster>[] = [
     {
@@ -98,6 +100,13 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
       header: "",
       cell: ({ row }) => (
         <div className="flex justify-end gap-1">
+          <button
+            onClick={() => router.push(`/dashboard/clusters/${row.original.id}`)}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-electric-blue bg-electric-blue/10 hover:bg-electric-blue/20 transition-colors"
+            title="Lihat Detail"
+          >
+            <Eye size={13} />
+          </button>
           <button
             onClick={() => onManageMembers(row.original)}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-muted-text bg-white/10 hover:bg-white/20 transition-colors"

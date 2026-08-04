@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import {
   Dialog,
   DialogContent,
@@ -54,6 +54,7 @@ export default function DesignSystemPage() {
   const [smallDialogOpen, setSmallDialogOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownChecked, setDropdownChecked] = useState(false);
+  const { success: alertSuccess, error: alertError } = useSweetAlert();
 
   return (
     <div className="min-h-screen bg-deep-space p-8">
@@ -327,56 +328,13 @@ export default function DesignSystemPage() {
           </div>
         </Section>
 
-        <Section title="Toast">
+        <Section title="Sweet Alert">
           <div className="flex flex-wrap gap-2">
-            <Button variant="primary" onClick={() => toast.success("Berhasil", { description: "Data berhasil disimpan" })}>
+            <Button variant="primary" onClick={() => alertSuccess("Data berhasil disimpan", "Berhasil")}>
               Success
             </Button>
-            <Button variant="destructive" onClick={() => toast.error("Gagal", { description: "Terjadi kesalahan server" })}>
+            <Button variant="destructive" onClick={() => alertError("Terjadi kesalahan server", "Gagal")}>
               Error
-            </Button>
-            <Button variant="accent" onClick={() => toast.warning("Perhatian", { description: "Data akan kedaluwarsa" })}>
-              Warning
-            </Button>
-            <Button
-              variant="outline"
-              className="border-cosmic-purple/60 hover:border-cosmic-purple hover:text-cosmic-purple"
-              onClick={() => toast.info("Info", { description: "Fitur ini akan tersedia" })}
-            >
-              Info
-            </Button>
-            <Button variant="ghost" onClick={() => toast("Toast biasa", { description: "Tanpa ikon" })}>
-              Default
-            </Button>
-            <Button variant="secondary" onClick={() => toast.loading("Memproses...")}>
-              Loading
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                toast.promise(
-                  new Promise((resolve) => setTimeout(resolve, 2000)),
-                  {
-                    loading: "Menyimpan...",
-                    success: "Tersimpan!",
-                    error: "Gagal menyimpan",
-                  },
-                )
-              }
-            >
-              Promise
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() =>
-                toast("Hapus data?", {
-                  description: "Tindakan ini tidak dapat dibatalkan",
-                  action: { label: "Hapus", onClick: () => toast.success("Data dihapus") },
-                  cancel: { label: "Batal", onClick: () => toast.info("Dibatalkan") },
-                })
-              }
-            >
-              With Action
             </Button>
           </div>
         </Section>

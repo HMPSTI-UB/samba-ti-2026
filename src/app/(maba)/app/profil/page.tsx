@@ -1,8 +1,113 @@
+"use client";
+
+import { useState } from "react";
+import { Mail, Hash, Users, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useUserStore } from "@/stores/user.store";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
+import { updateMe } from "@/lib/api/auth";
+import { useMabaDashboard } from "@/features/maba/hooks/use-maba-dashboard";
+import AvatarUpload from "@/components/common/avatar-upload";
+
 export default function MabaProfilPage() {
+  const user = useUserStore((s) => s.user);
+  const setUser = useUserStore((s) => s.setUser);
+  const { data: dashboardData } = useMabaDashboard();
+  const { success: alertSuccess, error: alertError } = useSweetAlert();
+
+  const [name, setName] = useState(user?.name ?? "");
+  const [savingName, setSavingName] = useState(false);
+
+  const clusterName = dashboardData?.data?.cluster?.name;
+
+  async function handleSaveName() {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      alertError("Nama tidak boleh kosong");
+      return;
+    }
+    setSavingName(true);
+    try {
+      const res = await updateMe({ name: trimmed });
+      setUser(res.data);
+      alertSuccess("Nama berhasil diubah");
+    } catch (err) {
+      alertError(err instanceof Error ? err.message : "Gagal mengubah nama");
+    } finally {
+      setSavingName(false);
+    }
+  }
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-soft-white mb-2">Profil</h1>
-      <p className="text-muted-text">Informasi profil MABA akan tampil di sini.</p>
+    <div className="space-y-6">
+      <div className="border border-white rounded-2xl p-6 relative bg-gradient-to-br from-background to-background/50 flex flex-col justify-center min-h-[140px]">
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+          <span className="bg-gradient-to-r from-electric-blue via-cosmic-purple to-supernova-orange bg-clip-text text-transparent">
+            Profil
+          </span>
+        </h1>
+        <p className="mt-3 text-sm md:text-base text-slate-300 font-medium">
+          Kelola informasi profil dan foto profil Anda
+        </p>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="rounded-xl border border-white/10 bg-card-bg p-6 flex flex-col items-center gap-4">
+          <AvatarUpload />
+          <div className="text-center">
+            <p className="font-semibold text-soft-white">{user?.name}</p>
+            <p className="text-xs text-muted-text capitalize">{user?.role?.toLowerCase()}</p>
+          </div>
+        </div>
+
+        <div className="lg:col-span-2 space-y-4">
+          <div className="rounded-xl border border-white/10 bg-card-bg p-6 space-y-4">
+            <h2 className="text-base font-bold text-soft-white">Informasi Akun</h2>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-muted-text">Nama Lengkap</label>
+              <div className="flex gap-2">
+                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nama lengkap" />
+                <Button type="button" variant="primary" onClick={handleSaveName} loading={savingName} disabled={savingName}>
+                  Simpan
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+                <Hash className="h-4 w-4 text-electric-blue shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase text-muted-text">NIM</p>
+                  <p className="truncate text-sm text-soft-white">{user?.nim ?? "-"}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+                <Mail className="h-4 w-4 text-supernova-orange shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase text-muted-text">Email</p>
+                  <p className="truncate text-sm text-soft-white">{user?.email ?? "-"}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+                <Users className="h-4 w-4 text-cosmic-purple shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase text-muted-text">Cluster</p>
+                  <p className="truncate text-sm text-soft-white">{clusterName ?? "-"}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+                <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase text-muted-text">Status</p>
+                  <p className="truncate text-sm text-soft-white">{user?.status ? "Aktif" : "Nonaktif"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

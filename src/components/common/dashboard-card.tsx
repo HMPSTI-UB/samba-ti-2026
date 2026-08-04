@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 type DashboardCardProps = {
   title: string;
@@ -6,6 +7,8 @@ type DashboardCardProps = {
   icon: LucideIcon;
   description?: string;
   trend?: { value: number; positive: boolean };
+  iconBgClass?: string;
+  iconColorClass?: string;
 };
 
 export default function DashboardCard({
@@ -14,6 +17,8 @@ export default function DashboardCard({
   icon: Icon,
   description,
   trend,
+  iconBgClass = "bg-cosmic-purple/20",
+  iconColorClass = "text-electric-blue",
 }: DashboardCardProps) {
   return (
     <div className="rounded-xl border border-white/10 bg-card-bg p-6 shadow-sm transition-shadow hover:shadow-md">
@@ -35,8 +40,8 @@ export default function DashboardCard({
             </p>
           )}
         </div>
-        <div className="rounded-lg bg-cosmic-purple/20 p-3">
-          <Icon className="h-5 w-5 text-electric-blue" />
+        <div className={cn("rounded-lg p-3", iconBgClass)}>
+          <Icon className={cn("h-5 w-5", iconColorClass)} />
         </div>
       </div>
     </div>

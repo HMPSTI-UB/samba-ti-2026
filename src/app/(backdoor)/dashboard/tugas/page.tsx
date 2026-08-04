@@ -1,307 +1,82 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Send, ClipboardList, LayoutGrid, List } from "lucide-react";
+import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/stores/user.store";
-import { useTasks, useCreateTask, useUpdateTask, useDeleteTask, useSubmissions, useReviewSubmission } from "@/features/penugasan/hooks/use-tasks";
+import { useTasks, useDeleteTask } from "@/features/penugasan/hooks/use-tasks";
 import TaskTable from "@/features/penugasan/components/task-table";
-import CampaignTable from "@/features/penugasan/components/campaign-table";
-import CreateTaskDialog from "@/features/penugasan/components/create-task-dialog";
-import EditTaskDialog from "@/features/penugasan/components/edit-task-dialog";
 import DeleteTaskDialog from "@/features/penugasan/components/delete-task-dialog";
-import SubmissionViewer from "@/features/penugasan/components/submission-viewer";
-import FormRenderer from "@/features/penugasan/components/form-renderer";
-import { toast } from "sonner";
-import type { Task, CreateTaskInput, UpdateTaskInput } from "@/features/penugasan/types";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
+import type { Task } from "@/features/penugasan/types";
 
 export default function TugasPage() {
   const user = useUserStore((s) => s.user);
   const role = user?.role ?? "";
   const isKaderisasi = role.toUpperCase() === "KADERISASI" || role.toUpperCase() === "ADMIN";
-  const isSpv = role.toUpperCase() === "SPV";
-  const isMaba = role.toUpperCase() === "MABA";
 
-  const [view, setView] = useState<"list" | "campaign">("list");
-  const [createOpen, setCreateOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
+  const router = useRouter();
+
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [editTask, setEditTask] = useState<Task | null>(null);
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
-  const [formValues, setFormValues] = useState<Record<string, string>>({});
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const { data: tasksRes, isLoading: tasksLoading } = useTasks();
-  const createMutation = useCreateTask();
-  const updateMutation = useUpdateTask();
   const deleteMutation = useDeleteTask();
-  const { data: submissionsRes, isLoading: subsLoading } = useSubmissions();
-  const reviewMutation = useReviewSubmission();
+  const alert = useSweetAlert();
 
   const tasks = tasksRes?.data ?? [];
-  const submissions = submissionsRes?.data ?? [];
-
-  function handleCreate(data: CreateTaskInput) {
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        toast.success("Tugas berhasil dibuat");
-        setCreateOpen(false);
-      },
-      onError: () => toast.error("Gagal membuat tugas"),
-    });
-  }
-
-  function handleUpdate(data: UpdateTaskInput) {
-    updateMutation.mutate(data, {
-      onSuccess: () => {
-        toast.success("Tugas berhasil diupdate");
-        setEditOpen(false);
-        setEditTask(null);
-      },
-      onError: () => toast.error("Gagal mengupdate tugas"),
-    });
-  }
 
   function handleDelete(id: string) {
     deleteMutation.mutate(id, {
       onSuccess: () => {
-        toast.success("Tugas berhasil dihapus");
+        alert.success("Tugas berhasil dihapus");
         setDeleteOpen(false);
         setDeleteTask(null);
       },
-      onError: () => toast.error("Gagal menghapus tugas"),
+      onError: (err: Error) => alert.error(err.message),
     });
-  }
-
-  function handleReview(id: string, status: "ACCEPTED" | "REJECTED", feedback: string) {
-    reviewMutation.mutate({ id, status, feedback }, {
-      onSuccess: () => toast.success("Review berhasil disimpan"),
-      onError: () => toast.error("Gagal menyimpan review"),
-    });
-  }
-
-  function handleSubmitTask() {
-    if (!selectedTask) return;
-
-    const errs: Record<string, string> = {};
-    selectedTask.formFields.forEach((f) => {
-      if (f.isRequired && !formValues[f.key]?.trim()) {
-        errs[f.key] = `${f.label} wajib diisi`;
-      }
-    });
-
-    if (Object.keys(errs).length > 0) {
-      setFormErrors(errs);
-      return;
-    }
-
-    toast.success("Tugas berhasil dikirim (simulasi)");
-    setSelectedTask(null);
-    setFormValues({});
-    setFormErrors({});
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-soft-white">Tugas</h1>
-          <p className="text-sm text-muted-text mt-0.5">
-            {isKaderisasi && "Buat dan kelola tugas untuk MABA"}
-            {isSpv && "Review submission MABA di cluster Anda"}
-            {isMaba && "Kerjakan tugas yang diberikan"}
-          </p>
+          <h1 className="text-2xl font-bold text-soft-white">Tugas</h1>
+          <p className="text-sm text-muted-text mt-1">Kelola penugasan untuk MABA</p>
         </div>
-
         {isKaderisasi && (
-          <Button variant="primary" onClick={() => setCreateOpen(true)} className="gap-2">
-            <Plus size={16} />
-            Buat Tugas
+          <Button variant="primary" onClick={() => router.push("/dashboard/tugas/create")} className="gap-2">
+            <Plus className="w-4 h-4" />
+            Tambah Tugas
           </Button>
         )}
       </div>
 
-      {/* Kaderisasi: Tab View + Content */}
-      {isKaderisasi && (
-        <>
-          {/* Tabs */}
-          <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-card-bg p-1 w-fit">
-            <button
-              onClick={() => setView("list")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                view === "list"
-                  ? "bg-sun-gold text-black shadow-sm"
-                  : "text-muted-text hover:text-soft-white"
-              }`}
-            >
-              <List size={16} />
-              Semua Tugas
-            </button>
-            <button
-              onClick={() => setView("campaign")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                view === "campaign"
-                  ? "bg-sun-gold text-black shadow-sm"
-                  : "text-muted-text hover:text-soft-white"
-              }`}
-            >
-              <LayoutGrid size={16} />
-              Campaign ZENITH
-            </button>
-          </div>
-
-          {view === "list" ? (
-            <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
-              <div className="px-5 py-4 border-b border-white/10">
-                <h2 className="text-sm font-semibold text-soft-white">Daftar Tugas</h2>
-              </div>
-              <div className="p-5">
-                <TaskTable
-                  data={tasks}
-                  onSelect={(task) => {
-                    setSelectedTask(task);
-                    setFormValues({});
-                    setFormErrors({});
-                  }}
-                  onEdit={(task) => {
-                    setEditTask(task);
-                    setEditOpen(true);
-                  }}
-                  onDelete={(task) => {
+      <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
+        {tasksLoading ? (
+          <div className="p-10 text-center text-sm text-muted-text">Memuat tugas...</div>
+        ) : (
+          <TaskTable
+            data={tasks}
+            onDelete={
+              isKaderisasi
+                ? (task) => {
                     setDeleteTask(task);
                     setDeleteOpen(true);
-                  }}
-                />
-              </div>
-            </div>
-          ) : (
-            <CampaignTable
-              data={tasks}
-              onEdit={(task) => {
-                setEditTask(task);
-                setEditOpen(true);
-              }}
-              onDelete={(task) => {
-                setDeleteTask(task);
-                setDeleteOpen(true);
-              }}
-            />
-          )}
-        </>
-      )}
-
-      {/* SPV: Submission Viewer */}
-      {isSpv && (
-        <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
-          <div className="px-5 py-4 border-b border-white/10">
-            <h2 className="text-sm font-semibold text-soft-white">Submission MABA</h2>
-          </div>
-          <div className="p-5">
-            <SubmissionViewer
-              submissions={submissions}
-              onReview={handleReview}
-              isPending={reviewMutation.isPending}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* MABA: Task list + submit */}
-      {isMaba && (
-        <div className="space-y-4">
-          {tasks.length === 0 && !tasksLoading && (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <ClipboardList size={32} className="text-muted-text mb-3" />
-              <p className="text-sm text-muted-text">Belum ada tugas</p>
-            </div>
-          )}
-
-          {tasks.map((task) => (
-            <div key={task.id} className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
-              <div className="px-5 py-4 border-b border-white/10">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-soft-white">{task.title}</h3>
-                  {task.letter && (
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold bg-white/10 text-muted-text border border-white/10">
-                      {task.letter}
-                    </span>
-                  )}
-                </div>
-                {task.deadline && (
-                  <p className="text-xs text-muted-text mt-0.5">
-                    Deadline: {new Date(task.deadline).toLocaleDateString("id-ID", {
-                      day: "numeric", month: "long", year: "numeric",
-                    })}
-                  </p>
-                )}
-              </div>
-
-              <div className="p-5 space-y-4">
-                <div>
-                  <p className="text-sm text-soft-white whitespace-pre-wrap">{task.description}</p>
-                  {task.termsConditions && (
-                    <div className="mt-3 rounded-lg bg-amber-500/10 border border-amber-500/30 p-3">
-                      <p className="text-xs font-medium text-amber-300 mb-1">Syarat & Ketentuan</p>
-                      <p className="text-xs text-amber-400 whitespace-pre-wrap">{task.termsConditions}</p>
-                    </div>
-                  )}
-                </div>
-
-                {selectedTask?.id === task.id ? (
-                  <div className="space-y-4 pt-2 border-t border-white/10">
-                    <FormRenderer
-                      fields={task.formFields}
-                      values={formValues}
-                      onChange={(key, val) => setFormValues((prev) => ({ ...prev, [key]: val }) )}
-                      errors={formErrors}
-                    />
-                    <div className="flex justify-end gap-3">
-                      <Button variant="ghost" size="sm" onClick={() => { setSelectedTask(null); setFormValues({}); setFormErrors({}); }}>
-                        Batal
-                      </Button>
-                      <Button variant="primary" size="sm" onClick={handleSubmitTask} className="gap-1.5">
-                        <Send size={14} />
-                        Kirim
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => { setSelectedTask(task); setFormValues({}); setFormErrors({}); }}
-                    className="gap-1.5"
-                  >
-                    Kerjakan
-                  </Button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Dialogs */}
-      <CreateTaskDialog
-        open={createOpen}
-        onOpenChange={setCreateOpen}
-        onSubmit={handleCreate}
-        isPending={createMutation.isPending}
-      />
-
-      <EditTaskDialog
-        open={editOpen}
-        onOpenChange={(open) => { setEditOpen(open); if (!open) setEditTask(null); }}
-        task={editTask}
-        onSubmit={handleUpdate}
-        isPending={updateMutation.isPending}
-      />
+                  }
+                : undefined
+            }
+          />
+        )}
+      </div>
 
       <DeleteTaskDialog
         open={deleteOpen}
-        onOpenChange={(open) => { setDeleteOpen(open); if (!open) setDeleteTask(null); }}
+        onOpenChange={(v) => {
+          setDeleteOpen(v);
+          if (!v) setDeleteTask(null);
+        }}
         task={deleteTask}
         onConfirm={handleDelete}
         isPending={deleteMutation.isPending}

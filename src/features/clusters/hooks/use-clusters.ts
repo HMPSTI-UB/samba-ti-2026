@@ -4,8 +4,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getClusters,
   getCluster,
+  getClusterDetail,
+  getMyCluster,
   createCluster,
   updateCluster,
+  updateClusterWhatsappLink,
   deleteCluster,
   assignSpv,
   getClusterMembers,
@@ -31,6 +34,21 @@ export function useCluster(id: string) {
   });
 }
 
+export function useClusterDetail(id: string) {
+  return useQuery({
+    queryKey: ["clusters", id, "detail"],
+    queryFn: () => getClusterDetail(id),
+    enabled: !!id,
+  });
+}
+
+export function useMyCluster() {
+  return useQuery({
+    queryKey: ["clusters", "my"],
+    queryFn: getMyCluster,
+  });
+}
+
 export function useCreateCluster() {
   const qc = useQueryClient();
   return useMutation({
@@ -46,6 +64,17 @@ export function useUpdateCluster() {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<ClusterFormValues> }) =>
       updateCluster(id, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["clusters"] });
+    },
+  });
+}
+
+export function useUpdateWhatsappLink() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ clusterId, whatsappGroupLink }: { clusterId: string; whatsappGroupLink: string | null }) =>
+      updateClusterWhatsappLink(clusterId, whatsappGroupLink),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
     },

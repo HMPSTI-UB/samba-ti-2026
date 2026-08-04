@@ -5,7 +5,7 @@ import type { ApiResponse, PaginatedResponse } from "./types";
 const apiClient = axios.create({
   baseURL: "/api",
   withCredentials: true,
-  timeout: 15000,
+  timeout: 60000,
   headers: { "Content-Type": "application/json" },
 });
 

@@ -4,11 +4,14 @@ import { persist } from "zustand/middleware";
 export type User = {
   id: string;
   name: string;
+  username: string | null;
   email: string;
   nim: string | null;
   role: string;
   status: boolean;
   clusterId: string | null;
+  avatarUrl: string | null;
+  avatarKey: string | null;
   createdAt: string;
   updatedAt: string;
 };

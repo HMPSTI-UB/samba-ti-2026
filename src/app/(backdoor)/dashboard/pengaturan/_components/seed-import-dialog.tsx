@@ -1,0 +1,365 @@
+"use client";
+
+import { useState, useRef } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Upload, Download, CheckCircle, XCircle, AlertTriangle, FileText } from "lucide-react";
+import { cn } from "@/lib/cn";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
+import { ApiError } from "@/lib/api/errors";
+import { useImportMaba } from "@/features/clusters/hooks/use-import-maba";
+import type { ImportMabaResult } from "@/features/clusters/api/import";
+
+type SeedPreviewRow = {
+  name: string;
+  username: string;
+  nim: string;
+  email: string;
+  gender: string;
+  status: string;
+  clusterName: string;
+  duplicate: boolean;
+};
+
+type Props = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+function parseCsvPreview(text: string): { rows: SeedPreviewRow[]; errors: string[] } {
+  const lines = text.split("\n").filter((l) => l.trim());
+  if (lines.length < 2) return { rows: [], errors: ["CSV kosong atau hanya baris header"] };
+
+  const header = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, "").toLowerCase());
+  const idx = (keys: string[]) => header.findIndex((h) => keys.some((k) => h.includes(k)));
+
+  const nameIdx = idx(["nama"]);
+  const usernameIdx = idx(["username"]);
+  const emailIdx = idx(["email"]);
+  const nimIdx = idx(["nim"]);
+  const genderIdx = idx(["gender", "jenis kelamin"]);
+  const statusIdx = idx(["status"]);
+  const clusterIdx = idx(["cluster"]);
+
+  if (nameIdx === -1 || nimIdx === -1 || emailIdx === -1) {
+    return { rows: [], errors: ["Kolom Nama, NIM, atau Email tidak ditemukan"] };
+  }
+
+  const rows: SeedPreviewRow[] = [];
+  const errors: string[] = [];
+  const seenNims = new Set<string>();
+
+  const cell = (cols: string[], i: number) => (i >= 0 ? (cols[i] ?? "").replace(/^"|"$/g, "").trim() : "");
+
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(",").map((c) => c.trim());
+    const name = cell(cols, nameIdx);
+    const nim = cell(cols, nimIdx).replace(/["'`]/g, "");
+    const email = cell(cols, emailIdx);
+    const username = cell(cols, usernameIdx);
+    const gender = cell(cols, genderIdx);
+    const status = cell(cols, statusIdx);
+    const clusterName = cell(cols, clusterIdx);
+
+    if (!name && !nim && !email) continue;
+    if (!name) { errors.push(`Baris ${i + 1}: Nama kosong`); continue; }
+    if (!/^\d{15}$/.test(nim)) { errors.push(`Baris ${i + 1}: NIM "${nim}" tidak valid`); continue; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errors.push(`Baris ${i + 1}: Email "${email}" tidak valid`); continue; }
+
+    const duplicate = seenNims.has(nim);
+    seenNims.add(nim);
+    rows.push({ name, username, nim, email, gender, status, clusterName, duplicate });
+  }
+
+  return { rows, errors };
+}
+
+function downloadCsv(users: ImportMabaResult["users"], filename: string) {
+  const BOM = "\uFEFF";
+  const header = "Nama,NIM,Email,Password,Gender";
+  const rows = users.map((u) =>
+    [u.name, u.nim, u.email, u.password, u.gender ?? ""].map((v) => `"${v.replace(/"/g, '""')}"`).join(","),
+  );
+  const blob = new Blob([BOM + header + "\n" + rows.join("\n")], { type: "text/csv;charset=utf-8;bom" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export default function SeedImportDialog({ open, onOpenChange }: Props) {
+  const [step, setStep] = useState<"upload" | "preview" | "result">("upload");
+  const [file, setFile] = useState<File | null>(null);
+  const [previewRows, setPreviewRows] = useState<SeedPreviewRow[]>([]);
+  const [previewErrors, setPreviewErrors] = useState<string[]>([]);
+  const [result, setResult] = useState<ImportMabaResult | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const importMutation = useImportMaba();
+  const { error: alertError } = useSweetAlert();
+  const [dragOver, setDragOver] = useState(false);
+
+  function reset() {
+    setStep("upload");
+    setFile(null);
+    setPreviewRows([]);
+    setPreviewErrors([]);
+    setResult(null);
+  }
+
+  function handleOpenChange(v: boolean) {
+    if (!v) reset();
+    onOpenChange(v);
+  }
+
+  function handleFile(file: File) {
+    if (!file.name.endsWith(".csv")) {
+      setPreviewErrors(["File harus berformat .csv"]);
+      return;
+    }
+    setFile(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      const { rows, errors } = parseCsvPreview(text);
+      setPreviewRows(rows);
+      setPreviewErrors(errors);
+      setStep("preview");
+    };
+    reader.readAsText(file);
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(false);
+    const f = e.dataTransfer.files[0];
+    if (f) handleFile(f);
+  }
+
+  function handleImport() {
+    const rows = previewRows
+      .filter((r) => !r.duplicate)
+      .map((r) => ({
+        name: r.name,
+        username: r.username || undefined,
+        nim: r.nim,
+        email: r.email,
+        gender: r.gender,
+        status: r.status || undefined,
+        clusterName: r.clusterName || undefined,
+      }));
+    if (rows.length === 0) return;
+    importMutation.mutate(
+      { rows, seed: true },
+      {
+        onSuccess: (res) => {
+          setResult(res.data ?? (res as unknown as ImportMabaResult));
+          setStep("result");
+        },
+        onError: (err) => {
+          alertError(err instanceof ApiError ? err.message : "Gagal mengimpor data");
+        },
+      },
+    );
+  }
+
+  const isPending = importMutation.isPending;
+  const importableCount = previewRows.filter((r) => !r.duplicate).length;
+  const duplicateCount = previewRows.length - importableCount;
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent title="Import CSV (Seed)" className={cn(step === "preview" && "max-w-2xl")}>
+        {step === "upload" && (
+          <div
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            onClick={() => inputRef.current?.click()}
+            className={cn(
+              "flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-10 cursor-pointer transition-colors",
+              dragOver ? "border-electric-blue bg-electric-blue/5" : "border-white/20 hover:border-white/40",
+            )}
+          >
+            <Upload size={32} className="text-muted-text" />
+            <div className="text-center">
+              <p className="text-sm font-medium text-soft-white">Klik atau taruh file CSV seed di sini</p>
+              <p className="text-xs text-muted-text mt-1">
+                Format: Nama, Username, Email, NIM, Gender, Status, Cluster
+              </p>
+              <p className="text-xs text-muted-text mt-1">
+                Password direset ke <span className="text-amber-400">NIM</span> · cluster dicocokkan berdasarkan nama
+              </p>
+            </div>
+            <input
+              ref={inputRef}
+              type="file"
+              accept=".csv"
+              className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+            />
+          </div>
+        )}
+
+        {step === "preview" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-text">
+                <strong className="text-soft-white">{importableCount}</strong> data akan di-import
+                {duplicateCount > 0 && <span className="text-amber-400">, {duplicateCount} duplikat NIM dilewati</span>}
+                {file && <span className="ml-1">dari <FileText size={14} className="inline" /> {file.name}</span>}
+              </p>
+            </div>
+
+            {previewErrors.length > 0 && (
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                <p className="text-xs font-medium text-amber-300 mb-1">Peringatan ({previewErrors.length})</p>
+                <ul className="space-y-0.5">
+                  {previewErrors.map((e, i) => (
+                    <li key={i} className="text-xs text-amber-400">{e}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="max-h-60 overflow-y-auto rounded-lg border border-white/10">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-white/5 text-left text-muted-text">
+                    <th className="px-3 py-2 font-medium">#</th>
+                    <th className="px-3 py-2 font-medium">Nama</th>
+                    <th className="px-3 py-2 font-medium">NIM</th>
+                    <th className="px-3 py-2 font-medium">Email</th>
+                    <th className="px-3 py-2 font-medium">Cluster</th>
+                    <th className="px-3 py-2 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {previewRows.slice(0, 50).map((row, i) => (
+                    <tr key={i} className={cn("hover:bg-white/5", row.duplicate && "bg-amber-500/5")}>
+                      <td className="px-3 py-2 text-muted-text">{i + 1}</td>
+                      <td className={cn("px-3 py-2 font-medium text-soft-white", row.duplicate && "line-through opacity-60")}>{row.name}</td>
+                      <td className={cn("px-3 py-2 text-muted-text", row.duplicate && "opacity-60")}>{row.nim}</td>
+                      <td className={cn("px-3 py-2 text-muted-text", row.duplicate && "opacity-60")}>{row.email}</td>
+                      <td className="px-3 py-2 text-muted-text">{row.clusterName || <span className="text-amber-400/80">-</span>}</td>
+                      <td className="px-3 py-2">
+                        {row.duplicate ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-400">
+                            <AlertTriangle size={10} />
+                            Duplikat
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-400">
+                            <CheckCircle size={10} />
+                            Seed
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {previewRows.length > 50 && (
+                    <tr>
+                      <td colSpan={6} className="px-3 py-2 text-center text-muted-text italic">
+                        ... dan {previewRows.length - 50} lainnya
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={() => setStep("upload")} disabled={isPending}>
+                Ganti File
+              </Button>
+              <Button type="button" variant="primary" onClick={handleImport} loading={isPending} disabled={isPending || importableCount === 0}>
+                Import {importableCount} Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {step === "result" && result && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 rounded-xl border p-4">
+              {result.created > 0 ? (
+                <CheckCircle size={28} className="text-emerald-500 shrink-0" />
+              ) : (
+                <XCircle size={28} className="text-red-500 shrink-0" />
+              )}
+              <div>
+                <p className="text-sm font-medium text-soft-white">
+                  {result.created > 0 ? "Import berhasil!" : "Import gagal"}
+                </p>
+                <p className="text-xs text-muted-text mt-0.5">
+                  {result.created} berhasil dibuat
+                  {result.skipped > 0 && `, ${result.skipped} dilewati (NIM sudah terdaftar)`}
+                </p>
+              </div>
+            </div>
+
+            {result.errors.length > 0 && (
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                <p className="text-xs font-medium text-amber-300 mb-1">
+                  <AlertTriangle size={12} className="inline mr-1" />
+                  {result.errors.length} catatan
+                </p>
+                <ul className="space-y-0.5 max-h-24 overflow-y-auto">
+                  {result.errors.map((e, i) => (
+                    <li key={i} className="text-xs text-amber-400">{(e.row || "Global")}: {e.reason}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {result.users.length > 0 && (
+              <div className="rounded-lg border border-white/10 p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs font-medium text-muted-text">
+                    {result.users.length} akun dibuat — password default <span className="text-amber-400">= NIM</span>
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => downloadCsv(result.users, `maba-seed-passwords-${Date.now()}.csv`)}
+                    className="gap-1.5 text-xs"
+                  >
+                    <Download size={12} />
+                    Download CSV
+                  </Button>
+                </div>
+                <div className="max-h-40 overflow-y-auto rounded border border-white/10">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="bg-white/5 text-left text-muted-text">
+                        <th className="px-2 py-1.5 font-medium">Nama</th>
+                        <th className="px-2 py-1.5 font-medium">NIM</th>
+                        <th className="px-2 py-1.5 font-medium">Password</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {result.users.map((u, i) => (
+                        <tr key={i} className="hover:bg-white/5">
+                          <td className="px-2 py-1.5 text-soft-white">{u.name}</td>
+                          <td className="px-2 py-1.5 text-muted-text">{u.nim}</td>
+                          <td className="px-2 py-1.5 font-mono text-soft-white">{u.password}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end pt-2">
+              <Button type="button" variant="primary" onClick={() => handleOpenChange(false)}>
+                Selesai
+              </Button>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

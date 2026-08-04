@@ -1,6 +1,3 @@
-export const CAMPAIGN_LETTERS = ["Z", "E", "N", "I", "T", "H"] as const;
-export type CampaignLetter = (typeof CAMPAIGN_LETTERS)[number];
-
 export type FormField = {
   key: string;
   label: string;
@@ -13,9 +10,9 @@ export type Task = {
   id: string;
   title: string;
   description: string;
-  termsConditions: string;
+  termsConditions: string[];
   formFields: FormField[];
-  letter: CampaignLetter;
+  status: "DRAFT" | "PUBLISHED";
   deadline: string;
   createdBy: string;
   createdAt: string;
@@ -26,7 +23,8 @@ export type Submission = {
   taskId: string;
   mabaId: string;
   mabaName: string;
-  data: Record<string, string>;
+  clusterName?: string | null;
+  submissionData: Record<string, string>;
   status: "PENDING" | "ACCEPTED" | "REJECTED";
   feedback: string | null;
   submittedAt: string;
@@ -35,10 +33,58 @@ export type Submission = {
 export type CreateTaskInput = {
   title: string;
   description: string;
-  termsConditions: string;
+  termsConditions: string[];
   formFields: FormField[];
-  letter: CampaignLetter;
+  status: "DRAFT" | "PUBLISHED";
   deadline: string;
 };
 
 export type UpdateTaskInput = Partial<CreateTaskInput> & { id: string };
+
+export type MabaTaskStatus = "DONE" | "PENDING" | "REJECTED" | "NOT_SUBMITTED";
+
+export type MabaTask = {
+  id: string;
+  title: string;
+  description: string;
+  deadline: string;
+  termsConditions: string[];
+  formFields: FormField[];
+  doneStatus: MabaTaskStatus;
+};
+
+export type MySubmission = {
+  id: string;
+  taskId: string;
+  mabaId: string;
+  submissionData: Record<string, string>;
+  status: "PENDING" | "ACCEPTED" | "REJECTED";
+  feedback: string | null;
+  submittedAt: string;
+};
+
+export type MemberTask = {
+  id: string;
+  title: string;
+  description: string;
+  deadline: string;
+  termsConditions: string[];
+  formFields: FormField[];
+  doneStatus: MabaTaskStatus;
+  submission: MySubmission | null;
+};
+
+export type MemberTasksData = {
+  maba: {
+    id: string;
+    name: string;
+    username: string | null;
+    email: string;
+    nim: string | null;
+    gender: string | null;
+    status: boolean;
+    clusterId: string | null;
+    clusterName: string | null;
+  };
+  tasks: MemberTask[];
+};

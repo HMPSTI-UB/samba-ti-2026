@@ -15,6 +15,7 @@ export function useUsers(filters: {
   search?: string;
   role?: string;
   status?: string;
+  clusterId?: string;
   page: number;
   limit: number;
 }) {

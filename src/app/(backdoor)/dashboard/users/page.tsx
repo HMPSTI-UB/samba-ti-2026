@@ -1,17 +1,16 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/ui/pagination";
+import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { useUsers, useCreateUser, useUpdateUser, useDeleteUser } from "@/features/users/hooks/use-users";
 import UserTable from "@/features/users/components/user-table";
 import UserFilter from "@/features/users/components/user-filter";
 import UserFormDialog from "@/features/users/components/user-form";
 import UserDeleteDialog from "@/features/users/components/user-delete-dialog";
 import type { SafeUser } from "@/features/users/api/users";
-import type { ApiError } from "@/lib/api/errors";
 
 const LIMIT = 20;
 
@@ -31,6 +30,7 @@ export default function UsersPage() {
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser();
   const deleteMutation = useDeleteUser();
+  const { success: alertSuccess, error: alertError } = useSweetAlert();
 
   const handleCreate = useCallback(
     (formData: any) => {
@@ -44,16 +44,16 @@ export default function UsersPage() {
         },
         {
           onSuccess: () => {
-            toast.success("User berhasil dibuat");
+            alertSuccess("User berhasil dibuat");
             setFormOpen(false);
           },
           onError: (err: Error) => {
-            toast.error(err.message);
+            alertError(err.message);
           },
         },
       );
     },
-    [createMutation],
+    [createMutation, alertSuccess, alertError],
   );
 
   const handleUpdate = useCallback(
@@ -63,32 +63,32 @@ export default function UsersPage() {
         { id: editingUser.id, data: { name: formData.name, email: formData.email } },
         {
           onSuccess: () => {
-            toast.success("User berhasil diupdate");
+            alertSuccess("User berhasil diupdate");
             setFormOpen(false);
             setEditingUser(null);
           },
           onError: (err: Error) => {
-            toast.error(err.message);
+            alertError(err.message);
           },
         },
       );
     },
-    [editingUser, updateMutation],
+    [editingUser, updateMutation, alertSuccess, alertError],
   );
 
   const handleDelete = useCallback(() => {
     if (!deletingUser) return;
     deleteMutation.mutate(deletingUser.id, {
       onSuccess: () => {
-        toast.success("User berhasil dihapus");
+        alertSuccess("User berhasil dihapus");
         setDeleteOpen(false);
         setDeletingUser(null);
       },
       onError: (err: Error) => {
-        toast.error(err.message);
+        alertError(err.message);
       },
     });
-  }, [deletingUser, deleteMutation]);
+  }, [deletingUser, deleteMutation, alertSuccess, alertError]);
 
   const openEdit = useCallback((user: SafeUser) => {
     setEditingUser(user);

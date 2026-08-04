@@ -69,7 +69,7 @@ export default function AppSidebar({
             <NavItem
               key={item.href}
               item={item}
-              isActive={pathname === item.href}
+              isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href + "/"))}
               badge={item.unreadBadge ? unreadCount : undefined}
               onNavigate={() => onOpenChange(false)}
             />

@@ -48,6 +48,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/app/dashboard", request.url));
   }
 
+  if (isDashboardPage && role === "SPV" && pathname !== "/dashboard" && !pathname.startsWith("/dashboard/cluster") && pathname !== "/dashboard/pengumuman" && pathname !== "/dashboard/profil") {
+    return NextResponse.redirect(new URL("/dashboard/cluster", request.url));
+  }
+
   return NextResponse.next();
 }
 

@@ -63,7 +63,7 @@ export default function LoginForm() {
             {isPending ? "Memproses..." : "Masuk"}
           </Button>
         </div>
-      </div>
-    </form>
+        </div>
+      </form>
   );
 }

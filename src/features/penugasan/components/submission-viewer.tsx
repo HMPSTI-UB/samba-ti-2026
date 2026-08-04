@@ -17,7 +17,7 @@ const statusColors: Record<string, string> = {
 
 type Props = {
   submissions: Submission[];
-  onReview: (id: string, status: "ACCEPTED" | "REJECTED", feedback: string) => void;
+  onReview: (submission: Submission, status: "ACCEPTED" | "REJECTED", feedback: string) => void;
   isPending?: boolean;
 };
 
@@ -27,7 +27,7 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
 
   function handleReview(status: "ACCEPTED" | "REJECTED") {
     if (!selected) return;
-    onReview(selected.id, status, feedback);
+    onReview(selected, status, feedback);
     setSelected(null);
     setFeedback("");
   }
@@ -90,10 +90,10 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
           {selected && (
             <div className="space-y-4">
               <div className="space-y-3">
-                {Object.entries(selected.data).map(([key, value]) => (
+                {Object.entries(selected.submissionData ?? {}).map(([key, value]) => (
                   <div key={key}>
                     <label className="block text-xs font-medium text-muted-text mb-1">{key}</label>
-                    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white">
+                    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap">
                       {value || <span className="text-muted-text">—</span>}
                     </div>
                   </div>

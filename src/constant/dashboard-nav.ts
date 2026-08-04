@@ -6,9 +6,11 @@ import {
   Clock3,
   Megaphone,
   User,
+  UserRound,
   LayoutDashboard,
   Layers,
   ClipboardCheck,
+  Settings,
 } from "lucide-react";
 
 export type DashboardNavItem = {
@@ -29,8 +31,18 @@ export const MABA_NAV_ITEMS: DashboardNavItem[] = [
 
 export const PANITIA_NAV_ITEMS: DashboardNavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Maba", href: "/dashboard/maba", icon: UserRound },
   { label: "Cluster", href: "/dashboard/clusters", icon: Layers },
   { label: "Users", href: "/dashboard/users", icon: Users },
   { label: "Tugas", href: "/dashboard/tugas", icon: ClipboardCheck },
   { label: "Pengumuman", href: "/dashboard/pengumuman", icon: Megaphone, unreadBadge: true },
+  { label: "Pengaturan", href: "/dashboard/pengaturan", icon: Settings },
+  { label: "Profil", href: "/dashboard/profil", icon: User },
+];
+
+export const SPV_NAV_ITEMS: DashboardNavItem[] = [
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Cluster", href: "/dashboard/cluster", icon: Layers },
+  { label: "Pengumuman", href: "/dashboard/pengumuman", icon: Megaphone, unreadBadge: true },
+  { label: "Profil", href: "/dashboard/profil", icon: User },
 ];
