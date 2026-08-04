@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[50%] z-50">
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[90%] md:max-w-[50%] z-50">
       <div className="px-6 py-3 flex items-center justify-between">
         <Link href="/">
           <Image src="/logo.png" width={50} height={20} alt="SAMBA TI" />
