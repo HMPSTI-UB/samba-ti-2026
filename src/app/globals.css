@@ -66,7 +66,21 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins), system-ui, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* Lenis smooth scroll (official recommended CSS) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 .glass-panel {
@@ -75,6 +89,51 @@ body {
   backdrop-filter: blur(16px);
   box-shadow: 0 0 40px rgba(56, 189, 248, 0.08);
   border-radius: 24px;
+}
+
+/* Scroll reveal (entrance) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+  will-change: opacity, transform;
+}
+
+.reveal-from-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+.reveal-from-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible,
+.reveal-from-left.is-visible,
+.reveal-from-right.is-visible,
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 .text-gradient-blue-purple {

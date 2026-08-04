@@ -22,6 +22,7 @@ components/
 | `post-login-alert.tsx` | `PostLoginAlert` | Client (shows SweetAlert once after login) |
 | `confirm-dialog.tsx` | `ConfirmDialog` | Client (generic confirmation dialog) |
 | `avatar-upload.tsx` | `AvatarUpload` | Client (profile photo picker + preview + upload to S3 via presigned URL + `updateMe`) |
+| `reveal.tsx` | `Reveal` | Client (IntersectionObserver scroll-entrance: fade/slide/scale in, respects prefers-reduced-motion) |
 
 ### `layout/`
 | File | Component | Type |

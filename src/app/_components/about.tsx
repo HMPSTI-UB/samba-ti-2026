@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import Reveal from "@/components/common/reveal";
 
 export default function About({ loaded }: { loaded: boolean }) {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -49,20 +50,26 @@ export default function About({ loaded }: { loaded: boolean }) {
       <h2 className="text-4xl md:text-[70px] font-sonsie text-[#B95C00] text-center italic z-50 relative">
         SAMBA TI
       </h2>
-      <Image
-        src={"/assets/hero/left-cloud-sm.png"}
-        width={630}
-        height={209}
-        alt="cloud"
-        className="absolute -left-40  top-25     md:top-30 z-20 scale-50 md:scale-100"
-      />
-      <Image
-        src={"/assets/hero/right-cloud-sm.png"}
-        width={630}
-        height={209}
-        alt="cloud"
-        className="absolute -right-45 -top-5 md:top-10 z-20 scale-50 md:scale-100"
-      />
+      <Reveal from="left" className="absolute -left-40 top-25 md:top-30 z-20">
+        <div className="scale-50 md:scale-100">
+          <Image
+            src={"/assets/hero/left-cloud-sm.png"}
+            width={630}
+            height={209}
+            alt="cloud"
+          />
+        </div>
+      </Reveal>
+      <Reveal from="right" delay={200} className="absolute -right-45 -top-5 md:top-10 z-20">
+        <div className="scale-50 md:scale-100">
+          <Image
+            src={"/assets/hero/right-cloud-sm.png"}
+            width={630}
+            height={209}
+            alt="cloud"
+          />
+        </div>
+      </Reveal>
       <div className="bg-[#2D160E] w-[1200px] md:w-[2000px] h-50 left-1/2 -translate-x-1/2  rounded-[110%] absolute top-30  md:top-70 z-10"></div>
       <div className="overflow-hidden mt-30">
         <div ref={carouselRef} className="flex gap-1 w-max" style={{ willChange: "transform" }}>
@@ -93,20 +100,26 @@ export default function About({ loaded }: { loaded: boolean }) {
         karakter yang disiplin, kreatif, profesional, dan siap menghadapi
         tantangan dunia teknologi serta industri.
       </p>
-      <Image
-        src={"/assets/hero/left-cloud-lg.svg"}
-        width={860}
-        height={715}
-        alt="Left Large Cloud"
-        className="absolute -left-30 -bottom-50 z-30 scale-50 md:scale-100"
-      />
-      <Image
-        src={"/assets/hero/right-cloud-lg.svg"}
-        width={860}
-        height={715}
-        alt="Right Large Cloud"
-        className="absolute -right-30   -bottom-50 z-30 scale-50 md:scale-100"
-      />
+      <Reveal from="left" delay={150} className="absolute -left-30 -bottom-50 z-30">
+        <div className="scale-50 md:scale-100">
+          <Image
+            src={"/assets/hero/left-cloud-lg.svg"}
+            width={860}
+            height={715}
+            alt="Left Large Cloud"
+          />
+        </div>
+      </Reveal>
+      <Reveal from="right" delay={350} className="absolute -right-30 -bottom-50 z-30">
+        <div className="scale-50 md:scale-100">
+          <Image
+            src={"/assets/hero/right-cloud-lg.svg"}
+            width={860}
+            height={715}
+            alt="Right Large Cloud"
+          />
+        </div>
+      </Reveal>
       <div className="   bg-[#2D160E] h-100 -bottom-25 md:-bottom-50 absolute w-[700px] md:w-[1500px] rounded-[300%] left-1/2 -translate-x-1/2 z-20"></div>
       <div className="   bg-linear-to-b from-[#EFA15B] from-70% to-transparent h-50 -bottom-35 md:-bottom-65 absolute w-[700px] md:w-[1700px] rounded-[300%] left-1/2 -translate-x-1/2 z-10 blur-3xl"></div>
     </section>

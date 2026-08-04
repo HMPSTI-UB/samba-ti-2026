@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Reveal from "@/components/common/reveal";
 
 export default function Zenith() {
   return (
     <section className="min-h-screen ">
       <div className="relative  pt-70 md:pt-120">
-        <div className="relative w-fit mx-auto z-30">
+        <Reveal from="scale" className="relative w-fit mx-auto z-30">
           <Image
             src={"/assets/hero/about-card.png"}
             width={900}
@@ -23,7 +24,7 @@ export default function Zenith() {
             akan berkembang menjadi para inovator, pemecah masalah, dan
             penggerak teknologi di masa depan “The New IT Heroes”.
           </p>
-        </div>
+        </Reveal>
         <Image
           src={"/assets/hero/rocks.png"}
           width={2100}
@@ -31,33 +32,40 @@ export default function Zenith() {
           alt=""
           className="absolute -bottom-20 left-1/2 -translate-x-1/2 z-10 scale-115"
         />
-        <Image
-          src={"/assets/hero/starwar-ship.png"}
-          width={252}
-          height={252}
-          alt=""
-          className="absolute top-10 md:top-50  -right-20 md:right-0 z-10 scale-50 md:scale-115"
-        />
+        <Reveal from="right" className="absolute top-10 md:top-50 -right-20 md:right-0 z-10">
+          <div className="scale-50 md:scale-115">
+            <Image
+              src={"/assets/hero/starwar-ship.png"}
+              width={252}
+              height={252}
+              alt=""
+            />
+          </div>
+        </Reveal>
       </div>
       <div className="relative w-full ">
-        <div className="absolute -top-10 md:-top-100 -right-110 md:-right-235 -rotate-5">
-          <Image
-            src={"/assets/hero/visi.svg"}
-            width={2000}
-            height={1200}
-            alt=""
-            className="scale-120 md:scale-70"
-          />
-        </div>
-        <div className="absolute top-80 md:top-10 -left-110 md:-left-240">
-          <Image
-            src={"/assets/hero/misi.svg"}
-            width={2000}
-            height={1200}
-            alt=""
-            className=" scale-120 md:scale-70"
-          />
-        </div>
+        <Reveal from="bottom" delay={100} className="absolute -top-10 md:-top-100 -right-110 md:-right-235">
+          <div className="-rotate-5">
+            <div className="scale-120 md:scale-70">
+              <Image
+                src={"/assets/hero/visi.svg"}
+                width={2000}
+                height={1200}
+                alt=""
+              />
+            </div>
+          </div>
+        </Reveal>
+        <Reveal from="bottom" delay={250} className="absolute top-80 md:top-10 -left-110 md:-left-240">
+          <div className="scale-120 md:scale-70">
+            <Image
+              src={"/assets/hero/misi.svg"}
+              width={2000}
+              height={1200}
+              alt=""
+            />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
