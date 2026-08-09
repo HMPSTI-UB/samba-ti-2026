@@ -3,6 +3,8 @@ export type Cluster = {
   name: string;
   slug: string;
   joinCode: string;
+  clusterNumber: number | null;
+  clusterMeaning: string | null;
   whatsappGroupLink: string | null;
   spvId: string | null;
   spvName: string | null;
@@ -13,6 +15,8 @@ export type Cluster = {
 export type ClusterFormValues = {
   name: string;
   slug?: string;
+  clusterNumber?: number | null;
+  clusterMeaning?: string | null;
   whatsappGroupLink?: string;
 };
 

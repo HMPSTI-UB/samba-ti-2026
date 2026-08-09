@@ -20,9 +20,10 @@ export default function HomePage() {
       <About loaded={loaded} />
       <Zenith />
       <ZenithPhases />
-      <Logo />
-      <section className="py-16 md:py-40 px-5 md:px-20">
-        <Reveal from="bottom">
+      <div className="bg-linear-to-b from-deep-space via-cosmic-purple/15 to-midnight-navy">
+        <Logo />
+        <section className="py-16 md:py-40 px-5 md:px-20 relative">
+          <Reveal from="bottom">
           <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-center md:text-right text-white font-poppins tracking-wide leading-9 md:leading-20 mb-10 md:mb-0">
             Kenalan sama Maskot Kita Yuk!{" "}
             <span className="text-[#BB5AFA]">Zuno</span>
@@ -112,7 +113,8 @@ export default function HomePage() {
             </Reveal>
           </div>
         </div>
-      </section>
+        </section>
+      </div>
       <Footer />
     </>
   );

@@ -45,6 +45,7 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
   const waMutation = useUpdateWhatsappLink();
 
   const cluster = clusterRes?.data;
+  const clusterNumberLabel = cluster?.clusterNumber != null ? `Cluster ${cluster.clusterNumber}` : "";
   const detail = detailRes?.data;
   const members = detail?.members ?? [];
   const totalTasks = detail?.totalTasks ?? 0;
@@ -147,7 +148,16 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
         )}
         <div className="flex-1 min-w-0">
           <h1 className="truncate text-2xl font-bold text-soft-white">{cluster.name}</h1>
-          <p className="text-sm text-muted-text">{cluster.slug}</p>
+          <p className="text-sm text-muted-text">
+            {clusterNumberLabel}
+            {clusterNumberLabel && cluster.slug ? " · " : ""}
+            {cluster.slug}
+          </p>
+          {cluster.clusterMeaning && (
+            <p className="mt-1 max-w-xl text-sm text-muted-text line-clamp-2">
+              {cluster.clusterMeaning}
+            </p>
+          )}
         </div>
         {!canManage && (
           <div className="flex shrink-0 items-center gap-2">

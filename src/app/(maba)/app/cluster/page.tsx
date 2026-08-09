@@ -51,8 +51,15 @@ export default function MabaClusterPage() {
             {detail.cluster.name}
           </span>
         </h1>
+        {detail.cluster.clusterNumber != null && (
+          <span className="mt-3 inline-flex w-fit items-center rounded-full border border-cosmic-purple/30 bg-cosmic-purple/15 px-3 py-1 text-xs font-bold text-cosmic-purple">
+            Cluster #{detail.cluster.clusterNumber}
+          </span>
+        )}
         <p className="mt-3 text-sm md:text-base text-slate-300 font-medium">
-          Mari wujudkan visi bersama dan saling bantu!
+          {detail.cluster.clusterMeaning
+            ? detail.cluster.clusterMeaning
+            : "Mari wujudkan visi bersama dan saling bantu!"}
         </p>
       </div>
 

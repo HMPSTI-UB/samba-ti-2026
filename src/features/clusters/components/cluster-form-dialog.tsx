@@ -7,10 +7,16 @@ import { z } from "zod";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { Cluster, ClusterFormValues } from "@/features/clusters/types";
 
 const clusterFormSchema = z.object({
   name: z.string().min(1, "Nama cluster wajib diisi"),
+  clusterNumber: z
+    .string()
+    .optional()
+    .refine((v) => v === undefined || v === "" || /^\d+$/.test(v), "Nomor cluster harus angka bulat"),
+  clusterMeaning: z.string().max(500, "Maksimal 500 karakter").optional(),
   whatsappGroupLink: z.string().url("Format URL tidak valid").optional().or(z.literal("")),
 });
 
@@ -42,7 +48,7 @@ export default function ClusterFormDialog({ open, onOpenChange, editingCluster, 
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(clusterFormSchema),
-    defaultValues: { name: "", whatsappGroupLink: "" },
+    defaultValues: { name: "", clusterNumber: "", clusterMeaning: "", whatsappGroupLink: "" },
   });
 
   const nameValue = watch("name");
@@ -52,10 +58,12 @@ export default function ClusterFormDialog({ open, onOpenChange, editingCluster, 
       if (editingCluster) {
         reset({
           name: editingCluster.name,
+          clusterNumber: editingCluster.clusterNumber?.toString() ?? "",
+          clusterMeaning: editingCluster.clusterMeaning ?? "",
           whatsappGroupLink: editingCluster.whatsappGroupLink ?? "",
         });
       } else {
-        reset({ name: "", whatsappGroupLink: "" });
+        reset({ name: "", clusterNumber: "", clusterMeaning: "", whatsappGroupLink: "" });
       }
     }
   }, [open, editingCluster, reset]);
@@ -64,6 +72,8 @@ export default function ClusterFormDialog({ open, onOpenChange, editingCluster, 
     onSubmit({
       name: data.name,
       slug: toSlug(data.name),
+      clusterNumber: data.clusterNumber ? Number(data.clusterNumber) : null,
+      clusterMeaning: data.clusterMeaning?.trim() || null,
       whatsappGroupLink: data.whatsappGroupLink || undefined,
     });
   }
@@ -81,6 +91,21 @@ export default function ClusterFormDialog({ open, onOpenChange, editingCluster, 
           <p className="-mt-3 text-xs text-muted-text">
             Slug: <span className="font-mono">{toSlug(nameValue) || "-"}</span>
           </p>
+          <Input
+            label="Nomor Cluster (opsional)"
+            type="number"
+            min={0}
+            placeholder="Contoh: 1"
+            error={errors.clusterNumber?.message}
+            {...register("clusterNumber")}
+          />
+          <Textarea
+            label="Makna Cluster (opsional)"
+            maxLength={500}
+            placeholder="Contoh: Bintang paling terang di langit malam."
+            error={errors.clusterMeaning?.message}
+            {...register("clusterMeaning")}
+          />
           <Input label="Link Grup WhatsApp (opsional)" placeholder="https://chat.whatsapp.com/..." error={errors.whatsappGroupLink?.message} {...register("whatsappGroupLink")} />
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} disabled={isPending}>

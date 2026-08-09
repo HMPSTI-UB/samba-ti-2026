@@ -14,6 +14,8 @@ export type ClusterDetail = {
     id: string;
     name: string;
     slug: string;
+    clusterNumber: number | null;
+    clusterMeaning: string | null;
     spvName: string | null;
     spvAvatarUrl: string | null;
     whatsappGroupLink: string | null;

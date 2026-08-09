@@ -40,6 +40,14 @@ export default function ClusterTable({ data, onEdit, onDelete, onAssignSpv, onMa
       ),
     },
     {
+      accessorKey: "clusterNumber",
+      header: "No. Cluster",
+      enableSorting: true,
+      cell: ({ getValue }) => (
+        <span className="text-sm">{getValue<number | null>() ?? "—"}</span>
+      ),
+    },
+    {
       accessorKey: "spvName",
       header: "SPV",
       enableSorting: true,
