@@ -59,3 +59,15 @@ export type PublicCluster = {
   memberCount: number | string;
   createdAt: string;
 };
+
+export type PublicClusterMember = {
+  id: string;
+  name: string;
+  nim: string | null;
+  gender: string | null;
+};
+
+export type PublicClusterDetail = {
+  cluster: PublicCluster;
+  members: PublicClusterMember[];
+};

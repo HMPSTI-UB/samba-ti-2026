@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[90%] md:max-w-[50%] z-50">
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[90%] md:max-w-[50%] z-[100]">
       <div className="px-6 py-3 flex items-center justify-between">
         <Link href="/">
           <Image src="/logo.png" width={50} height={20} alt="SAMBA TI" />
@@ -20,9 +20,9 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-1">
           {[
             { name: "Home", href: "/" },
-            { name: "Journey", href: "#journey" },
-            { name: "Schedule", href: "#schedule" },
             { name: "Cluster", href: "/clusters" },
+            { name: "Pengumuman", href: "/coming-soon" },
+            { name: "Galeri", href: "/coming-soon" },
           ].map((item) => (
             <Link 
               key={item.name} 
@@ -60,9 +60,10 @@ export default function Navbar() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-electric-blue/20 blur-[60px] -z-10" />
             
             <Link href="/" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Home</Link>
-            <Link href="#journey" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Journey</Link>
-            <Link href="#schedule" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Schedule</Link>
             <Link href="/clusters" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Cluster</Link>
+            <Link href="/coming-soon" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Pengumuman</Link>
+            <Link href="/coming-soon" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Galeri</Link>
+            <Link href="/coming-soon" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">App</Link>
             <Link href="/app/dashboard" onClick={() => setIsOpen(false)} className="text-center py-3 font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">Masuk Portal</Link>
           </motion.div>
         )}
