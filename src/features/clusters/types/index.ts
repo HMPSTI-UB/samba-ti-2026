@@ -48,3 +48,14 @@ export type ClusterDetail = {
   totalTasks: number;
   members: ClusterMemberProgress[];
 };
+
+export type PublicCluster = {
+  id: string;
+  name: string;
+  slug: string;
+  clusterNumber: number | null;
+  clusterMeaning: string | null;
+  spvName: string | null;
+  memberCount: number | string;
+  createdAt: string;
+};

@@ -5,6 +5,7 @@ type FetchOptions = {
   headers?: Record<string, string>;
   cache?: RequestCache;
   revalidate?: number | false;
+  next?: { revalidate?: number | false };
 };
 
 function getBaseUrl(): string {
@@ -33,6 +34,7 @@ async function request<T>(
     headers,
     body: body ? JSON.stringify(body) : undefined,
     cache: options?.cache,
+    next: options?.next,
   };
 
   const res = await fetch(url, fetchInit);

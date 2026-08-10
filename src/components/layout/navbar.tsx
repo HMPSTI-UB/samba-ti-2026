@@ -22,6 +22,7 @@ export default function Navbar() {
             { name: "Home", href: "/" },
             { name: "Journey", href: "#journey" },
             { name: "Schedule", href: "#schedule" },
+            { name: "Cluster", href: "/clusters" },
           ].map((item) => (
             <Link 
               key={item.name} 
@@ -61,6 +62,7 @@ export default function Navbar() {
             <Link href="/" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Home</Link>
             <Link href="#journey" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Journey</Link>
             <Link href="#schedule" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Schedule</Link>
+            <Link href="/clusters" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Cluster</Link>
             <Link href="/app/dashboard" onClick={() => setIsOpen(false)} className="text-center py-3 font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">Masuk Portal</Link>
           </motion.div>
         )}
