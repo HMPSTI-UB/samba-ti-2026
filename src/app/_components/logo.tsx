@@ -190,7 +190,7 @@ export default function Logo() {
                 className="absolute"
                 style={{ left: "52%", top: "10%", transform: "translate(-50%, -50%)" }}
               >
-                <Image src="/assets/hero/maskot.svg" width={64} height={48} alt="Zuno" className="w-16 h-12 object-contain drop-shadow-[0_0_12px_rgba(56,189,248,0.7)]" />
+                <Image src="/assets/hero/starwar-ship2.png" width={448} height={301} alt="" className="w-16 h-auto object-contain drop-shadow-[0_0_12px_rgba(56,189,248,0.7)]" />
               </div>
 
               {/* titik ganti deskripsi */}

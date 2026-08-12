@@ -1,5 +1,6 @@
-import Image from "next/image";
 import Footer from "@/components/layout/footer";
+import StarBackground from "@/components/common/star-background";
+import Reveal from "@/components/common/reveal";
 import { getPublicClusters } from "@/features/clusters/api/public-clusters";
 import type { PublicCluster } from "@/features/clusters/types";
 import ClusterCard from "./_components/cluster-card";
@@ -20,39 +21,24 @@ export default async function ClustersPage() {
 
   return (
     <main className="bg-deep-space font-poppins text-soft-white">
-      <section className="relative overflow-hidden bg-[#2D160E] pb-28 pt-32 md:pb-40 md:pt-44">
-        <div className="absolute -top-50 left-0 right-0 z-0 h-50 bg-linear-to-t from-[#2D160E] from-20% to-transparent" />
+      <section className="relative overflow-hidden pt-32 md:pt-44 pb-20 md:pb-28">
+        <StarBackground />
 
-        <div className="pointer-events-none absolute -left-40 top-16 z-20 opacity-40 md:top-24 md:opacity-100">
-          <div className="scale-50 md:scale-100">
-            <Image
-              src="/assets/hero/left-cloud-sm.png"
-              width={630}
-              height={209}
-              alt=""
-            />
-          </div>
-        </div>
-        <div className="pointer-events-none absolute -right-45 -top-5 z-20 opacity-40 md:top-10 md:opacity-100">
-          <div className="scale-50 md:scale-100">
-            <Image
-              src="/assets/hero/right-cloud-sm.png"
-              width={630}
-              height={209}
-              alt=""
-            />
-          </div>
-        </div>
+        <div className="pointer-events-none absolute -top-40 -left-40 z-10 h-100 w-100 rounded-full bg-[#2DD4BF]/15 blur-3xl" />
+        <div className="pointer-events-none absolute top-1/4 -right-50 z-10 h-120 w-120 rounded-full bg-[#2DD4BF]/10 blur-3xl" />
 
-        <div className="absolute left-1/2 top-30 z-10 h-50 w-[1200px] -translate-x-1/2 rounded-[110%] bg-[#2D160E] md:top-70 md:w-[2000px]" />
-
-        <div className="relative z-50 mx-auto max-w-7xl px-5 md:px-10">
-          <h2 className="text-center text-4xl font-sonsie italic text-[#B95C00] md:text-[70px]">
-            CLUSTER
-          </h2>
-          <p className="mt-6 text-center text-sm font-medium text-white/80 md:text-lg">
-            Kenali 12 kelompok bintang SAMBA TI 2026 beserta maknanya.
-          </p>
+        <div className="relative z-20 mx-auto max-w-7xl px-5 md:px-10">
+          <Reveal from="bottom">
+            <p className="text-center text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-[#2DD4BF]">
+              SAMBA TI 2026
+            </p>
+            <h2 className="mt-4 text-center font-poppins text-4xl sm:text-6xl md:text-7xl font-bold uppercase tracking-wide text-soft-white">
+              Cluster
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-center text-sm font-medium text-muted-text md:text-lg">
+              12 nama bintang, 12 cerita. Kamu bakal ditaruh di mana?
+            </p>
+          </Reveal>
 
           {clusters.length === 0 ? (
             <p className="py-20 text-center text-muted-text">
@@ -60,15 +46,14 @@ export default async function ClustersPage() {
             </p>
           ) : (
             <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {clusters.map((cluster) => (
-                <ClusterCard key={cluster.id} cluster={cluster} />
+              {clusters.map((cluster, i) => (
+                <Reveal key={cluster.id} from="bottom" delay={(i % 4) * 100}>
+                  <ClusterCard cluster={cluster} />
+                </Reveal>
               ))}
             </div>
           )}
         </div>
-
-        <div className="absolute bottom-0 left-1/2 z-20 h-100 w-[700px] -translate-x-1/2 rounded-[300%] bg-[#2D160E] md:w-[1500px]" />
-        <div className="absolute bottom-0 left-1/2 z-10 h-50 w-[700px] -translate-x-1/2 rounded-[300%] bg-linear-to-b from-[#EFA15B] from-70% to-transparent blur-3xl md:w-[1700px]" />
       </section>
       <Footer />
     </main>

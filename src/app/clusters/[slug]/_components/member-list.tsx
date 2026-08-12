@@ -22,10 +22,10 @@ export default function MemberList({
   }, [members, query]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#B95C00]/25 bg-gradient-to-b from-[#3A1E0F] to-[#241007]">
-      <div className="flex flex-col gap-4 border-b border-[#B95C00]/15 p-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="overflow-hidden rounded-2xl border border-[#2DD4BF]/30 bg-[#0B3C42] shadow-[0_0_30px_rgba(45,212,191,0.1)]">
+      <div className="flex flex-col gap-4 border-b border-[#2DD4BF]/20 p-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#B95C00]/30 bg-[#B95C00]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#EFA15B]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#2DD4BF]/40 bg-[#2DD4BF]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#2DD4BF]">
             <Users size={14} />
             {members.length} Anggota
           </span>
@@ -40,7 +40,7 @@ export default function MemberList({
             placeholder="Cari nama / NIM..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="block w-full rounded-lg border border-[#B95C00]/25 bg-black/20 py-2 pl-9 pr-3 text-sm text-white placeholder-white/40 transition-colors focus:border-[#EFA15B] focus:outline-none focus:ring-1 focus:ring-[#EFA15B]"
+            className="block w-full rounded-lg border border-[#2DD4BF]/30 bg-black/20 py-2 pl-9 pr-3 text-sm text-white placeholder-white/40 transition-colors focus:border-[#2DD4BF] focus:outline-none focus:ring-1 focus:ring-[#2DD4BF]"
           />
         </div>
       </div>
@@ -48,20 +48,20 @@ export default function MemberList({
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <SearchX className="mb-4 h-12 w-12 text-white/20" />
-          <p className="text-sm font-medium text-white/70">
+          <p className="text-sm font-medium text-muted-text">
             {query
               ? "Pencarian tidak ditemukan."
               : "Belum ada anggota di cluster ini."}
           </p>
         </div>
       ) : (
-        <ul className="divide-y divide-[#B95C00]/10">
+        <ul className="divide-y divide-[#2DD4BF]/10">
           {filtered.map((member, i) => (
             <li
               key={member.id}
-              className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#B95C00]/5"
+              className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#2DD4BF]/5"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#B95C00]/15 text-sm font-bold text-[#EFA15B]">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2DD4BF]/15 text-sm font-bold text-[#F8B41D]">
                 {i + 1}
               </span>
               <div className="min-w-0 flex-1">

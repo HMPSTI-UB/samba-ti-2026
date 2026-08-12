@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 import Hero from "./hero";
-import About from "./about";
 import Image from "next/image";
+import About from "./about";
 import Zenith from "./zenith";
 import ZenithPhases from "./phases";
 import Logo from "./logo";
@@ -38,18 +38,14 @@ export default function HomePage() {
               alt="Zuno"
               className="w-64 h-64 md:w-[480px] md:h-[480px]"
             />
-            <Image
-              src={"/assets/bubble.png"}
-              width={150}
-              height={100}
-              alt="Zuno"
-              className="absolute top-4 -right-4 md:top-10 md:-right-40 w-24 h-16 md:w-36 md:h-24"
-            />
-            <div className="absolute top-4 -right-4 md:top-10 md:-right-40 w-24 h-16 md:w-36 md:h-24 flex items-center justify-center">
-              <p className="text-blue-900 font-bold text-xs md:text-sm text-center leading-tight">
-                Hai!
-                <br /> Aku Zuno
-              </p>
+            <div className="absolute top-1 right-2 md:top-2 md:right-6 z-10">
+              <div className="relative rounded-xl bg-white px-4 py-3 shadow-lg">
+                <p className="text-blue-900 font-bold text-xs md:text-sm text-center leading-tight">
+                  Hai!
+                  <br /> Aku Zuno
+                </p>
+                <div className="absolute -bottom-1.5 left-6 h-3 w-3 rotate-45 bg-white" />
+              </div>
             </div>
           </Reveal>
           <div className="space-y-8 md:space-y-10">

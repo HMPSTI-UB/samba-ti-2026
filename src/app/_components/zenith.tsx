@@ -4,7 +4,7 @@ import Reveal from "@/components/common/reveal";
 export default function Zenith() {
   return (
     <section className="min-h-screen ">
-      <div className="relative  pt-70 md:pt-120">
+      <div className="relative pt-[190px]">
         <Reveal from="scale" className="relative w-fit mx-auto z-30">
           <Image
             src={"/assets/hero/about-card.png"}
@@ -25,15 +25,30 @@ export default function Zenith() {
             penggerak teknologi di masa depan “The New IT Heroes”.
           </p>
         </Reveal>
-        <Image
-          src={"/assets/hero/rocks.png"}
-          width={2100}
-          height={645}
-          alt=""
-          className="absolute -bottom-20 left-1/2 -translate-x-1/2 z-10 scale-115"
-        />
+        <Reveal
+          from="bottom"
+          className="absolute -bottom-20 left-1/2 -translate-x-1/2 z-10"
+        >
+          <Image
+            src={"/assets/hero/rocks.png"}
+            width={2100}
+            height={645}
+            alt=""
+            className="scale-105 animate-bob"
+          />
+        </Reveal>
+        <Reveal from="left" className="absolute -bottom-20 md:-bottom-28 -left-10 md:left-0 z-40">
+          <div className="scale-40 md:scale-75 animate-bob">
+            <Image
+              src={"/assets/hero/starwar-ship2.png"}
+              width={448}
+              height={301}
+              alt=""
+            />
+          </div>
+        </Reveal>
         <Reveal from="right" className="absolute top-10 md:top-50 -right-20 md:right-0 z-10">
-          <div className="scale-50 md:scale-115">
+          <div className="scale-50 md:scale-115 animate-float">
             <Image
               src={"/assets/hero/starwar-ship.png"}
               width={252}

@@ -4,10 +4,29 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import { useUserStore } from "@/stores/user.store";
+
+const PANITIA_ROLES = ["ADMIN", "KADERISASI", "SPV"];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useUserStore((s) => s.user);
+  const isClient = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
+  const isAuthenticated = isClient && Boolean(user);
+  const isPanitia =
+    isAuthenticated && PANITIA_ROLES.includes(user?.role ?? "");
+  const ctaLabel = isAuthenticated ? "Dashboard" : "Masuk";
+  const ctaHref = isAuthenticated
+    ? isPanitia
+      ? "/dashboard"
+      : "/app/dashboard"
+    : "/app/dashboard";
 
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[90%] md:max-w-[50%] z-[100]">
@@ -21,7 +40,7 @@ export default function Navbar() {
           {[
             { name: "Home", href: "/" },
             { name: "Cluster", href: "/clusters" },
-            { name: "Pengumuman", href: "/coming-soon" },
+            { name: "Pengumuman", href: "/pengumuman" },
             { name: "Galeri", href: "/coming-soon" },
           ].map((item) => (
             <Link 
@@ -33,8 +52,8 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="w-px h-6 bg-white/10 mx-2" />
-          <Link href="/app/dashboard" className="py-2 px-6 text-sm font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">
-            Masuk Portal
+          <Link href={ctaHref} className="py-2 px-6 text-sm font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">
+            {ctaLabel}
           </Link>
         </div>
 
@@ -61,10 +80,10 @@ export default function Navbar() {
             
             <Link href="/" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Home</Link>
             <Link href="/clusters" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Cluster</Link>
-            <Link href="/coming-soon" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Pengumuman</Link>
+            <Link href="/pengumuman" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Pengumuman</Link>
             <Link href="/coming-soon" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">Galeri</Link>
             <Link href="/coming-soon" onClick={() => setIsOpen(false)} className="text-white text-lg font-poppins font-medium hover:text-[#FACC15] transition-colors">App</Link>
-            <Link href="/app/dashboard" onClick={() => setIsOpen(false)} className="text-center py-3 font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">Masuk Portal</Link>
+            <Link href={ctaHref} onClick={() => setIsOpen(false)} className="text-center py-3 font-bold tracking-wide font-poppins rounded-full text-deep-space bg-[#FACC15] hover:bg-[#E6B800] transition-all shadow-[0_0_20px_rgba(250,204,21,0.3)]">{ctaLabel}</Link>
           </motion.div>
         )}
       </AnimatePresence>

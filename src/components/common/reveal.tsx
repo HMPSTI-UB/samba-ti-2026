@@ -5,24 +5,34 @@ import { cn } from "@/lib/cn";
 
 type RevealProps = {
   children: React.ReactNode;
-  from?: "bottom" | "left" | "right" | "scale";
+  from?: "bottom" | "left" | "right" | "right-far" | "scale";
   delay?: number;
   className?: string;
+  start?: boolean;
 };
 
 const VARIANT_CLASS: Record<NonNullable<RevealProps["from"]>, string> = {
   bottom: "reveal",
   left: "reveal-from-left",
   right: "reveal-from-right",
+  "right-far": "reveal-from-right-far",
   scale: "reveal-scale",
 };
 
-export default function Reveal({ children, from = "bottom", delay = 0, className }: RevealProps) {
+export default function Reveal({
+  children,
+  from = "bottom",
+  delay = 0,
+  className,
+  start = true,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    if (start === false) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       el.classList.add("is-visible");
@@ -41,7 +51,7 @@ export default function Reveal({ children, from = "bottom", delay = 0, className
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [start]);
 
   return (
     <div

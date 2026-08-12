@@ -1,20 +1,11 @@
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
 
-
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-  </svg>
-);
-
-const LinkedinIcon = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-    <rect width="4" height="12" x="2" y="9" />
-    <circle cx="4" cy="4" r="2" />
   </svg>
 );
 
@@ -25,82 +16,101 @@ const GithubIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const USEFUL_LINKS = [
+  { name: "Home", href: "/" },
+  { name: "Cluster", href: "/clusters" },
+  { name: "Pengumuman", href: "/pengumuman" },
+  { name: "Galeri", href: "/coming-soon" },
+  { name: "Masuk Portal", href: "/app/dashboard" },
+];
+
 export default function Footer() {
   return (
-    <footer className="bg-midnight-navy border-t border-white/10 pt-20 pb-10 px-6 relative overflow-hidden">
-      {/* Glow Effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-electric-blue/50 to-transparent blur-sm" />
-
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 relative z-10">
+    <footer className="bg-midnight-navy border-t border-white/10 pt-16 pb-10 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-10">
         {/* Brand Info */}
-        <div className="lg:col-span-1">
-          <div className="flex flex-col">
-            <h2 className="font-poppins font-black text-2xl tracking-tighter mb-2">SAMBA TI <span className="text-electric-blue">2026</span></h2>
-            <p className="font-poppins text-sm font-bold tracking-widest text-star-gold mb-6">ZENITH</p>
-            <p className="text-muted-text text-sm leading-relaxed mb-6">
-              Ruang inkubasi visioner yang mengantarkan mahasiswa baru menuju Zenith potensi mereka sebagai New IT Heroes.
-            </p>
-            <div className="flex items-center space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-muted-text hover:text-electric-blue hover:border-electric-blue hover:bg-electric-blue/10 transition-all">
-                <InstagramIcon className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-muted-text hover:text-electric-blue hover:border-electric-blue hover:bg-electric-blue/10 transition-all">
-                <LinkedinIcon className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-muted-text hover:text-electric-blue hover:border-electric-blue hover:bg-electric-blue/10 transition-all">
-                <GithubIcon className="w-4 h-4" />
-              </a>
-            </div>
+        <div>
+          <h2 className="font-poppins font-black text-2xl tracking-tighter mb-2 text-soft-white">
+            SAMBA TI 2026
+          </h2>
+          <p className="font-poppins text-sm font-bold tracking-widest text-star-gold mb-6">
+            ZENITH
+          </p>
+          <p className="text-muted-text text-sm leading-relaxed mb-6">
+            Ruang inkubasi visioner yang mengantarkan mahasiswa baru menuju
+            Zenith potensi mereka sebagai New IT Heroes.
+          </p>
+          <div className="flex items-center space-x-4">
+            <a
+              href="https://www.instagram.com/sambati.ub"
+              target="_blank"
+              rel="noreferrer"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-muted-text hover:text-electric-blue hover:border-electric-blue hover:bg-electric-blue/10 transition-all"
+              aria-label="Instagram"
+            >
+              <InstagramIcon className="w-4 h-4" />
+            </a>
+            <a
+              href="https://github.com/HMPSTI"
+              target="_blank"
+              rel="noreferrer"
+              className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-muted-text hover:text-electric-blue hover:border-electric-blue hover:bg-electric-blue/10 transition-all"
+              aria-label="GitHub"
+            >
+              <GithubIcon className="w-4 h-4" />
+            </a>
           </div>
         </div>
 
         {/* Useful Links */}
         <div>
-          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">Tautan Berguna</h3>
+          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">
+            Tautan Berguna
+          </h3>
           <ul className="space-y-4">
-            <li><Link href="#about" className="text-muted-text text-sm hover:text-electric-blue transition-colors">About Mission</Link></li>
-            <li><Link href="#journey" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Journey Phase</Link></li>
-            <li><Link href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Outcomes</Link></li>
-            <li><Link href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">FAQ</Link></li>
-          </ul>
-        </div>
-
-        {/* Resources */}
-        <div>
-          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">Sumber Daya</h3>
-          <ul className="space-y-4">
-            <li><a href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Buku Panduan</a></li>
-            <li><a href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Virtual Background</a></li>
-            <li><a href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Twibbon</a></li>
-            <li><a href="#" className="text-muted-text text-sm hover:text-electric-blue transition-colors">Ketentuan Atribut</a></li>
+            {USEFUL_LINKS.map((link) => (
+              <li key={link.name}>
+                <Link
+                  href={link.href}
+                  className="text-muted-text text-sm hover:text-electric-blue transition-colors"
+                >
+                  {link.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">Hubungi Kami</h3>
+          <h3 className="font-poppins font-bold text-lg mb-6 text-soft-white">
+            Hubungi Kami
+          </h3>
           <ul className="space-y-4">
             <li className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-electric-blue flex-shrink-0" />
-              <span className="text-muted-text text-sm">Gedung Fakultas Vokasi Dieng, Universitas Brawijaya</span>
+              <span className="text-muted-text text-sm">
+                Gedung Fakultas Vokasi Dieng, Universitas Brawijaya
+              </span>
             </li>
             <li className="flex items-center space-x-3">
               <Mail className="w-5 h-5 text-electric-blue flex-shrink-0" />
-              <span className="text-muted-text text-sm">samba.ti@ub.ac.id</span>
+              <a
+                href="mailto:sambati2026@gmail.com"
+                className="text-muted-text text-sm hover:text-electric-blue transition-colors"
+              >
+                sambati2026@gmail.com
+              </a>
             </li>
           </ul>
         </div>
       </div>
 
       {/* Copyright */}
-      <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between relative z-10">
-        <p className="text-muted-text text-sm mb-4 md:mb-0">
+      <div className="max-w-7xl mx-auto pt-6 border-t border-white/5 flex items-center justify-center">
+        <p className="text-muted-text text-sm">
           &copy; 2026 Himpunan Mahasiswa Teknologi Informasi. All rights reserved.
         </p>
-        <div className="flex space-x-6 text-sm text-muted-text">
-          <a href="#" className="hover:text-soft-white transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-soft-white transition-colors">Terms of Service</a>
-        </div>
       </div>
     </footer>
   );

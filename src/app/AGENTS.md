@@ -8,6 +8,7 @@ Next.js App Router pages, layouts, and route-level files:
 - `globals.css` — Tailwind v4 + custom CSS tokens
 - `page.tsx` — Countdown coming-soon page at `/`
 - `clusters/` — Public cluster page at `/clusters` (server component, ISR via `getPublicClusters`)
+- `pengumuman/` — Public announcements page at `/pengumuman` (server shell + CSR feed via TanStack Query, `/public/announcements`)
 - `not-found.tsx` — Custom 404 page
 - `auth/` — Auth shell (login, register) at `/auth/*`
 - `(maba)/app/` — MABA (mahasiswa baru) app at `/app/*` — `dashboard`, `penugasan`, `cluster`, `timeline`, `pengumuman`, `profil`

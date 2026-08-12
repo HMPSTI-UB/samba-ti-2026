@@ -26,3 +26,18 @@ export type PaginatedAnnouncements = {
   page: number;
   limit: number;
 };
+
+export type PublicAnnouncement = {
+  id: string;
+  title: string;
+  desc: string;
+  targetType: "ALL" | "MABA";
+  createdAt: string;
+};
+
+export type PaginatedPublicAnnouncements = {
+  data: PublicAnnouncement[];
+  total: number;
+  page: number;
+  limit: number;
+};

@@ -2,10 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import LoginForm from "@/features/auth/components/login-form";
+import LoginGuard from "@/features/auth/components/login-guard";
 
 export default function LoginPage() {
   return (
-    <div className="max-w-5xl w-full mx-auto px-4 font-poppins">
+    <LoginGuard>
+      <div className="max-w-5xl w-full mx-auto px-4 font-poppins">
       <div className="mb-8">
         <Link
           href="/"
@@ -60,6 +62,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </LoginGuard>
   );
 }

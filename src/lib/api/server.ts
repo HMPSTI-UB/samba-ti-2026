@@ -9,8 +9,7 @@ type FetchOptions = {
 };
 
 function getBaseUrl(): string {
-  const url = process.env.API_URL;
-  if (!url) throw new Error("API_URL environment variable is not set");
+  const url = process.env.API_URL ?? "http://localhost:8000";
   return url.replace(/\/+$/, "");
 }
 

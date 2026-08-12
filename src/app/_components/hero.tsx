@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import StarBackground from "@/components/common/star-background";
@@ -9,9 +10,35 @@ import LoadingScreen from "@/components/common/loading-screen";
 export default function Hero({
   loaded,
   setLoaded,
+  hideLoadingScreen = false,
+  eyebrow = "SAMBA TI",
+  title = "ZENITH",
+  titleTail,
+  titleClassName,
+  subtitle = (
+    <>
+      Zealous Evolution of
+      <br />
+      New IT Heroes
+    </>
+  ),
+  ctaLabel = "Mulai Perjalananmu!",
+  ctaHref,
+  hideCta = false,
+  hideSubtitle = false,
 }: {
   loaded: boolean;
   setLoaded: (loaded: boolean) => void;
+  hideLoadingScreen?: boolean;
+  eyebrow?: string;
+  title?: string;
+  titleTail?: string;
+  titleClassName?: string;
+  subtitle?: React.ReactNode;
+  ctaLabel?: string;
+  ctaHref?: string;
+  hideCta?: boolean;
+  hideSubtitle?: boolean;
 }) {
   const marsRef = useRef<HTMLDivElement>(null);
   const earthRef = useRef<HTMLDivElement>(null);
@@ -124,7 +151,7 @@ export default function Hero({
 
   return (
     <>
-      <LoadingScreen onComplete={() => setLoaded(true)} />
+      {!hideLoadingScreen && <LoadingScreen onComplete={() => setLoaded(true)} />}
 
       <section
         ref={containerRef}
@@ -139,7 +166,7 @@ export default function Hero({
         >
           <div className="w-full h-full scale-80 -translate-x-[60px] translate-y-[180px] rotate-[9.48deg] origin-bottom-left">
             <Image
-              src="/assets/hero/mars-ground-2.svg"
+              src="/assets/hero/mars-ground.svg"
               alt="Mars Ground"
               fill
               sizes="100vw"
@@ -248,28 +275,48 @@ export default function Hero({
             ref={subRef}
             className="text-[10px] md:text-sm text-soft-white font-bold font-heading tracking-[3px] md:tracking-[6px] uppercase mb-2 opacity-0"
           >
-            SAMBA TI
+            {eyebrow}
           </span>
           <span
             ref={comingRef}
-            className="text-[80px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display coming-shadow opacity-0"
+            className={`text-[80px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display coming-shadow opacity-0 ${titleClassName ?? ""}`}
           >
-            ZENITH
+            {title}
           </span>
-          <span
-            ref={subtitleRef}
-            className="text-base md:text-[40px]  font-poppins text-white   text-center opacity-0"
-          >
-            Zealous Evolution of
-            <br />
-            New IT Heroes
-          </span>
-          <button
-            ref={ctaRef}
-            className="bg-yellow-500 text-black uppercase border border-black mt-4 hover:bg-yellow-600 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.5)] active:scale-95 transition-colors duration-200 h-10 md:h-12 px-7 text-sm md:text-base rounded-full font-semibold opacity-0"
-          >
-            Mulai Perjalananmu!
-          </button>
+          {titleTail && (
+            <span
+              ref={soonRef}
+              className={`text-[80px] md:text-[160px] text-star-gold uppercase tracking-[4px] md:tracking-[10px] font-display soon-shadow opacity-0 ${titleClassName ?? ""}`}
+            >
+              {titleTail}
+            </span>
+          )}
+          {!hideSubtitle && (
+            <span
+              ref={subtitleRef}
+              className="text-base md:text-[40px]  font-poppins text-white   text-center opacity-0"
+            >
+              {subtitle}
+            </span>
+          )}
+          {!hideCta &&
+            (ctaHref ? (
+              <Link href={ctaHref}>
+                <button
+                  ref={ctaRef}
+                  className="bg-yellow-500 text-black uppercase border border-black mt-4 hover:bg-yellow-600 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.5)] active:scale-95 transition-colors duration-200 h-10 md:h-12 px-7 text-sm md:text-base rounded-full font-semibold opacity-0"
+                >
+                  {ctaLabel}
+                </button>
+              </Link>
+            ) : (
+              <button
+                ref={ctaRef}
+                className="bg-yellow-500 text-black uppercase border border-black mt-4 hover:bg-yellow-600 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.5)] active:scale-95 transition-colors duration-200 h-10 md:h-12 px-7 text-sm md:text-base rounded-full font-semibold opacity-0"
+              >
+                {ctaLabel}
+              </button>
+            ))}
         </div>
       </section>
     </>

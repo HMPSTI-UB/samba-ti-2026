@@ -1,127 +1,68 @@
-import gsap from "gsap";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
 import Reveal from "@/components/common/reveal";
+import StarBackground from "@/components/common/star-background";
 
 export default function About({ loaded }: { loaded: boolean }) {
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    let tween: gsap.core.Tween | null = null;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      tween = gsap.to(carouselRef.current, {
-        xPercent: -50,
-        repeat: -1,
-        duration: 40,
-        ease: "none",
-      });
-    });
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          tween?.resume();
-        } else {
-          tween?.pause();
-        }
-      },
-      { threshold: 0 },
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-
-    return () => {
-      ctx.kill();
-      observer.disconnect();
-    };
-  }, [loaded]);
   return (
     <section
-      ref={sectionRef}
-      className="min-h-screen relative  bg-[#2D160E] mt-30 md:mt-60 py-30 md:py-50"
+      id="about"
+      className="relative min-h-screen overflow-hidden pt-36 md:pt-64 pb-0"
     >
-      <div className="w-full  bg-linear-to-t from-[#2D160E] from-20% to-transparent h-50 -top-50 absolute"></div>
-      <h2 className="text-4xl md:text-[70px] font-sonsie text-[#B95C00] text-center italic z-50 relative">
-        SAMBA TI
-      </h2>
-      <Reveal from="left" className="absolute -left-40 top-25 md:top-30 z-20">
-        <div className="scale-50 md:scale-100">
-          <Image
-            src={"/assets/hero/left-cloud-sm.png"}
-            width={630}
-            height={209}
-            alt="cloud"
-          />
-        </div>
-      </Reveal>
-      <Reveal from="right" delay={200} className="absolute -right-45 -top-5 md:top-10 z-20">
-        <div className="scale-50 md:scale-100">
-          <Image
-            src={"/assets/hero/right-cloud-sm.png"}
-            width={630}
-            height={209}
-            alt="cloud"
-          />
-        </div>
-      </Reveal>
-      <div className="bg-[#2D160E] w-[1200px] md:w-[2000px] h-50 left-1/2 -translate-x-1/2  rounded-[110%] absolute top-30  md:top-70 z-10"></div>
-      <div className="overflow-hidden mt-30">
-        <div ref={carouselRef} className="flex gap-1 w-max" style={{ willChange: "transform" }}>
-          {[...Array(6), ...Array(6)].map((_, idx) => (
+      <StarBackground />
+
+      <div className="relative z-20 mx-auto max-w-6xl px-5 md:px-10">
+        <Reveal from="right-far" start={loaded} className="mb-8 md:mb-14">
+          <div className="relative w-full max-w-[800px] mx-auto">
             <Image
-              key={idx}
-              src={`/assets/past/img${(idx % 6) + 1}.png`}
-              width={480}
-              height={320}
-              sizes="(max-width: 767px) 240px, 480px"
-              quality={70}
-              loading="lazy"
-              alt={`Image ${(idx % 6) + 1}`}
-              className="w-40 sm:w-60 md:w-120 shrink-0"
+              src="/assets/hero/plane-frame.png"
+              width={1536}
+              height={1024}
+              alt=""
+              className="w-full h-auto relative z-10"
+              sizes="(max-width: 800px) 100vw, 800px"
+              quality={80}
             />
-          ))}
-        </div>
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] z-0">
+              <Image
+                src="/assets/past/img1.png"
+                width={668}
+                height={376}
+                alt=""
+                className="w-full h-auto rounded-lg border border-white/20 shadow-lg"
+                sizes="(max-width: 767px) 80vw, 55vw"
+                quality={80}
+              />
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal from="bottom">
+          <p className="text-center text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-electric-blue">
+            Tentang Kami
+          </p>
+          <h2 className="mt-4 text-center font-heading text-3xl sm:text-5xl md:text-6xl font-bold uppercase tracking-wide text-soft-white">
+            SAMBA <span className="text-electric-blue">TI</span>{" "}
+            <span className="text-star-gold">2026</span>
+          </h2>
+        </Reveal>
+
+        <Reveal from="bottom" delay={150}>
+          <div className="glass-panel mx-auto mt-10 md:mt-14 max-w-3xl px-6 md:px-12 py-8 md:py-12 text-center">
+            <p className="text-sm md:text-lg leading-relaxed text-white">
+              SAMBA TI merupakan kegiatan penyambutan dan pembinaan bagi
+              mahasiswa baru Program Studi D-III Teknologi Informasi, Fakultas
+              Vokasi Universitas Brawijaya. Melalui rangkaian kegiatan yang{" "}
+              <span className="font-semibold text-electric-blue">edukatif</span>
+              , <span className="font-semibold text-electric-blue">interaktif</span>
+              , dan <span className="font-semibold text-electric-blue">kolaboratif</span>
+              , mahasiswa diperkenalkan pada lingkungan akademik, budaya kampus,
+              serta pembelajaran vokasi berbasis praktik. SAMBA TI bertujuan
+              membangun karakter yang disiplin, kreatif, profesional, dan siap
+              menghadapi tantangan dunia teknologi serta industri.
+            </p>
+          </div>
+        </Reveal>
       </div>
-      <div className="bg-[#2D160E] w-[1200px] md:w-[2000px] h-50 left-1/2 -translate-x-1/2  rounded-[110%] absolute  top-140 md:top-170  z-10"></div>
-      <p className="relative pt-10 z-30 text-sm md:text-lg text-center font-medium block w-6/10 mx-auto pb-10">
-        SAMBA TI merupakan kegiatan penyambutan dan pembinaan bagi mahasiswa
-        <br />
-        baru Program Studi D-III
-        <br /> Teknologi Informasi, Fakultas Vokasi Universitas Brawijaya.
-        Melalui rangkaian kegiatan yang edukatif, interaktif, dan kolaboratif,
-        mahasiswa diperkenalkan pada lingkungan akademik, budaya kampus, serta
-        pembelajaran vokasi berbasis praktik. SAMBA TI bertujuan membangun
-        karakter yang disiplin, kreatif, profesional, dan siap menghadapi
-        tantangan dunia teknologi serta industri.
-      </p>
-      <Reveal from="left" delay={150} className="absolute -left-30 -bottom-50 z-30">
-        <div className="scale-50 md:scale-100">
-          <Image
-            src={"/assets/hero/left-cloud-lg.svg"}
-            width={860}
-            height={715}
-            alt="Left Large Cloud"
-          />
-        </div>
-      </Reveal>
-      <Reveal from="right" delay={350} className="absolute -right-30 -bottom-50 z-30">
-        <div className="scale-50 md:scale-100">
-          <Image
-            src={"/assets/hero/right-cloud-lg.svg"}
-            width={860}
-            height={715}
-            alt="Right Large Cloud"
-          />
-        </div>
-      </Reveal>
-      <div className="   bg-[#2D160E] h-100 -bottom-25 md:-bottom-50 absolute w-[700px] md:w-[1500px] rounded-[300%] left-1/2 -translate-x-1/2 z-20"></div>
-      <div className="   bg-linear-to-b from-[#EFA15B] from-70% to-transparent h-50 -bottom-35 md:-bottom-65 absolute w-[700px] md:w-[1700px] rounded-[300%] left-1/2 -translate-x-1/2 z-10 blur-3xl"></div>
     </section>
   );
 }
