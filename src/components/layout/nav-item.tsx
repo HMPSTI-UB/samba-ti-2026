@@ -28,11 +28,11 @@ export default function NavItem({
         size={20}
         className={cn("shrink-0", !isActive && "text-muted-text group-hover:text-soft-white")}
       />
-      <span className="hidden lg:inline">{item.label}</span>
+      <span className="md:hidden lg:inline">{item.label}</span>
       {badge !== undefined && badge > 0 && (
         <span
           className={cn(
-            "ml-auto hidden h-5 min-w-[20px] items-center justify-center rounded-full bg-destructive px-1.5 text-[10px] font-bold text-white lg:flex",
+            "ml-auto hidden h-5 min-w-[20px] items-center justify-center rounded-full bg-destructive px-1.5 text-[10px] font-bold text-white md:hidden lg:flex",
             isActive && "bg-black/20 text-black",
           )}
         >

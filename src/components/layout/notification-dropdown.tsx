@@ -83,7 +83,7 @@ export default function NotificationDropdown({ unreadCount }: { unreadCount: num
       </button>
 
       {open && (
-        <div className="absolute right-0 top-11 z-50 w-80 overflow-hidden rounded-2xl border border-white/10 bg-midnight-navy shadow-2xl shadow-black/50">
+        <div className="fixed left-1/2 top-14 z-50 w-[calc(100vw-2rem)] max-w-80 -translate-x-1/2 overflow-hidden rounded-2xl border border-white/10 bg-midnight-navy shadow-2xl shadow-black/50 md:absolute md:left-auto md:right-0 md:top-11 md:w-80 md:max-w-none md:translate-x-0">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
             <span className="text-sm font-semibold text-soft-white">Notifikasi</span>
             {unreadIds.length > 0 && (
@@ -158,9 +158,10 @@ export default function NotificationDropdown({ unreadCount }: { unreadCount: num
                       <span className="mt-1 block truncate text-sm font-medium text-soft-white">
                         {item.title}
                       </span>
-                      <span className="block truncate text-xs text-muted-text">
-                        {item.desc}
-                      </span>
+                      <span
+                        className="block truncate text-xs text-muted-text"
+                        dangerouslySetInnerHTML={{ __html: item.desc }}
+                      />
                     </span>
                   </button>
                 ))}
