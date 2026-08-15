@@ -3,11 +3,11 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Upload, Download, CheckCircle, XCircle, AlertTriangle, FileText } from "lucide-react";
+import { Upload, Download, CheckCircle, XCircle, AlertTriangle, FileText, Loader2 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { ApiError } from "@/lib/api/errors";
-import { useImportMaba } from "@/features/clusters/hooks/use-import-maba";
+import { useImportMaba, useExistingNims } from "@/features/clusters/hooks/use-import-maba";
 import type { ImportMabaResult } from "@/features/clusters/api/import";
 
 type CsvPreviewRow = {
@@ -92,6 +92,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
   const [result, setResult] = useState<ImportMabaResult | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const importMutation = useImportMaba();
+  const { existingNims, isLoading: nimsLoading } = useExistingNims(open);
   const { error: alertError } = useSweetAlert();
   const [dragOver, setDragOver] = useState(false);
 
@@ -134,7 +135,7 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
 
   function handleImport() {
     const rows = previewRows
-      .filter((r) => !r.duplicate)
+      .filter((r) => !r.duplicate && !existingNims.has(r.nim))
       .map((r) => ({ name: r.name, nim: r.nim, email: r.email, gender: r.gender }));
     if (rows.length === 0) return;
     importMutation.mutate(rows, {
@@ -149,8 +150,10 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
   }
 
   const isPending = importMutation.isPending;
-  const importableCount = previewRows.filter((r) => !r.duplicate).length;
-  const duplicateCount = previewRows.length - importableCount;
+  const newRows = previewRows.filter((r) => !r.duplicate && !existingNims.has(r.nim));
+  const inFileDupCount = previewRows.filter((r) => r.duplicate).length;
+  const inDbCount = previewRows.filter((r) => !r.duplicate && existingNims.has(r.nim)).length;
+  const importableCount = newRows.length;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -183,92 +186,104 @@ export default function ImportMabaDialog({ open, onOpenChange }: Props) {
 
         {step === "preview" && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-text">
-                <strong className="text-soft-white">{importableCount}</strong> data akan di-import
-                {duplicateCount > 0 && (
-                  <span className="text-amber-400">, {duplicateCount} duplikat NIM dilewati</span>
-                )}
-                {file && <span className="ml-1">dari <FileText size={14} className="inline" /> {file.name}</span>}
-              </p>
-            </div>
+            {nimsLoading ? (
+              <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+                <Loader2 size={24} className="animate-spin text-electric-blue" />
+                <p className="text-sm text-muted-text">Mengecek NIM ke database...</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-text">
+                    <strong className="text-soft-white">{importableCount}</strong> data baru akan di-import
+                    {inFileDupCount > 0 && (
+                      <span className="text-amber-400">, {inFileDupCount} duplikat dalam file dilewati</span>
+                    )}
+                    {inDbCount > 0 && (
+                      <span className="text-sky-400">, {inDbCount} sudah terdaftar di database (disembunyikan)</span>
+                    )}
+                    {file && <span className="ml-1">dari <FileText size={14} className="inline" /> {file.name}</span>}
+                  </p>
+                </div>
 
-            {previewErrors.length > 0 && (
-              <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
-                <p className="text-xs font-medium text-amber-300 mb-1">Peringatan ({previewErrors.length})</p>
-                <ul className="space-y-0.5">
-                  {previewErrors.map((e, i) => (
-                    <li key={i} className="text-xs text-amber-400">{e}</li>
-                  ))}
-                </ul>
+                {previewErrors.length > 0 && (
+                  <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                    <p className="text-xs font-medium text-amber-300 mb-1">Peringatan ({previewErrors.length})</p>
+                    <ul className="space-y-0.5">
+                      {previewErrors.map((e, i) => (
+                        <li key={i} className="text-xs text-amber-400">{e}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="max-h-60 overflow-y-auto rounded-lg border border-white/10">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="bg-white/5 text-left text-muted-text">
+                        <th className="px-3 py-2 font-medium">#</th>
+                        <th className="px-3 py-2 font-medium">Nama</th>
+                        <th className="px-3 py-2 font-medium">NIM</th>
+                        <th className="px-3 py-2 font-medium">Email</th>
+                        <th className="px-3 py-2 font-medium">Gender</th>
+                        <th className="px-3 py-2 font-medium">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/10">
+                      {newRows.slice(0, 50).map((row, i) => (
+                        <tr key={i} className="hover:bg-white/5">
+                          <td className="px-3 py-2 text-muted-text">{i + 1}</td>
+                          <td className="px-3 py-2 font-medium text-soft-white">{row.name}</td>
+                          <td className="px-3 py-2 text-muted-text">{row.nim}</td>
+                          <td className="px-3 py-2 text-muted-text">{row.email}</td>
+                          <td className="px-3 py-2">
+                            <span className={cn(
+                              "inline-block rounded-full px-2 py-0.5 text-xs font-medium",
+                              genderLabel(row.gender) === "Perempuan"
+                                ? "bg-pink-500/10 text-pink-400"
+                                : genderLabel(row.gender) === "Laki-laki"
+                                  ? "bg-blue-500/10 text-blue-400"
+                                  : "bg-white/10 text-muted-text",
+                            )}>
+                              {genderLabel(row.gender)}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-400">
+                              <CheckCircle size={10} />
+                              Akan di-import
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                      {newRows.length === 0 && (
+                        <tr>
+                          <td colSpan={6} className="px-3 py-8 text-center text-muted-text italic">
+                            Tidak ada data baru untuk di-import
+                          </td>
+                        </tr>
+                      )}
+                      {newRows.length > 50 && (
+                        <tr>
+                          <td colSpan={6} className="px-3 py-2 text-center text-muted-text italic">
+                            ... dan {newRows.length - 50} lainnya
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-2">
+                  <Button type="button" variant="ghost" onClick={() => setStep("upload")} disabled={isPending}>
+                    Ganti File
+                  </Button>
+                  <Button type="button" variant="primary" onClick={handleImport} loading={isPending} disabled={isPending || importableCount === 0}>
+                    Import {importableCount} Data
+                  </Button>
+                </div>
               </div>
             )}
-
-            <div className="max-h-60 overflow-y-auto rounded-lg border border-white/10">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="bg-white/5 text-left text-muted-text">
-                    <th className="px-3 py-2 font-medium">#</th>
-                    <th className="px-3 py-2 font-medium">Nama</th>
-                    <th className="px-3 py-2 font-medium">NIM</th>
-                    <th className="px-3 py-2 font-medium">Email</th>
-                    <th className="px-3 py-2 font-medium">Gender</th>
-                    <th className="px-3 py-2 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/10">
-                  {previewRows.slice(0, 50).map((row, i) => (
-                    <tr key={i} className={cn("hover:bg-white/5", row.duplicate && "bg-amber-500/5")}>
-                      <td className="px-3 py-2 text-muted-text">{i + 1}</td>
-                      <td className={cn("px-3 py-2 font-medium text-soft-white", row.duplicate && "line-through opacity-60")}>{row.name}</td>
-                      <td className={cn("px-3 py-2 text-muted-text", row.duplicate && "opacity-60")}>{row.nim}</td>
-                      <td className={cn("px-3 py-2 text-muted-text", row.duplicate && "opacity-60")}>{row.email}</td>
-                      <td className="px-3 py-2">
-                        <span className={cn(
-                          "inline-block rounded-full px-2 py-0.5 text-xs font-medium",
-                          genderLabel(row.gender) === "Perempuan"
-                            ? "bg-pink-500/10 text-pink-400"
-                            : genderLabel(row.gender) === "Laki-laki"
-                              ? "bg-blue-500/10 text-blue-400"
-                              : "bg-white/10 text-muted-text",
-                        )}>
-                          {genderLabel(row.gender)}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2">
-                        {row.duplicate ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-400">
-                            <AlertTriangle size={10} />
-                            Duplikat
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-400">
-                            <CheckCircle size={10} />
-                            Akan di-import
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                  {previewRows.length > 50 && (
-                    <tr>
-                      <td colSpan={6} className="px-3 py-2 text-center text-muted-text italic">
-                        ... dan {previewRows.length - 50} lainnya
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-2">
-              <Button type="button" variant="ghost" onClick={() => setStep("upload")} disabled={isPending}>
-                Ganti File
-              </Button>
-              <Button type="button" variant="primary" onClick={handleImport} loading={isPending} disabled={isPending || importableCount === 0}>
-                Import {importableCount} Data
-              </Button>
-            </div>
           </div>
         )}
 

@@ -26,5 +26,5 @@ export type ImportMabaResult = {
 };
 
 export function importMaba(rows: ImportMabaRow[], options?: { seed?: boolean }) {
-  return clientApi.post<ImportMabaResult>("/clusters/import/maba", { rows, seed: options?.seed ?? false });
+  return clientApi.post<ImportMabaResult>("/clusters/import/maba", { rows, seed: options?.seed ?? false }, { timeout: 5 * 60 * 1000 });
 }
