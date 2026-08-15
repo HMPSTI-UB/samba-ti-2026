@@ -55,9 +55,10 @@ export default function AnnouncementCard({ item, onMarkRead, isPending }: Props)
             {item.title}
           </h3>
 
-          <p className="text-sm text-muted-text line-clamp-3 leading-relaxed">
-            {item.desc}
-          </p>
+          <div
+            className="rich-text line-clamp-3 text-sm text-muted-text leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: item.desc }}
+          />
 
           <div className="flex items-center gap-4 pt-1">
             <span className="flex items-center gap-1 text-xs text-muted-text">

@@ -25,9 +25,10 @@ export default function AnnouncementItem({ item }: { item: PublicAnnouncement })
         {item.title}
       </h3>
 
-      <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-white/80">
-        {item.desc}
-      </p>
+      <div
+        className="rich-text mt-2 text-white/80"
+        dangerouslySetInnerHTML={{ __html: item.desc }}
+      />
     </article>
   );
 }

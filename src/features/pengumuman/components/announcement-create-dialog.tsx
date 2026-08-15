@@ -7,6 +7,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import RichTextEditor from "@/components/ui/rich-text-editor";
 
 const announcementSchema = z.object({
   title: z.string().min(3, "Minimal 3 karakter").max(255, "Maksimal 255 karakter"),
@@ -48,11 +49,16 @@ export default function AnnouncementCreateDialog({ open, onOpenChange, onSubmit,
 
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-soft-white">Isi Pengumuman</label>
-            <textarea
-              {...register("desc")}
-              rows={5}
-              placeholder="Tulis isi pengumuman di sini..."
-              className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue resize-none"
+            <Controller
+              name="desc"
+              control={control}
+              render={({ field }) => (
+                <RichTextEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="Tulis isi pengumuman di sini..."
+                />
+              )}
             />
             {errors.desc && <p className="text-xs text-destructive">{errors.desc.message}</p>}
           </div>
