@@ -37,8 +37,8 @@ export default function Zenith() {
             className="scale-105 animate-bob"
           />
         </Reveal>
-        <Reveal from="left" className="absolute -bottom-20 md:-bottom-28 -left-10 md:left-0 z-40">
-          <div className="scale-40 md:scale-75 animate-bob">
+        <Reveal from="left" className="absolute -bottom-55 md:-bottom-28 -left-27 md:left-0 z-40">
+          <div className="scale-33 md:scale-75 animate-bob">
             <Image
               src={"/assets/hero/starwar-ship2.png"}
               width={448}
@@ -47,7 +47,7 @@ export default function Zenith() {
             />
           </div>
         </Reveal>
-        <Reveal from="right" className="absolute top-10 md:top-50 -right-20 md:right-0 z-10">
+        <Reveal from="right" className="absolute top-0 md:top-50 -right-20 md:right-0 z-10">
           <div className="scale-50 md:scale-115 animate-float">
             <Image
               src={"/assets/hero/starwar-ship.png"}

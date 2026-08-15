@@ -23,36 +23,36 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
     const ctx = gsap.context(() => {
       gsap.timeline({ defaults: { ease: "power3.out" } })
-        .fromTo(loadingTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 })
-        .to(dotsRef.current, { opacity: 1, duration: 0.3 })
+        .fromTo(loadingTextRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 })
+        .to(dotsRef.current, { opacity: 1, duration: 0.2 })
         .to(dotsRef.current, {
           opacity: 0.3,
-          duration: 0.7,
-          repeat: 5,
+          duration: 0.5,
+          repeat: 2,
           yoyo: true,
           ease: "sine.inOut",
         })
         .fromTo(
           maskotRef.current,
           { x: 1200, rotation: -25, opacity: 1 },
-          { x: 0, rotation: 0, opacity: 1, duration: 1.2, ease: "power2.out" },
+          { x: 0, rotation: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
         )
         .to(maskotRef.current, {
           x: 30,
-          duration: 0.8,
-          repeat: 3,
+          duration: 0.5,
+          repeat: 1,
           yoyo: true,
           ease: "sine.inOut",
         })
         .to(maskotRef.current, {
           x: -1200,
           rotation: -25,
-          duration: 1,
+          duration: 0.7,
           ease: "power2.in",
         })
         .to(overlayRef.current, {
           opacity: 0,
-          duration: 0.5,
+          duration: 0.3,
           onComplete,
         });
     }, overlayRef);

@@ -45,7 +45,7 @@ export default function ZenithPhases() {
                 <p className="text-[#BB5AFA] text-xs md:text-base">Obama</p>
               </div>
             </div>
-            <div className="absolute top-full left-0 z-50 mt-3 w-60 md:w-72 rounded-xl border border-electric-blue/30 bg-midnight-navy/95 px-4 py-3 opacity-0 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-opacity duration-200 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 mt-3 w-52 md:w-72 rounded-xl border border-electric-blue/30 bg-midnight-navy/95 px-3 py-2.5 opacity-0 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-opacity duration-200 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100">
               <p className="text-[11px] md:text-xs leading-relaxed text-white/80 text-justify">
                 {NEBULA_DESC}
               </p>
@@ -70,7 +70,7 @@ export default function ZenithPhases() {
                 <p className="text-[#BB5AFA] text-xs md:text-base">Samba TI</p>
               </div>
             </div>
-            <div className="absolute top-full right-0 z-50 mt-3 w-60 md:w-72 rounded-xl border border-electric-blue/30 bg-midnight-navy/95 px-4 py-3 opacity-0 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-opacity duration-200 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 mt-3 w-52 md:w-72 rounded-xl border border-electric-blue/30 bg-midnight-navy/95 px-3 py-2.5 opacity-0 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-opacity duration-200 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100">
               <p className="text-[11px] md:text-xs leading-relaxed text-white/80 text-justify">
                 {FUSION_DESC}
               </p>
@@ -99,7 +99,7 @@ export default function ZenithPhases() {
                 </p>
               </div>
             </div>
-            <div className="absolute top-full left-0 z-50 mt-3 w-60 md:w-72 rounded-xl border border-electric-blue/30 bg-midnight-navy/95 px-4 py-3 opacity-0 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-opacity duration-200 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100 md:left-1/2 md:-translate-x-1/2">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 mt-3 w-52 md:w-72 rounded-xl border border-electric-blue/30 bg-midnight-navy/95 px-3 py-2.5 opacity-0 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-opacity duration-200 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100">
               <p className="text-[11px] md:text-xs leading-relaxed text-white/80 text-justify">
                 {SUPERNOVA_DESC}
               </p>
