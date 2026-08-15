@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { loginSchema, type LoginFormData } from "@/features/auth/validation/login-schema";
 import { useLogin } from "@/features/auth/hooks/use-login";
 import { getMe } from "@/lib/api/auth";
+import { ApiError } from "@/lib/api/errors";
 import { useUserStore } from "@/stores/user.store";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { markJustLoggedIn } from "@/lib/just-logged-in";
@@ -37,33 +38,29 @@ export function useLoginForm() {
 
   function onSubmit(data: LoginFormData) {
     login(data, {
-      onSuccess: async (result) => {
-        if (!result.success) {
-          if (result.errors) {
-            for (const [field, messages] of Object.entries(result.errors)) {
-              setError(field as keyof LoginFormData, {
-                message: messages[0],
-              });
-            }
-          }
-          alertError(result.message);
-        } else {
-          markJustLoggedIn();
+      onSuccess: async () => {
+        markJustLoggedIn();
 
-          const userResponse = await getMe();
-          if (!userResponse.success) {
-            alertError("Gagal mengambil data user");
-            return;
-          }
-
-          setUser(userResponse.data);
-
-          const route = ROLE_ROUTES[normalizeRole(userResponse.data.role)] || ROLE_ROUTES.mahasiswa;
-          router.push(route);
+        const userResponse = await getMe();
+        if (!userResponse.success) {
+          alertError("Gagal mengambil data user");
+          return;
         }
+
+        setUser(userResponse.data);
+
+        const route = ROLE_ROUTES[normalizeRole(userResponse.data.role)] || ROLE_ROUTES.mahasiswa;
+        router.push(route);
       },
-      onError: () => {
-        alertError("Tidak dapat terhubung ke server.");
+      onError: (err) => {
+        if (err instanceof ApiError && err.hasValidationErrors()) {
+          for (const [field, messages] of Object.entries(err.getAllFieldErrors())) {
+            setError(field as keyof LoginFormData, {
+              message: messages[0],
+            });
+          }
+        }
+        alertError(err instanceof Error ? err.message : "Tidak dapat terhubung ke server.");
       },
     });
   }

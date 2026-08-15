@@ -1,23 +1,20 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import Footer from "@/components/layout/footer";
 import StarBackground from "@/components/common/star-background";
 import Reveal from "@/components/common/reveal";
-import { getPublicClusters } from "@/features/clusters/api/public-clusters";
+import { clientApi } from "@/lib/api/client";
 import type { PublicCluster } from "@/features/clusters/types";
 import ClusterCard from "./_components/cluster-card";
 
-export const metadata = {
-  title: "Cluster — SAMBA TI 2026",
-  description: "Kenali 12 cluster bintang SAMBA TI 2026 beserta maknanya.",
-};
+export default function ClustersPage() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["public-clusters"],
+    queryFn: () => clientApi.get<PublicCluster[]>("/public/clusters"),
+  });
 
-export default async function ClustersPage() {
-  let clusters: PublicCluster[] = [];
-  try {
-    const res = await getPublicClusters();
-    clusters = res.data ?? [];
-  } catch {
-    clusters = [];
-  }
+  const clusters = data?.data ?? [];
 
   return (
     <main className="bg-deep-space font-poppins text-soft-white">
@@ -40,7 +37,16 @@ export default async function ClustersPage() {
             </p>
           </Reveal>
 
-          {clusters.length === 0 ? (
+          {isLoading ? (
+            <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="aspect-square animate-pulse rounded-[22px] border-2 border-[#2DD4BF]/20 bg-[#0B3C42]/50"
+                />
+              ))}
+            </div>
+          ) : clusters.length === 0 ? (
             <p className="py-20 text-center text-muted-text">
               Data cluster belum tersedia.
             </p>

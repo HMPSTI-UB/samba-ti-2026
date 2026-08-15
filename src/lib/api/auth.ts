@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { clientApi } from "./client";
 import type { ApiResponse } from "./types";
 
 export type User = {
@@ -16,9 +16,14 @@ export type User = {
   updatedAt: string;
 };
 
-/** Credentials login untuk Panitia (email + password) */
+export type AuthTokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+/** Login (identifier = email / NIM / username) */
 export type LoginInput = {
-  email: string;
+  identifier: string;
   password: string;
 };
 
@@ -29,22 +34,22 @@ export type RegisterInput = {
   password_confirmation: string;
 };
 
-export function login(data: LoginInput): Promise<ApiResponse<User>> {
-  return apiClient.post("/auth/login", data) as Promise<ApiResponse<User>>;
+export function login(data: LoginInput): Promise<ApiResponse<AuthTokens>> {
+  return clientApi.post<AuthTokens>("/auth/login", data);
 }
 
 export function register(data: RegisterInput): Promise<ApiResponse<User>> {
-  return apiClient.post("/auth/register", data) as Promise<ApiResponse<User>>;
+  return clientApi.post<User>("/auth/register", data);
 }
 
 export function getMe(): Promise<ApiResponse<User>> {
-  return apiClient.get("/auth/me") as Promise<ApiResponse<User>>;
+  return clientApi.get<User>("/auth/me");
 }
 
 export function updateMe(data: { name?: string; avatarUrl?: string | null; avatarKey?: string | null }): Promise<ApiResponse<User>> {
-  return apiClient.patch("/auth/me", data) as Promise<ApiResponse<User>>;
+  return clientApi.patch<User>("/auth/me", data);
 }
 
-export function refresh(): Promise<void> {
-  return apiClient.post("/auth/refresh") as Promise<void>;
+export function logout(): Promise<ApiResponse<null>> {
+  return clientApi.post<null>("/auth/logout");
 }

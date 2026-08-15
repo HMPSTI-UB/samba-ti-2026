@@ -3,8 +3,9 @@
 import { usePathname, useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { logoutAction } from "@/features/auth/api/action";
+import { logout as logoutApi } from "@/lib/api/auth";
 import { useUserStore } from "@/stores/user.store";
+import { useTokenStore } from "@/stores/token.store";
 import NavItem from "./nav-item";
 import type { DashboardNavItem } from "@/constant/dashboard-nav";
 
@@ -24,7 +25,12 @@ export default function AppSidebar({
   const clearUser = useUserStore((s) => s.clearUser);
 
   async function handleLogout() {
-    await logoutAction();
+    try {
+      await logoutApi();
+    } catch {
+      // tetap lanjut logout lokal walau server gagal
+    }
+    useTokenStore.getState().clearTokens();
     clearUser();
     router.push("/auth/login");
   }
@@ -53,7 +59,7 @@ export default function AppSidebar({
             alt="ZENITH 2026"
             className="w-10 shrink-0 object-contain md:w-10 lg:w-[70px]"
           />
-          <div className="hidden lg:block text-center leading-tight">
+          <div className="md:hidden lg:block text-center leading-tight">
             <span className="block font-heading font-bold text-lg text-soft-white tracking-wide">
               ZENITH
             </span>
@@ -83,7 +89,7 @@ export default function AppSidebar({
             className="flex h-[42px] w-full items-center gap-3 rounded-xl px-3.5 text-sm text-destructive transition-all duration-200 hover:translate-x-1 hover:bg-destructive/10"
           >
             <LogOut size={20} className="shrink-0" />
-            <span className="hidden lg:inline">Logout</span>
+            <span className="md:hidden lg:inline">Logout</span>
           </button>
         </div>
       </aside>

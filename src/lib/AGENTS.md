@@ -7,14 +7,15 @@ src/lib/
   api/
     types.ts     # Standard API response shapes
     errors.ts    # ApiError class (holds field-level validation errors)
-    client.ts    # Axios instance with interceptors (client components only)
-    server.ts    # fetch-based client for server components (RSC)
-    auth.ts      # Auth API function stubs (login, register, getMe)
+    client.ts    # Axios instance with interceptors (client only)
+    auth.ts      # Auth API functions (login, logout, getMe, updateMe)
   query-client.ts   # TanStack QueryClient factory
   query-provider.tsx # React provider wrapping the app
 ```
 
-**Token strategy**: http-only cookies (set by Server Actions). Client never sees the token.
+**Token strategy**: client-side tokens in `src/stores/token.store.ts` (zustand + localStorage). Axios request interceptor injects `Authorization: Bearer`. 401 → interceptor calls `/auth/refresh` with the stored refresh token (token rotation), retries the original request, or redirects to `/auth/login` on failure.
+
+**Env**: `NEXT_PUBLIC_API_URL` = backend base URL (browser calls backend directly; no `/api` proxy).
 
 ## Standard API Shapes (`api/types.ts`)
 

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore, type User } from "@/stores/user.store";
+import { useTokenStore } from "@/stores/token.store";
+import { getMe } from "@/lib/api/auth";
 import { ROLE_ROUTES } from "@/constant/roles";
 
 function roleRoute(role: string): string {
@@ -13,24 +15,28 @@ export default function LoginGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const redirectIfAuthenticated = useCallback(async () => {
+    const accessToken = useTokenStore.getState().accessToken;
     const storeUser = useUserStore.getState().user;
+
+    // Tanpa token, tidak ada yang bisa di-redirect — bersihkan user basi (kalau ada)
+    // supaya tidak terjebak loop login ↔ dashboard.
+    if (!accessToken) {
+      if (storeUser) useUserStore.getState().clearUser();
+      return;
+    }
+
     if (storeUser) {
       router.replace(roleRoute(storeUser.role));
       return;
     }
 
     try {
-      const res = await fetch("/api/auth/me", { credentials: "include" });
-      if (!res.ok) return;
-      const body = (await res.json()) as {
-        success: boolean;
-        data?: User | null;
-      };
-      if (!body.success || !body.data) return;
-      useUserStore.getState().setUser(body.data);
-      router.replace(roleRoute(body.data.role));
+      const res = await getMe();
+      if (!res.success || !res.data) return;
+      useUserStore.getState().setUser(res.data);
+      router.replace(roleRoute(res.data.role));
     } catch {
-      // koneksi/network error — biarkan tetap di halaman login
+      // token invalid/expired — biarkan tetap di halaman login
     }
   }, [router]);
 

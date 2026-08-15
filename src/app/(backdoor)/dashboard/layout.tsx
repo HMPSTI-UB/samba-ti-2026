@@ -1,24 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/user.store";
-import { ROLE_ROUTES } from "@/constant/roles";
 import AppShell from "@/components/layout/app-shell";
+import AuthGuard from "@/components/common/auth-guard";
 import { PANITIA_NAV_ITEMS, SPV_NAV_ITEMS } from "@/constant/dashboard-nav";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const user = useUserStore((s) => s.user);
-
-  useEffect(() => {
-    if (user?.role?.toLowerCase() === "mahasiswa") {
-      router.replace(ROLE_ROUTES.mahasiswa);
-    }
-  }, [user, router]);
 
   const isSpv = user?.role?.toUpperCase() === "SPV";
   const navItems = isSpv ? SPV_NAV_ITEMS : PANITIA_NAV_ITEMS;
 
-  return <AppShell navItems={navItems}>{children}</AppShell>;
+  return (
+    <AuthGuard>
+      <AppShell navItems={navItems}>{children}</AppShell>
+    </AuthGuard>
+  );
 }
