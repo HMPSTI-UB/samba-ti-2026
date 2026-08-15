@@ -35,6 +35,9 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
   const fieldLabels: Record<string, string> = Object.fromEntries(
     (task.formFields ?? []).map((f) => [f.key, f.label]),
   );
+  const fieldTypes: Record<string, string> = Object.fromEntries(
+    (task.formFields ?? []).map((f) => [f.key, f.type]),
+  );
   const submission = task.submission;
   const canReview = !!onReview && !!submission && submission.status === "PENDING";
 
@@ -63,9 +66,20 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
                   <label className="block text-xs font-medium text-muted-text mb-1">
                     {fieldLabels[key] ?? key}
                   </label>
-                  <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap">
-                    {value || <span className="text-muted-text">—</span>}
-                  </div>
+                  {fieldTypes[key] === "link" && value ? (
+                    <a
+                      href={value}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-electric-blue underline break-all hover:bg-white/10"
+                    >
+                      {value}
+                    </a>
+                  ) : (
+                    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap break-words">
+                      {value || <span className="text-muted-text">—</span>}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

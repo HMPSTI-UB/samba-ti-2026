@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @custom-media --short (max-height: 640px);
 
@@ -235,9 +236,14 @@ html.lenis body {
   color: #cbd5e1;
   font-size: 0.875rem;
   line-height: 1.6;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .rich-text p {
   margin-bottom: 0.5rem;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .rich-text ul,
 .rich-text ol {

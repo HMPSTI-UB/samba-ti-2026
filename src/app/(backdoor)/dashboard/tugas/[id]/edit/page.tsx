@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { useTask, useUpdateTask, useDeleteTask } from "@/features/penugasan/hooks/use-tasks";
 import FormBuilder from "@/features/penugasan/components/form-builder";
+import type { FormField } from "@/features/penugasan/types";
 import DeleteTaskDialog from "@/features/penugasan/components/delete-task-dialog";
 import RichTextEditor from "@/components/ui/rich-text-editor";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
@@ -20,7 +21,7 @@ export default function EditTaskPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [termsConditions, setTermsConditions] = useState<string[]>([]);
-  const [formFields, setFormFields] = useState<{ key: string; label: string; type: "text" | "textarea"; isRequired: boolean; placeholder: string }[]>([]);
+  const [formFields, setFormFields] = useState<FormField[]>([]);
   const [status, setStatus] = useState<"DRAFT" | "PUBLISHED">("DRAFT");
   const [deadline, setDeadline] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -40,7 +41,7 @@ export default function EditTaskPage() {
       setDescription(task.description);
       setTermsConditions(task.termsConditions ?? []);
       setFormFields(task.formFields ?? []);
-      setStatus(task.status ?? "DRAFT");
+      setStatus(task.status === "DRAFT" || task.status === "PUBLISHED" ? task.status : "DRAFT");
       setDeadline(task.deadline ? task.deadline.slice(0, 16) : "");
     }
   }, [task]);
@@ -72,7 +73,7 @@ export default function EditTaskPage() {
         isRequired: f.isRequired,
         placeholder: f.placeholder,
       })),
-      status,
+      status: status === "DRAFT" || status === "PUBLISHED" ? status : "DRAFT",
       deadline: new Date(deadline).toISOString(),
     };
 

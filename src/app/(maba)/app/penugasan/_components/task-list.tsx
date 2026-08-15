@@ -205,7 +205,7 @@ const activeId = selectedId ?? filtered[0]?.id ?? null;
             <Section icon={FaAlignLeft} title="Deskripsi">
               {selected.description ? (
                 <div
-                  className="text-sm text-slate-300 prose-sm prose-invert max-w-none"
+                  className="text-sm text-slate-300 prose-sm prose-invert max-w-none break-words [&_*]:break-words [&_p]:whitespace-pre-wrap"
                   dangerouslySetInnerHTML={{ __html: selected.description }}
                 />
               ) : (

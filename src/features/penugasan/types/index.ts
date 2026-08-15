@@ -1,7 +1,9 @@
+export type FormFieldType = "text" | "textarea" | "link";
+
 export type FormField = {
   key: string;
   label: string;
-  type: "text" | "textarea";
+  type: FormFieldType;
   isRequired: boolean;
   placeholder: string;
 };

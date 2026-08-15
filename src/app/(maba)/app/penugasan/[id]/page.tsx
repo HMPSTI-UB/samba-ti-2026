@@ -61,7 +61,7 @@ function StatusBadge({ status }: { status: Status }) {
   );
 }
 
-function AnswerList({ data, fieldLabels }: { data: Record<string, string>; fieldLabels: Record<string, string> }) {
+function AnswerList({ data, fieldLabels, fieldTypes }: { data: Record<string, string>; fieldLabels: Record<string, string>; fieldTypes?: Record<string, string> }) {
   const entries = Object.entries(data ?? {});
   if (entries.length === 0) return <p className="text-sm text-muted-text">Tidak ada jawaban.</p>;
   return (
@@ -71,9 +71,20 @@ function AnswerList({ data, fieldLabels }: { data: Record<string, string>; field
           <label className="block text-xs font-medium text-muted-text mb-1">
             {fieldLabels[key] ?? key}
           </label>
-          <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap">
-            {value || <span className="text-muted-text">—</span>}
-          </div>
+          {fieldTypes?.[key] === "link" && value ? (
+            <a
+              href={value}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-electric-blue underline break-all hover:bg-white/10"
+            >
+              {value}
+            </a>
+          ) : (
+            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap break-words">
+              {value || <span className="text-muted-text">—</span>}
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -112,8 +123,18 @@ export default function MabaTaskDetailPage() {
   function validate(): boolean {
     const next: Record<string, string> = {};
     (task?.formFields ?? []).forEach((f) => {
-      if (f.isRequired && !(values[f.key] ?? "").trim()) {
+      const value = (values[f.key] ?? "").trim();
+      if (f.isRequired && !value) {
         next[f.key] = "Field ini wajib diisi";
+        return;
+      }
+      if (f.type === "link" && value) {
+        try {
+          const url = new URL(value);
+          if (!url.hostname) throw new Error();
+        } catch {
+          next[f.key] = "Format link tidak valid. Contoh: https://... atau http://...";
+        }
       }
     });
     setErrors(next);
@@ -159,6 +180,9 @@ export default function MabaTaskDetailPage() {
 
   const fieldLabels: Record<string, string> = Object.fromEntries(
     (task.formFields ?? []).map((f) => [f.key, f.label]),
+  );
+  const fieldTypes: Record<string, string> = Object.fromEntries(
+    (task.formFields ?? []).map((f) => [f.key, f.type]),
   );
   const prefill = status === "REJECTED" ? (submission?.submissionData ?? {}) : {};
 
@@ -227,7 +251,7 @@ export default function MabaTaskDetailPage() {
                 <FaCircleCheck className="h-5 w-5" />
                 <h3 className="font-bold text-white">Tugas Selesai</h3>
               </div>
-              <AnswerList data={submission?.submissionData ?? {}} fieldLabels={fieldLabels} />
+              <AnswerList data={submission?.submissionData ?? {}} fieldLabels={fieldLabels} fieldTypes={fieldTypes} />
               {submission?.feedback && (
                 <div className="rounded-lg border border-white/10 bg-white/5 p-4">
                   <p className="flex items-center gap-1.5 text-xs font-bold text-slate-300 mb-1.5">
@@ -250,7 +274,7 @@ export default function MabaTaskDetailPage() {
                 Jawabanmu sedang ditinjau oleh panitia. Kamu akan mendapat notifikasi setelah
                 direview.
               </p>
-              <AnswerList data={submission?.submissionData ?? {}} fieldLabels={fieldLabels} />
+              <AnswerList data={submission?.submissionData ?? {}} fieldLabels={fieldLabels} fieldTypes={fieldTypes} />
             </div>
           )}
 

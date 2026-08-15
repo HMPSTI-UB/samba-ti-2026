@@ -19,9 +19,10 @@ type Props = {
   submissions: Submission[];
   onReview: (submission: Submission, status: "ACCEPTED" | "REJECTED", feedback: string) => void;
   isPending?: boolean;
+  fieldTypes?: Record<string, string>;
 };
 
-export default function SubmissionViewer({ submissions, onReview, isPending }: Props) {
+export default function SubmissionViewer({ submissions, onReview, isPending, fieldTypes }: Props) {
   const [selected, setSelected] = useState<Submission | null>(null);
   const [feedback, setFeedback] = useState("");
 
@@ -93,9 +94,20 @@ export default function SubmissionViewer({ submissions, onReview, isPending }: P
                 {Object.entries(selected.submissionData ?? {}).map(([key, value]) => (
                   <div key={key}>
                     <label className="block text-xs font-medium text-muted-text mb-1">{key}</label>
-                    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap">
-                      {value || <span className="text-muted-text">—</span>}
-                    </div>
+                    {fieldTypes?.[key] === "link" && value ? (
+                      <a
+                        href={value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-electric-blue underline break-all hover:bg-white/10"
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-soft-white whitespace-pre-wrap break-words">
+                        {value || <span className="text-muted-text">—</span>}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

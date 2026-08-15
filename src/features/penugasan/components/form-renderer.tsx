@@ -38,6 +38,17 @@ export default function FormRenderer({ fields, values, onChange, errors }: Props
             />
           )}
 
+          {field.type === "link" && (
+            <input
+              type="url"
+              inputMode="url"
+              value={values[field.key] ?? ""}
+              onChange={(e) => onChange(field.key, e.target.value)}
+              placeholder={field.placeholder || "https://..."}
+              className="w-full h-10 rounded-lg border border-white/10 bg-transparent px-3 text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue/30 focus:border-electric-blue/50"
+            />
+          )}
+
           {errors[field.key] && (
             <p className="text-xs text-destructive mt-1">{errors[field.key]}</p>
           )}

@@ -98,7 +98,7 @@ export default function TaskDetailPage() {
           <div className="rounded-xl border border-white/10 bg-card-bg p-5">
             <h3 className="font-semibold text-soft-white mb-3">Deskripsi</h3>
             <div
-              className="prose prose-invert prose-sm text-muted-text"
+              className="prose prose-invert prose-sm text-muted-text break-words [&_*]:break-words [&_p]:whitespace-pre-wrap"
               dangerouslySetInnerHTML={{ __html: task.description }}
             />
 
@@ -153,6 +153,7 @@ export default function TaskDetailPage() {
                 submissions={submissions}
                 onReview={handleReview}
                 isPending={reviewMutation.isPending}
+                fieldTypes={Object.fromEntries((task.formFields ?? []).map((f) => [f.key, f.type]))}
               />
             )}
           </div>
