@@ -44,3 +44,7 @@ next-env.d.ts
 .agent
 .gemini
 .ai
+
+# local data & scripts (do not push)
+*.csv
+/scripts/
