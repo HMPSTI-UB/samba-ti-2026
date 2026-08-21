@@ -1,0 +1,3 @@
+module.exports=[48971,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(91830);a.n(d("[project]/samba-ti-2026/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},42324,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(91830);a.n(d("[project]/samba-ti-2026/node_modules/next/dist/client/components/builtin/global-error.js"))},69677,a=>{"use strict";a.i(48971);var b=a.i(42324);a.n(b)},33275,a=>{a.n(a.i(69677))}];
+
+//# sourceMappingURL=1uhv_next_dist_client_components_builtin_global-error_1jrgi36.js.map

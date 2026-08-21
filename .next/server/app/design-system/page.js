@@ -1,0 +1,13 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/design-system/page.js")
+R.c("server/chunks/ssr/[root-of-the-server]__1oulh4z._.js")
+R.c("server/chunks/ssr/1uhv_next_dist_esm_build_templates_app-page_1-i1j9r.js")
+R.c("server/chunks/ssr/[root-of-the-server]__1v2ef2t._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__1smq08r._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__16scoe4._.js")
+R.c("server/chunks/ssr/samba-ti-2026_src_app_not-found_tsx_1o608f-._.js")
+R.c("server/chunks/ssr/1uhv_next_dist_client_components_0w_iqlz._.js")
+R.c("server/chunks/ssr/1uhv_next_dist_client_components_builtin_unauthorized_09fjfxh.js")
+R.c("server/chunks/ssr/1uhv_next_dist_client_components_builtin_global-error_1jrgi36.js")
+R.c("server/chunks/ssr/samba-ti-2026__next-internal_server_app_design-system_page_actions_04cdzux.js")
+R.m(3396)
+module.exports=R.m(3396).exports

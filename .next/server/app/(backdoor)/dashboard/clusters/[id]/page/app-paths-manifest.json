@@ -1,0 +1,3 @@
+{
+  "/(backdoor)/dashboard/clusters/[id]/page": "app/(backdoor)/dashboard/clusters/[id]/page.js"
+}

@@ -1,0 +1,3 @@
+{
+  "/(backdoor)/dashboard/tugas/[id]/page": "app/(backdoor)/dashboard/tugas/[id]/page.js"
+}
