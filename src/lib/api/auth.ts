@@ -46,7 +46,16 @@ export function getMe(): Promise<ApiResponse<User>> {
   return clientApi.get<User>("/auth/me");
 }
 
-export function updateMe(data: { name?: string; avatarUrl?: string | null; avatarKey?: string | null }): Promise<ApiResponse<User>> {
+export type UpdateMeInput = {
+  name?: string;
+  avatarUrl?: string | null;
+  avatarKey?: string | null;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
+};
+
+export function updateMe(data: UpdateMeInput): Promise<ApiResponse<User>> {
   return clientApi.patch<User>("/auth/me", data);
 }
 

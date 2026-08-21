@@ -8,6 +8,7 @@ import { useUserStore } from "@/stores/user.store";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { updateMe } from "@/lib/api/auth";
 import AvatarUpload from "@/components/common/avatar-upload";
+import ChangePasswordForm from "@/components/common/change-password-form";
 
 const ROLE_LABEL: Record<string, string> = {
   ADMIN: "Administrator",
@@ -103,6 +104,8 @@ export default function PanitiaProfilPage() {
               </div>
             </div>
           </div>
+
+          <ChangePasswordForm />
         </div>
       </div>
     </div>

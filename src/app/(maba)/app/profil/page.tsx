@@ -9,6 +9,7 @@ import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { updateMe } from "@/lib/api/auth";
 import { useMabaDashboard } from "@/features/maba/hooks/use-maba-dashboard";
 import AvatarUpload from "@/components/common/avatar-upload";
+import ChangePasswordForm from "@/components/common/change-password-form";
 
 export default function MabaProfilPage() {
   const user = useUserStore((s) => s.user);
@@ -106,6 +107,8 @@ export default function MabaProfilPage() {
               </div>
             </div>
           </div>
+
+          <ChangePasswordForm />
         </div>
       </div>
     </div>
