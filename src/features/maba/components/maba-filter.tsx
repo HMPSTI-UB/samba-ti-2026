@@ -32,7 +32,7 @@ export default function MabaFilter({
         <input
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Cari nama..."
+          placeholder="Cari nama, NIM, atau username..."
           className="w-full h-10 pl-9 pr-8 rounded-lg border border-white/10 bg-transparent text-sm text-soft-white placeholder:text-muted-text focus:outline-none focus:ring-2 focus:ring-electric-blue/30 focus:border-electric-blue/50"
         />
         {search && (
