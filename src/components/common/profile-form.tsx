@@ -24,8 +24,10 @@ export default function ProfileForm() {
   function validate(): boolean {
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = "Nama tidak boleh kosong";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Email tidak valid";
-    if (username.trim() && !/^[a-z0-9_.]{3,50}$/.test(username.trim())) {
+    if (!email.trim()) next.email = "Email tidak boleh kosong";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Email tidak valid";
+    if (!username.trim()) next.username = "Username tidak boleh kosong";
+    else if (!/^[a-z0-9_.]{3,50}$/.test(username.trim())) {
       next.username = "Minimal 3 karakter; hanya huruf kecil, angka, titik, underscore";
     }
     if (nim.trim() && !/^\d{15}$/.test(nim.trim())) next.nim = "NIM harus 15 digit angka";
@@ -40,7 +42,7 @@ export default function ProfileForm() {
       const res = await updateMe({
         name: name.trim(),
         email: email.trim(),
-        username: username.trim() || undefined,
+        username: username.trim(),
         gender: gender === "" ? null : (gender as "L" | "P"),
         nim: nim.trim() || undefined,
       });
