@@ -55,7 +55,7 @@ export default function ClustersPage() {
           </Reveal>
 
           <div className="mx-auto mt-10 max-w-xl">
-            <MabaSearchBar searchFn={handleMabaSearch} />
+            <MabaSearchBar searchFn={handleMabaSearch} placeholder="Cari nama / NIM kamu..." />
           </div>
 
           {isLoading ? (
