@@ -157,7 +157,7 @@ export default function MabaClusterPage() {
           <div className="flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar space-y-3">
             {!hasAnySubmission ? (
               <p className="text-sm text-center text-slate-400 py-6">
-                Belum ada yang mengumpulkan tugas.
+                Belum ada yang mengumpulkan tugas. Ayo dong, jadilah yang pertama!
               </p>
             ) : (
               topMembers.map((m, i) => (
