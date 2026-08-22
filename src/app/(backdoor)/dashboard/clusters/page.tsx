@@ -11,6 +11,7 @@ import ClusterDeleteDialog from "@/features/clusters/components/cluster-delete-d
 import AssignSpvDialog from "@/features/clusters/components/assign-spv-dialog";
 import ManageMembersDialog from "@/features/clusters/components/manage-members-dialog";
 import ImportMabaDialog from "@/features/clusters/components/import-maba-dialog";
+import MabaSearchBar from "@/features/clusters/components/maba-search-bar";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import type { Cluster, ClusterFormValues } from "@/features/clusters/types";
 
@@ -109,6 +110,8 @@ export default function ClustersPage() {
           </div>
         )}
       </div>
+
+      <MabaSearchBar clusters={clusters} />
 
       <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
         {isLoading ? (
