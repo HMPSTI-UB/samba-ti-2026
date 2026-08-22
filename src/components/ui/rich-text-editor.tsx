@@ -7,13 +7,15 @@ import Link from "@tiptap/extension-link";
 import Highlight from "@tiptap/extension-highlight";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Mark, mergeAttributes } from "@tiptap/core";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { uploadFileToS3 } from "@/lib/api/upload";
 import {
   Bold,
   Italic,
@@ -32,6 +34,8 @@ import {
   AlignJustify,
   IndentIncrease,
   IndentDecrease,
+  Image as ImageIcon,
+  Upload,
 } from "lucide-react";
 
 const IndentMark = Mark.create({
@@ -57,6 +61,34 @@ const IndentMark = Mark.create({
   },
 });
 
+const AlignableImage = Image.extend({
+  inline: false,
+  group: "block",
+  draggable: true,
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      dataAlign: {
+        default: "left",
+        parseHTML: (element) => element.getAttribute("data-align") || "left",
+        renderHTML: (attributes) => {
+          const align = attributes.dataAlign ?? "left";
+          const style =
+            align === "center"
+              ? "display:block; margin-left:auto; margin-right:auto; max-width:100%; height:auto;"
+              : align === "right"
+                ? "display:block; margin-left:auto; margin-right:0; max-width:100%; height:auto;"
+                : "display:block; margin-right:auto; max-width:100%; height:auto;";
+          return { "data-align": align, style };
+        },
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: "img[src]" }];
+  },
+});
+
 type Props = {
   value: string;
   onChange: (val: string) => void;
@@ -68,6 +100,11 @@ type Props = {
 export default function RichTextEditor({ value, onChange, placeholder = "Mulai menulis...", label, error }: Props) {
   const [linkOpen, setLinkOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
+  const [imageOpen, setImageOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [imageError, setImageError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
@@ -92,6 +129,7 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
       }),
       TextStyle,
       IndentMark,
+      AlignableImage,
       Placeholder.configure({
         placeholder,
       }),
@@ -108,6 +146,10 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
           "[&_h1]:text-2xl [&_h1]:font-bold [&_h1]:text-white",
           "[&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-white",
           "[&_blockquote]:border-l-4 [&_blockquote]:border-electric-blue [&_blockquote]:pl-3 [&_blockquote]:italic",
+          "[&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-lg [&_img]:my-2",
+          "[&_img[data-align='center']]:block [&_img[data-align='center']]:mx-auto",
+          "[&_img[data-align='right']]:block [&_img[data-align='right']]:ml-auto",
+          "[&_img[data-align='left']]:block [&_img[data-align='left']]:mr-auto",
         ),
       },
     },
@@ -137,6 +179,59 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
       editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
     }
     setLinkOpen(false);
+  }
+
+  function openImageDialog() {
+    setImageUrl("");
+    setImageError("");
+    setImageOpen(true);
+  }
+
+  async function handleImageFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      setImageError("File harus berupa gambar");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setImageError("Ukuran gambar maksimal 5MB");
+      return;
+    }
+    setUploading(true);
+    setImageError("");
+    try {
+      const { publicUrl } = await uploadFileToS3(file, "content");
+      editor.chain().focus().setImage({ src: publicUrl }).run();
+      setImageOpen(false);
+    } catch (err) {
+      setImageError(err instanceof Error ? err.message : "Gagal mengunggah gambar");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function applyImageUrl() {
+    const url = imageUrl.trim();
+    if (url === "") {
+      setImageError("URL gambar tidak boleh kosong");
+      return;
+    }
+    editor.chain().focus().setImage({ src: url }).run();
+    setImageOpen(false);
+  }
+
+  function handleAlign(value: string) {
+    if (editor.isActive("image")) {
+      editor.chain().focus().updateAttributes("image", { dataAlign: value }).run();
+    } else {
+      editor.chain().focus().setTextAlign(value).run();
+    }
+  }
+
+  function isAlignActive(value: string): boolean {
+    if (editor.isActive("image")) {
+      return editor.getAttributes("image").dataAlign === value;
+    }
+    return editor.isActive({ textAlign: value });
   }
 
   const alignButtons = [
@@ -243,16 +338,28 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
               <button
                 key={value}
                 type="button"
-                onClick={() => editor.chain().focus().setTextAlign(value).run()}
+                onClick={() => handleAlign(value)}
                 className={cn(
                   "p-1.5 rounded hover:bg-white/10 text-muted-text hover:text-soft-white transition-colors",
-                  editor.isActive({ textAlign: value }) && "bg-white/10 text-electric-blue",
+                  isAlignActive(value) && "bg-white/10 text-electric-blue",
                 )}
                 title={label}
               >
                 <Icon size={16} />
               </button>
             ))}
+            <div className="h-4 w-[1px] bg-white/10 mx-1" />
+            <button
+              type="button"
+              onClick={openImageDialog}
+              className={cn(
+                "p-1.5 rounded hover:bg-white/10 text-muted-text hover:text-soft-white transition-colors",
+                editor.isActive("image") && "bg-white/10 text-electric-blue",
+              )}
+              title="Sisipkan gambar"
+            >
+              <ImageIcon size={16} />
+            </button>
             <div className="h-4 w-[1px] bg-white/10 mx-1" />
             <button
               type="button"
@@ -355,6 +462,69 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
               </Button>
               <Button type="button" variant="primary" onClick={applyLink}>
                 {linkUrl.trim() === "" ? "Hapus Link" : "Simpan"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={imageOpen} onOpenChange={setImageOpen}>
+        <DialogContent title="Sisipkan Gambar" description="Unggah dari perangkat atau tempel URL gambar.">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-white/20 p-4">
+              <div>
+                <p className="text-sm font-medium text-soft-white">Upload dari perangkat</p>
+                <p className="text-xs text-muted-text">JPG, PNG, WebP, GIF — maks. 5MB</p>
+              </div>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                loading={uploading}
+                disabled={uploading}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload size={14} />
+                {uploading ? "Mengunggah..." : "Pilih File"}
+              </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleImageFile(f);
+                  e.target.value = "";
+                }}
+              />
+            </div>
+
+            <div className="flex items-end gap-3">
+              <div className="flex-1">
+                <Input
+                  label="Atau URL gambar"
+                  placeholder="https://..."
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      applyImageUrl();
+                    }
+                  }}
+                />
+              </div>
+              <Button type="button" variant="outline" onClick={applyImageUrl} disabled={uploading}>
+                Sisipkan
+              </Button>
+            </div>
+
+            {imageError && <p className="text-xs text-destructive">{imageError}</p>}
+
+            <div className="flex justify-end gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={() => setImageOpen(false)}>
+                Batal
               </Button>
             </div>
           </div>

@@ -6,7 +6,7 @@ export type PresignedUploadResult = {
   publicUrl: string;
 };
 
-export type UploadPrefix = "avatars" | "events" | "twibbons" | "gallery" | "submissions";
+export type UploadPrefix = "avatars" | "events" | "twibbons" | "gallery" | "submissions" | "content";
 
 export function requestPresignedUrl(opts: {
   prefix: UploadPrefix;
