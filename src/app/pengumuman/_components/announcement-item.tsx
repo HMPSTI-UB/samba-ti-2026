@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, ImageIcon, Megaphone } from "lucide-react";
+import { Clock, ChevronRight, ImageIcon, Megaphone } from "lucide-react";
 import { countImages, stripImages } from "@/features/pengumuman/utils/images";
 import AnnouncementDetailDialog from "@/features/pengumuman/components/announcement-detail-dialog";
 import type { PublicAnnouncement } from "@/features/pengumuman/types";
@@ -57,6 +57,18 @@ export default function AnnouncementItem({ item }: { item: PublicAnnouncement })
             {imgCount} gambar
           </span>
         )}
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setDetailOpen(true);
+          }}
+          className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#2DD4BF] transition-colors hover:text-[#2DD4BF]/80 hover:underline"
+        >
+          Lihat selengkapnya
+          <ChevronRight size={16} />
+        </button>
       </article>
 
       <AnnouncementDetailDialog

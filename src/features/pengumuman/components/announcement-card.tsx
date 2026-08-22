@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { Clock, Eye, ImageIcon, Pencil, Trash2 } from "lucide-react";
+import { Clock, Eye, ImageIcon, Pencil, Trash2, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { countImages, stripImages } from "@/features/pengumuman/utils/images";
 import AnnouncementDetailDialog from "./announcement-detail-dialog";
@@ -85,7 +85,7 @@ export default function AnnouncementCard({ item, onMarkRead, isPending, onEdit, 
             </span>
           )}
 
-          <div className="flex items-center gap-4 pt-1">
+          <div className="flex items-center justify-between gap-4 pt-1">
             <span className="flex items-center gap-1 text-xs text-muted-text">
               <Clock size={12} />
               {new Date(item.createdAt).toLocaleDateString("id-ID", {
@@ -96,6 +96,17 @@ export default function AnnouncementCard({ item, onMarkRead, isPending, onEdit, 
                 minute: "2-digit",
               })}
             </span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDetailOpen(true);
+              }}
+              className="flex shrink-0 items-center gap-1 text-xs font-semibold text-electric-blue transition-colors hover:text-electric-blue/80 hover:underline"
+            >
+              Lihat selengkapnya
+              <ChevronRight size={14} />
+            </button>
           </div>
         </div>
 
