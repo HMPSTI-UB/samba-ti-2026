@@ -3,7 +3,6 @@ import {
   House,
   ClipboardList,
   Users,
-  Clock3,
   Megaphone,
   User,
   UserRound,
@@ -26,7 +25,6 @@ export const MABA_NAV_ITEMS: DashboardNavItem[] = [
   { label: "Dashboard", href: "/app/dashboard", icon: House },
   { label: "Penugasan", href: "/app/penugasan", icon: ClipboardList },
   { label: "Cluster", href: "/app/cluster", icon: Users },
-  { label: "Timeline", href: "/app/timeline", icon: Clock3 },
   { label: "Pengumuman", href: "/app/pengumuman", icon: Megaphone, unreadBadge: true },
   { label: "Profil", href: "/app/profil", icon: User },
 ];
