@@ -27,7 +27,7 @@ export default function MabaProfilPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="rounded-xl border border-white/10 bg-card-bg p-6 flex flex-col items-center gap-4">
+        <div className="rounded-xl border border-white/10 bg-card-bg p-6 flex flex-col items-center gap-4 self-start">
           <AvatarUpload />
           <div className="text-center">
             <p className="font-semibold text-soft-white">{user?.name}</p>
