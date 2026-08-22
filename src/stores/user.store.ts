@@ -7,6 +7,7 @@ export type User = {
   username: string | null;
   email: string;
   nim: string | null;
+  gender: string | null;
   role: string;
   status: boolean;
   clusterId: string | null;

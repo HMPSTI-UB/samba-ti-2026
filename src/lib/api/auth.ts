@@ -7,6 +7,7 @@ export type User = {
   username: string | null;
   email: string;
   nim: string | null;
+  gender: string | null;
   role: string;
   status: boolean;
   clusterId: string | null;
@@ -48,6 +49,10 @@ export function getMe(): Promise<ApiResponse<User>> {
 
 export type UpdateMeInput = {
   name?: string;
+  email?: string;
+  username?: string;
+  gender?: "L" | "P" | null;
+  nim?: string;
   avatarUrl?: string | null;
   avatarKey?: string | null;
   currentPassword?: string;
