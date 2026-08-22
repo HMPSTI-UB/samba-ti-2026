@@ -49,6 +49,21 @@ export function removeClusterMember(clusterId: string, userId: string) {
   return clientApi.delete<{ message: string }>(`/clusters/${clusterId}/members/${userId}`);
 }
 
+export type PublicMabaItem = {
+  id: string;
+  name: string;
+  nim: string | null;
+  clusterId: string | null;
+  clusterName: string | null;
+  clusterSlug: string | null;
+};
+
+export function searchPublicMabas(q: string) {
+  const searchParams = new URLSearchParams();
+  searchParams.set("q", q);
+  return clientApi.get<PublicMabaItem[]>(`/public/maba/search?${searchParams.toString()}`);
+}
+
 export function getAvailableSpvs() {
   return clientApi.get<{ data: { id: string; name: string; email: string }[] }>("/users?role=SPV&limit=100");
 }

@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Plus, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/stores/user.store";
 import { useClusters, useCreateCluster, useUpdateCluster, useDeleteCluster, useAssignSpv } from "@/features/clusters/hooks/use-clusters";
+import { searchMabas } from "@/features/clusters/api/clusters";
+import MabaSearchBar, { type MabaSearchItem } from "@/features/clusters/components/maba-search-bar";
 import ClusterTable from "@/features/clusters/components/cluster-table";
 import ClusterFormDialog from "@/features/clusters/components/cluster-form-dialog";
 import ClusterDeleteDialog from "@/features/clusters/components/cluster-delete-dialog";
 import AssignSpvDialog from "@/features/clusters/components/assign-spv-dialog";
 import ManageMembersDialog from "@/features/clusters/components/manage-members-dialog";
 import ImportMabaDialog from "@/features/clusters/components/import-maba-dialog";
-import MabaSearchBar from "@/features/clusters/components/maba-search-bar";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import type { Cluster, ClusterFormValues } from "@/features/clusters/types";
 
@@ -39,6 +40,21 @@ export default function ClustersPage() {
   const { success: alertSuccess, error: alertError } = useSweetAlert();
 
   const clusters = clustersRes?.data ?? [];
+  const clusterNameById = Object.fromEntries(clusters.map((c) => [c.id, c.name]));
+
+  const handleMabaSearch = useCallback(
+    async (q: string): Promise<MabaSearchItem[]> => {
+      const res = await searchMabas({ search: q, limit: 8 });
+      return res.data.map((m) => ({
+        id: m.id,
+        name: m.name,
+        nim: m.nim,
+        clusterLabel: m.clusterId ? clusterNameById[m.clusterId] ?? null : null,
+        href: m.clusterId ? `/dashboard/clusters/${m.clusterId}` : null,
+      }));
+    },
+    [clusterNameById],
+  );
 
   function handleCreate(data: ClusterFormValues) {
     createMutation.mutate(data, {
@@ -111,7 +127,7 @@ export default function ClustersPage() {
         )}
       </div>
 
-      <MabaSearchBar clusters={clusters} />
+      <MabaSearchBar searchFn={handleMabaSearch} />
 
       <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
         {isLoading ? (

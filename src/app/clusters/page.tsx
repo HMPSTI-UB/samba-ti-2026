@@ -1,10 +1,13 @@
 "use client";
 
+import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Footer from "@/components/layout/footer";
 import StarBackground from "@/components/common/star-background";
 import Reveal from "@/components/common/reveal";
 import { clientApi } from "@/lib/api/client";
+import { searchPublicMabas } from "@/features/clusters/api/clusters";
+import MabaSearchBar, { type MabaSearchItem } from "@/features/clusters/components/maba-search-bar";
 import type { PublicCluster } from "@/features/clusters/types";
 import ClusterCard from "./_components/cluster-card";
 
@@ -15,6 +18,20 @@ export default function ClustersPage() {
   });
 
   const clusters = data?.data ?? [];
+
+  const handleMabaSearch = useCallback(
+    async (q: string): Promise<MabaSearchItem[]> => {
+      const res = await searchPublicMabas(q);
+      return res.data.map((m) => ({
+        id: m.id,
+        name: m.name,
+        nim: m.nim,
+        clusterLabel: m.clusterName,
+        href: m.clusterSlug ? `/clusters/${m.clusterSlug}` : null,
+      }));
+    },
+    [],
+  );
 
   return (
     <main className="bg-deep-space font-poppins text-soft-white">
@@ -36,6 +53,10 @@ export default function ClustersPage() {
               12 nama bintang, 12 cerita. Kamu bakal ditaruh di mana?
             </p>
           </Reveal>
+
+          <div className="mx-auto mt-10 max-w-xl">
+            <MabaSearchBar searchFn={handleMabaSearch} />
+          </div>
 
           {isLoading ? (
             <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

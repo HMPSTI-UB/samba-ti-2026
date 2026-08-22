@@ -16,7 +16,6 @@ import {
   removeClusterMember,
   getAvailableSpvs,
   getAvailableMabas,
-  searchMabas,
 } from "@/features/clusters/api/clusters";
 import type { ClusterFormValues } from "@/features/clusters/types";
 
@@ -151,14 +150,5 @@ export function useAvailableMabas(params: { search?: string; page?: number; limi
   return useQuery({
     queryKey: ["users", "mabas", params],
     queryFn: () => getAvailableMabas(params),
-  });
-}
-
-export function useMabaSearch(search: string) {
-  const trimmed = search.trim();
-  return useQuery({
-    queryKey: ["clusters", "maba-search", trimmed],
-    queryFn: () => searchMabas({ search: trimmed, limit: 8 }),
-    enabled: trimmed.length > 0,
   });
 }
