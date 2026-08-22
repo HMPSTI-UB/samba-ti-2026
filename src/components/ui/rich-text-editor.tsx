@@ -15,6 +15,7 @@ import { cn } from "@/lib/cn";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import { uploadFileToS3 } from "@/lib/api/upload";
 import {
   Bold,
@@ -71,18 +72,31 @@ const AlignableImage = Image.extend({
       dataAlign: {
         default: "left",
         parseHTML: (element) => element.getAttribute("data-align") || "left",
-        renderHTML: (attributes) => {
-          const align = attributes.dataAlign ?? "left";
-          const style =
-            align === "center"
-              ? "display:block; margin-left:auto; margin-right:auto; max-width:100%; height:auto;"
-              : align === "right"
-                ? "display:block; margin-left:auto; margin-right:0; max-width:100%; height:auto;"
-                : "display:block; margin-right:auto; max-width:100%; height:auto;";
-          return { "data-align": align, style };
-        },
+      },
+      width: {
+        default: "50",
+        parseHTML: (element) => element.getAttribute("data-width") || "50",
       },
     };
+  },
+  renderHTML({ HTMLAttributes }) {
+    const { dataAlign, width, ...rest } = HTMLAttributes;
+    const align = dataAlign ?? "left";
+    const w = width ?? "50";
+    const margin =
+      align === "center"
+        ? "margin-left:auto;margin-right:auto;"
+        : align === "right"
+          ? "margin-left:auto;margin-right:0;"
+          : "margin-right:auto;";
+    return [
+      "img",
+      mergeAttributes(rest, {
+        "data-align": align,
+        "data-width": w,
+        style: `display:block;${margin}width:${w}%;max-width:100%;height:auto;`,
+      }),
+    ];
   },
   parseHTML() {
     return [{ tag: "img[src]" }];
@@ -102,6 +116,7 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
   const [linkUrl, setLinkUrl] = useState("");
   const [imageOpen, setImageOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [imageWidth, setImageWidth] = useState("50");
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -183,6 +198,7 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
 
   function openImageDialog() {
     setImageUrl("");
+    setImageWidth("50");
     setImageError("");
     setImageOpen(true);
   }
@@ -200,7 +216,12 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
     setImageError("");
     try {
       const { publicUrl } = await uploadFileToS3(file, "content");
-      editor.chain().focus().setImage({ src: publicUrl }).run();
+      editor
+        .chain()
+        .focus()
+        .setImage({ src: publicUrl })
+        .updateAttributes("image", { width: imageWidth, dataAlign: "left" })
+        .run();
       setImageOpen(false);
     } catch (err) {
       setImageError(err instanceof Error ? err.message : "Gagal mengunggah gambar");
@@ -215,8 +236,17 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
       setImageError("URL gambar tidak boleh kosong");
       return;
     }
-    editor.chain().focus().setImage({ src: url }).run();
+    editor
+      .chain()
+      .focus()
+      .setImage({ src: url })
+      .updateAttributes("image", { width: imageWidth, dataAlign: "left" })
+      .run();
     setImageOpen(false);
+  }
+
+  function handleResizeImage(width: string) {
+    editor.chain().focus().updateAttributes("image", { width }).run();
   }
 
   function handleAlign(value: string) {
@@ -360,6 +390,25 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
             >
               <ImageIcon size={16} />
             </button>
+            {editor.isActive("image") && (
+              <>
+                <div className="h-4 w-[1px] bg-white/10 mx-1" />
+                {["25", "50", "75", "100"].map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    onClick={() => handleResizeImage(w)}
+                    className={cn(
+                      "px-1.5 py-1 rounded text-xs font-medium hover:bg-white/10 text-muted-text hover:text-soft-white transition-colors",
+                      editor.getAttributes("image").width === w && "bg-white/10 text-electric-blue",
+                    )}
+                    title={`Lebar ${w}%`}
+                  >
+                    {w}%
+                  </button>
+                ))}
+              </>
+            )}
             <div className="h-4 w-[1px] bg-white/10 mx-1" />
             <button
               type="button"
@@ -497,6 +546,20 @@ export default function RichTextEditor({ value, onChange, placeholder = "Mulai m
                   if (f) handleImageFile(f);
                   e.target.value = "";
                 }}
+              />
+            </div>
+
+            <div className="w-40">
+              <Select
+                label="Ukuran"
+                items={[
+                  { value: "25", label: "Kecil (25%)" },
+                  { value: "50", label: "Sedang (50%)" },
+                  { value: "75", label: "Besar (75%)" },
+                  { value: "100", label: "Penuh (100%)" },
+                ]}
+                value={imageWidth}
+                onValueChange={setImageWidth}
               />
             </div>
 
