@@ -104,7 +104,13 @@ export default function ClusterDetailTable({ data, totalTasks }: Props) {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="px-4 sm:px-6 py-3 border-b border-white/10">
+          <p className="text-sm text-slate-300">
+            Jangan lupa ingetin temen kamu buat nyelesai tugas yahh!
+          </p>
+        </div>
+
+        <div className="overflow-x-auto">
         <Table>
           <THead>
             {table.getHeaderGroups().map((hg) => (
@@ -145,12 +151,6 @@ export default function ClusterDetailTable({ data, totalTasks }: Props) {
             )}
           </TBody>
         </Table>
-      </div>
-
-      <div className="border-t border-white/10 px-4 sm:px-6 py-4">
-        <p className="text-sm text-slate-400">
-          Jangan lupa ingetin temen kamu buat nyelesai tugas yahh!
-        </p>
       </div>
     </div>
   );
