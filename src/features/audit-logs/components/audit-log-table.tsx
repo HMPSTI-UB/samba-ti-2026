@@ -12,26 +12,6 @@ const actionColors: Record<AuditAction, string> = {
   DELETE: "bg-red-500/10 text-red-400",
 };
 
-const roleColors: Record<string, string> = {
-  ADMIN: "bg-cosmic-purple/10 text-cosmic-purple",
-  KADERISASI: "bg-electric-blue/10 text-electric-blue",
-  SPV: "bg-supernova-orange/10 text-supernova-orange",
-  MABA: "bg-star-gold/10 text-star-gold",
-};
-
-function entityLabel(entityType: string): string {
-  const map: Record<string, string> = {
-    user: "User",
-    maba: "Maba",
-    cluster: "Cluster",
-    task: "Tugas",
-    task_submission: "Submission",
-    announcement: "Pengumuman",
-    election: "Election",
-  };
-  return map[entityType] ?? entityType;
-}
-
 function formatDate(value: string): string {
   return new Date(value).toLocaleString("id-ID", {
     day: "numeric",
@@ -59,10 +39,8 @@ export default function AuditLogTable({ data }: { data: AuditLog[] }) {
         <THead>
           <TR>
             <TH>Waktu</TH>
-            <TH>Pelaku</TH>
-            <TH>Role</TH>
             <TH>Aksi</TH>
-            <TH>Entity</TH>
+            <TH>Pesan</TH>
             <TH>Detail</TH>
           </TR>
         </THead>
@@ -75,17 +53,6 @@ export default function AuditLogTable({ data }: { data: AuditLog[] }) {
                   <TD className="whitespace-nowrap text-xs text-muted-text">
                     {formatDate(log.createdAt)}
                   </TD>
-                  <TD className="font-medium text-soft-white">{log.performerName}</TD>
-                  <TD>
-                    <span
-                      className={cn(
-                        "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium",
-                        roleColors[log.performedByRole] ?? "bg-white/10 text-muted-text",
-                      )}
-                    >
-                      {log.performedByRole}
-                    </span>
-                  </TD>
                   <TD>
                     <span
                       className={cn(
@@ -96,7 +63,7 @@ export default function AuditLogTable({ data }: { data: AuditLog[] }) {
                       {log.action}
                     </span>
                   </TD>
-                  <TD className="text-sm text-soft-white">{entityLabel(log.entityType)}</TD>
+                  <TD className="text-sm font-medium text-soft-white">{log.message}</TD>
                   <TD>
                     <button
                       onClick={() => setExpandedId(expanded ? null : log.id)}
@@ -109,7 +76,7 @@ export default function AuditLogTable({ data }: { data: AuditLog[] }) {
                 </TR>
                 {expanded && (
                   <TR>
-                    <TD colSpan={6} className="bg-black/20">
+                    <TD colSpan={4} className="bg-black/20">
                       <div className="rounded-lg border border-white/10 bg-deep-space p-4">
                         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-text">
                           Perubahan (changes)

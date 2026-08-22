@@ -29,16 +29,6 @@ const AUDIT_ACTION_COLORS: Record<AuditAction, string> = {
   DELETE: "bg-red-500/10 text-red-400",
 };
 
-const AUDIT_ENTITY_LABELS: Record<string, string> = {
-  user: "User",
-  maba: "Maba",
-  cluster: "Cluster",
-  task: "Tugas",
-  task_submission: "Submission",
-  announcement: "Pengumuman",
-  election: "Election",
-};
-
 type QuickAction = {
   label: string;
   description: string;
@@ -267,7 +257,7 @@ export default function PanitiaDashboard() {
                         </span>
                         <div className="flex-1 min-w-0">
                           <p className="truncate text-sm font-medium text-soft-white">
-                            {AUDIT_ENTITY_LABELS[log.entityType] ?? log.entityType} · {log.performerName}
+                            {log.message}
                           </p>
                           <p className="text-[11px] text-muted-text">{formatTime(log.createdAt)}</p>
                         </div>

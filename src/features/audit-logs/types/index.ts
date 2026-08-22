@@ -9,6 +9,7 @@ export type AuditLog = {
   changes: Record<string, unknown> | null;
   createdAt: string;
   performerName: string;
+  message: string;
 };
 
 export type AuditLogFilters = {
