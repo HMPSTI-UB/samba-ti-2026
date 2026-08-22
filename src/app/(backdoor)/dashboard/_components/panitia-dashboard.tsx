@@ -106,7 +106,7 @@ export default function PanitiaDashboard() {
   const actions = QUICK_ACTIONS.filter((a) => !a.adminOnly || isAdmin);
   const latestPending = d?.latestPending ?? [];
   const latestTasks = d?.latestTasks ?? [];
-  const recentAuditLogs = auditData?.data.data ?? [];
+  const recentAuditLogs = auditData?.data ?? [];
 
   return (
     <div className="space-y-6">

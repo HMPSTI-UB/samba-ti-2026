@@ -21,9 +21,9 @@ export default function AuditLogsPage() {
     action: action || undefined,
   });
 
-  const logs = data?.data.data ?? [];
-  const total = data?.data.pagination.total ?? 0;
-  const totalPages = data ? Math.ceil(data.data.pagination.total / LIMIT) : 1;
+  const logs = data?.data ?? [];
+  const total = data?.pagination?.total ?? 0;
+  const totalPages = data ? Math.ceil((data.pagination?.total ?? 0) / LIMIT) : 1;
 
   return (
     <div className="space-y-6">

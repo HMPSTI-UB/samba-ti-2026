@@ -11,7 +11,16 @@ export type AuditLog = {
   performerName: string;
 };
 
-export type AuditLogsResponse = {
+export type AuditLogFilters = {
+  page: number;
+  limit: number;
+  entityType?: string;
+  action?: AuditAction | "";
+};
+
+export type ApiAuditLogsResponse = {
+  success: boolean;
+  message: string;
   data: AuditLog[];
   pagination: {
     page: number;
@@ -19,11 +28,4 @@ export type AuditLogsResponse = {
     total: number;
     totalPages: number;
   };
-};
-
-export type AuditLogFilters = {
-  page: number;
-  limit: number;
-  entityType?: string;
-  action?: AuditAction | "";
 };
