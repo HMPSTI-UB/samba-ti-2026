@@ -69,6 +69,7 @@ export function useCreateTask() {
     mutationFn: (data: CreateTaskInput) => createTask(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tasks"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -79,6 +80,7 @@ export function useUpdateTask() {
     mutationFn: (data: UpdateTaskInput) => updateTask(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tasks"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -89,6 +91,7 @@ export function useDeleteTask() {
     mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tasks"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -100,6 +103,7 @@ export function useSubmitTask() {
       submitTask(taskId, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["tasks"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
       qc.invalidateQueries({ queryKey: ["maba", "tasks"] });
     },
   });
@@ -121,6 +125,7 @@ export function useReviewSubmission() {
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["tasks", variables.taskId, "submissions"] });
       qc.invalidateQueries({ queryKey: ["submissions"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
       qc.invalidateQueries({ queryKey: ["tasks", "member"] });
     },
   });

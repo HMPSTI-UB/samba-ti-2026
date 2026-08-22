@@ -9,5 +9,7 @@ export function useAuditLogs(filters: AuditLogFilters, options?: { enabled?: boo
     queryKey: ["audit-logs", filters],
     queryFn: () => getAuditLogs(filters),
     enabled: options?.enabled,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 }

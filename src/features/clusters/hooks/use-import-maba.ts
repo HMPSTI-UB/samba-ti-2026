@@ -16,6 +16,7 @@ export function useImportMaba() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
       qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
       qc.invalidateQueries({ queryKey: ["maba", "seed"] });
     },
   });

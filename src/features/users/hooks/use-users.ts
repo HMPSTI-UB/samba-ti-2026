@@ -31,6 +31,7 @@ export function useCreateUser() {
     mutationFn: createUser,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -42,6 +43,7 @@ export function useUpdateUser() {
       updateUser(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -53,6 +55,7 @@ export function useUpdateUserRole() {
       updateUserRole(id, role),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -63,6 +66,7 @@ export function useDeleteUser() {
     mutationFn: deleteUser,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }

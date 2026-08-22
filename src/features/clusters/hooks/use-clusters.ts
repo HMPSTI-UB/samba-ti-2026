@@ -55,6 +55,7 @@ export function useCreateCluster() {
     mutationFn: (data: ClusterFormValues) => createCluster(data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -66,6 +67,7 @@ export function useUpdateCluster() {
       updateCluster(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -77,6 +79,7 @@ export function useUpdateWhatsappLink() {
       updateClusterWhatsappLink(clusterId, whatsappGroupLink),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -87,6 +90,7 @@ export function useDeleteCluster() {
     mutationFn: deleteCluster,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -98,6 +102,7 @@ export function useAssignSpv() {
       assignSpv(clusterId, spvId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -117,6 +122,7 @@ export function useAddClusterMembers() {
       addClusterMembers(clusterId, userIds),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
@@ -128,6 +134,7 @@ export function useRemoveClusterMember() {
       removeClusterMember(clusterId, userId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["audit-logs"] });
     },
   });
 }
