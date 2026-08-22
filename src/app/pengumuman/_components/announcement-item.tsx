@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, Megaphone } from "lucide-react";
+import { Clock, ImageIcon, Megaphone } from "lucide-react";
+import { countImages, stripImages } from "@/features/pengumuman/utils/images";
 import AnnouncementDetailDialog from "@/features/pengumuman/components/announcement-detail-dialog";
 import type { PublicAnnouncement } from "@/features/pengumuman/types";
 
 export default function AnnouncementItem({ item }: { item: PublicAnnouncement }) {
   const [detailOpen, setDetailOpen] = useState(false);
+  const imgCount = countImages(item.desc);
+  const previewHtml = stripImages(item.desc);
 
   return (
     <>
@@ -45,8 +48,15 @@ export default function AnnouncementItem({ item }: { item: PublicAnnouncement })
 
         <div
           className="rich-text mt-2 text-white/80"
-          dangerouslySetInnerHTML={{ __html: item.desc }}
+          dangerouslySetInnerHTML={{ __html: previewHtml }}
         />
+
+        {imgCount > 0 && (
+          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-[#2DD4BF]/30 bg-[#2DD4BF]/10 px-3 py-1 text-xs font-medium text-[#2DD4BF]">
+            <ImageIcon size={13} />
+            {imgCount} gambar
+          </span>
+        )}
       </article>
 
       <AnnouncementDetailDialog

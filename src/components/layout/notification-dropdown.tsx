@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
-import { Bell, CheckCheck, Inbox } from "lucide-react";
+import { Bell, CheckCheck, Inbox, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useUserStore } from "@/stores/user.store";
 import { markAsRead } from "@/features/pengumuman/api/announcements";
+import { countImages, stripImages } from "@/features/pengumuman/utils/images";
 import { useAnnouncements, useMarkAsRead } from "@/features/pengumuman/hooks/use-announcements";
 
 const targetColors: Record<string, string> = {
@@ -160,8 +161,14 @@ export default function NotificationDropdown({ unreadCount }: { unreadCount: num
                       </span>
                       <span
                         className="block truncate text-xs text-muted-text"
-                        dangerouslySetInnerHTML={{ __html: item.desc }}
+                        dangerouslySetInnerHTML={{ __html: stripImages(item.desc) }}
                       />
+                      {countImages(item.desc) > 0 && (
+                        <span className="mt-1 inline-flex items-center gap-1 text-[11px] text-electric-blue">
+                          <ImageIcon size={12} />
+                          {countImages(item.desc)} gambar
+                        </span>
+                      )}
                     </span>
                   </button>
                 ))}

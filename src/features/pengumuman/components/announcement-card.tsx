@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { Clock, Eye, Pencil, Trash2 } from "lucide-react";
+import { Clock, Eye, ImageIcon, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { countImages, stripImages } from "@/features/pengumuman/utils/images";
 import AnnouncementDetailDialog from "./announcement-detail-dialog";
 import type { AnnouncementRow } from "@/features/pengumuman/types";
 
@@ -29,6 +30,8 @@ type Props = {
 
 export default function AnnouncementCard({ item, onMarkRead, isPending, onEdit, onDelete }: Props) {
   const [detailOpen, setDetailOpen] = useState(false);
+  const imgCount = countImages(item.desc);
+  const previewHtml = stripImages(item.desc);
 
   return (
     <div
@@ -72,8 +75,15 @@ export default function AnnouncementCard({ item, onMarkRead, isPending, onEdit, 
 
           <div
             className="rich-text line-clamp-3 text-sm text-muted-text leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: item.desc }}
+            dangerouslySetInnerHTML={{ __html: previewHtml }}
           />
+
+          {imgCount > 0 && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-0.5 text-xs text-muted-text">
+              <ImageIcon size={13} className="text-electric-blue" />
+              {imgCount} gambar
+            </span>
+          )}
 
           <div className="flex items-center gap-4 pt-1">
             <span className="flex items-center gap-1 text-xs text-muted-text">
