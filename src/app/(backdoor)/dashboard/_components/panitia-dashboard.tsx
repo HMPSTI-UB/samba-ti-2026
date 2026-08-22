@@ -19,7 +19,25 @@ import {
 import DashboardCard from "@/components/common/dashboard-card";
 import { useUserStore } from "@/stores/user.store";
 import { usePanitiaDashboard } from "@/features/dashboard/hooks/use-panitia-dashboard";
+import { useAuditLogs } from "@/features/audit-logs/hooks/use-audit-logs";
 import type { DashboardTask } from "@/features/dashboard/types";
+import type { AuditAction } from "@/features/audit-logs/types";
+
+const AUDIT_ACTION_COLORS: Record<AuditAction, string> = {
+  CREATE: "bg-emerald-500/10 text-emerald-400",
+  UPDATE: "bg-electric-blue/10 text-electric-blue",
+  DELETE: "bg-red-500/10 text-red-400",
+};
+
+const AUDIT_ENTITY_LABELS: Record<string, string> = {
+  user: "User",
+  maba: "Maba",
+  cluster: "Cluster",
+  task: "Tugas",
+  task_submission: "Submission",
+  announcement: "Pengumuman",
+  election: "Election",
+};
 
 type QuickAction = {
   label: string;
@@ -75,6 +93,10 @@ export default function PanitiaDashboard() {
   const user = useUserStore((s) => s.user);
   const isAdmin = user?.role?.toUpperCase() === "ADMIN";
   const { data, isLoading } = usePanitiaDashboard();
+  const { data: auditData, isLoading: auditLoading } = useAuditLogs(
+    { page: 1, limit: 5 },
+    { enabled: isAdmin },
+  );
 
   if (isLoading && !data) {
     return <div className="p-10 text-center text-sm text-muted-text">Memuat data...</div>;
@@ -84,6 +106,7 @@ export default function PanitiaDashboard() {
   const actions = QUICK_ACTIONS.filter((a) => !a.adminOnly || isAdmin);
   const latestPending = d?.latestPending ?? [];
   const latestTasks = d?.latestTasks ?? [];
+  const recentAuditLogs = auditData?.data.data ?? [];
 
   return (
     <div className="space-y-6">
@@ -217,6 +240,44 @@ export default function PanitiaDashboard() {
               </ul>
             )}
           </div>
+
+          {isAdmin && (
+            <div className="mt-6">
+              <div className="mb-3 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-soft-white">Aktivitas Terbaru</h2>
+                <Link href="/dashboard/audit-logs" className="flex items-center gap-1 text-xs font-semibold text-electric-blue hover:text-electric-blue/80">
+                  Lihat Semua <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">
+                {auditLoading ? (
+                  <p className="p-6 text-center text-sm text-muted-text">Memuat...</p>
+                ) : recentAuditLogs.length === 0 ? (
+                  <p className="p-6 text-center text-sm text-muted-text">
+                    Belum ada aktivitas tercatat.
+                  </p>
+                ) : (
+                  <ul className="divide-y divide-white/5">
+                    {recentAuditLogs.map((log) => (
+                      <li key={log.id} className="flex items-center gap-3 p-4">
+                        <span
+                          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${AUDIT_ACTION_COLORS[log.action]}`}
+                        >
+                          {log.action}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="truncate text-sm font-medium text-soft-white">
+                            {AUDIT_ENTITY_LABELS[log.entityType] ?? log.entityType} · {log.performerName}
+                          </p>
+                          <p className="text-[11px] text-muted-text">{formatTime(log.createdAt)}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

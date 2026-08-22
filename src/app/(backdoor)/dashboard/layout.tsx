@@ -8,8 +8,11 @@ import { PANITIA_NAV_ITEMS, SPV_NAV_ITEMS } from "@/constant/dashboard-nav";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = useUserStore((s) => s.user);
 
-  const isSpv = user?.role?.toUpperCase() === "SPV";
-  const navItems = isSpv ? SPV_NAV_ITEMS : PANITIA_NAV_ITEMS;
+  const role = user?.role?.toUpperCase() ?? "";
+  const isSpv = role === "SPV";
+  const isAdmin = role === "ADMIN";
+  const baseNavItems = isSpv ? SPV_NAV_ITEMS : PANITIA_NAV_ITEMS;
+  const navItems = baseNavItems.filter((item) => !item.adminOnly || isAdmin);
 
   return (
     <AuthGuard>

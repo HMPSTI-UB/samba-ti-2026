@@ -11,6 +11,7 @@ import {
   Layers,
   ClipboardCheck,
   Settings,
+  ScrollText,
 } from "lucide-react";
 
 export type DashboardNavItem = {
@@ -18,6 +19,7 @@ export type DashboardNavItem = {
   href: string;
   icon: LucideIcon;
   unreadBadge?: boolean;
+  adminOnly?: boolean;
 };
 
 export const MABA_NAV_ITEMS: DashboardNavItem[] = [
@@ -36,6 +38,7 @@ export const PANITIA_NAV_ITEMS: DashboardNavItem[] = [
   { label: "Users", href: "/dashboard/users", icon: Users },
   { label: "Tugas", href: "/dashboard/tugas", icon: ClipboardCheck },
   { label: "Pengumuman", href: "/dashboard/pengumuman", icon: Megaphone, unreadBadge: true },
+  { label: "Log Aktivitas", href: "/dashboard/audit-logs", icon: ScrollText, adminOnly: true },
   { label: "Pengaturan", href: "/dashboard/pengaturan", icon: Settings },
   { label: "Profil", href: "/dashboard/profil", icon: User },
 ];
