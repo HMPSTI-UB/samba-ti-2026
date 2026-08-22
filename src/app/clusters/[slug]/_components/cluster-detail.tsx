@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { clientApi } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/errors";
-import { Phone, Star } from "lucide-react";
+import { Phone, Shield, Star } from "lucide-react";
 import type { PublicClusterDetail } from "@/features/clusters/types";
 import MemberList from "./member-list";
 
@@ -60,6 +60,14 @@ export default function ClusterDetail() {
         {cluster.clusterMeaning && (
           <p className="mx-auto mt-6 max-w-2xl text-sm font-medium leading-relaxed text-muted-text md:text-lg">
             {cluster.clusterMeaning}
+          </p>
+        )}
+
+        {cluster.spvName && (
+          <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#F8B41D]/30 bg-[#F8B41D]/5 px-4 py-1.5 text-sm text-white/80">
+            <Shield size={15} className="text-[#F8B41D]" />
+            SPV:
+            <span className="font-bold text-[#F8B41D]">{cluster.spvName}</span>
           </p>
         )}
       </div>
