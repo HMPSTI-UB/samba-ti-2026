@@ -1,7 +1,6 @@
 "use client";
 
 import { Megaphone } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import AnnouncementCard from "./announcement-card";
 import Pagination from "@/components/ui/pagination";
 import type { AnnouncementRow } from "@/features/pengumuman/types";
@@ -15,6 +14,8 @@ type Props = {
   onMarkRead: (id: string) => void;
   onPageChange: (page: number) => void;
   markReadPending: boolean;
+  onEdit?: (item: AnnouncementRow) => void;
+  onDelete?: (item: AnnouncementRow) => void;
 };
 
 export default function AnnouncementList({
@@ -26,6 +27,8 @@ export default function AnnouncementList({
   onMarkRead,
   onPageChange,
   markReadPending,
+  onEdit,
+  onDelete,
 }: Props) {
   if (isPending) {
     return (
@@ -69,6 +72,8 @@ export default function AnnouncementList({
             item={item}
             onMarkRead={onMarkRead}
             isPending={markReadPending}
+            onEdit={onEdit}
+            onDelete={onDelete}
           />
         ))}
       </div>

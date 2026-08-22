@@ -28,6 +28,14 @@ export function createAnnouncement(data: CreateAnnouncementInput) {
   return clientApi.post<AnnouncementRow>("/announcements", data);
 }
 
+export function updateAnnouncement(id: string, data: CreateAnnouncementInput) {
+  return clientApi.patch<AnnouncementRow>(`/announcements/${id}`, data);
+}
+
+export function deleteAnnouncement(id: string) {
+  return clientApi.delete<{ message: string }>(`/announcements/${id}`);
+}
+
 export function markAsRead(id: string) {
   return clientApi.patch<{ message: string }>(`/announcements/${id}/read`);
 }

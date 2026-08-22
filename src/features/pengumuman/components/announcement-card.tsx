@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { Clock, Eye } from "lucide-react";
+import { Clock, Eye, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AnnouncementDetailDialog from "./announcement-detail-dialog";
 import type { AnnouncementRow } from "@/features/pengumuman/types";
 
 const targetColors: Record<string, string> = {
@@ -21,16 +23,29 @@ type Props = {
   item: AnnouncementRow;
   onMarkRead: (id: string) => void;
   isPending?: boolean;
+  onEdit?: (item: AnnouncementRow) => void;
+  onDelete?: (item: AnnouncementRow) => void;
 };
 
-export default function AnnouncementCard({ item, onMarkRead, isPending }: Props) {
+export default function AnnouncementCard({ item, onMarkRead, isPending, onEdit, onDelete }: Props) {
+  const [detailOpen, setDetailOpen] = useState(false);
+
   return (
     <div
+      role="button"
+      tabIndex={0}
+      onClick={() => setDetailOpen(true)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setDetailOpen(true);
+        }
+      }}
       className={cn(
-        "rounded-xl border p-5 transition-all",
+        "cursor-pointer rounded-xl border p-5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric-blue",
         item.isRead
-          ? "border-white/10 bg-card-bg"
-          : "border-cosmic-purple/30 bg-cosmic-purple/[0.08]",
+          ? "border-white/10 bg-card-bg hover:border-electric-blue/40"
+          : "border-cosmic-purple/30 bg-cosmic-purple/[0.08] hover:border-cosmic-purple/60",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -74,19 +89,57 @@ export default function AnnouncementCard({ item, onMarkRead, isPending }: Props)
           </div>
         </div>
 
-        {!item.isRead && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onMarkRead(item.id)}
-            disabled={isPending}
-            className="shrink-0 gap-1.5 text-xs"
-          >
-            <Eye size={14} />
-            Tandai dibaca
-          </Button>
-        )}
+        <div className="flex flex-col items-end gap-2 shrink-0">
+          {onEdit && onDelete && (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(item);
+                }}
+                className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-cosmic-purple bg-cosmic-purple/10 hover:bg-cosmic-purple/20 hover:text-electric-blue transition-colors"
+              >
+                <Pencil size={13} />
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(item);
+                }}
+                className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 hover:text-red-300 transition-colors"
+              >
+                <Trash2 size={13} />
+                Hapus
+              </button>
+            </div>
+          )}
+
+          {!item.isRead && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onMarkRead(item.id);
+              }}
+              disabled={isPending}
+              className="gap-1.5 text-xs"
+            >
+              <Eye size={14} />
+              Tandai dibaca
+            </Button>
+          )}
+        </div>
       </div>
+
+      <AnnouncementDetailDialog
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        item={item}
+      />
     </div>
   );
 }

@@ -5,6 +5,8 @@ import {
   getAnnouncements,
   getUnreadCount,
   createAnnouncement,
+  updateAnnouncement,
+  deleteAnnouncement,
   markAsRead,
 } from "@/features/pengumuman/api/announcements";
 import type { AnnouncementFilters, CreateAnnouncementInput } from "@/features/pengumuman/types";
@@ -29,6 +31,29 @@ export function useCreateAnnouncement() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data: CreateAnnouncementInput) => createAnnouncement(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["announcements"] });
+      qc.invalidateQueries({ queryKey: ["announcements", "unread-count"] });
+    },
+  });
+}
+
+export function useUpdateAnnouncement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: CreateAnnouncementInput }) =>
+      updateAnnouncement(id, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["announcements"] });
+      qc.invalidateQueries({ queryKey: ["announcements", "unread-count"] });
+    },
+  });
+}
+
+export function useDeleteAnnouncement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteAnnouncement,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["announcements"] });
       qc.invalidateQueries({ queryKey: ["announcements", "unread-count"] });

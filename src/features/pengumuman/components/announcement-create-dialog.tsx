@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import RichTextEditor from "@/components/ui/rich-text-editor";
+import type { AnnouncementRow } from "@/features/pengumuman/types";
 
 const announcementSchema = z.object({
   title: z.string().min(3, "Minimal 3 karakter").max(255, "Maksimal 255 karakter"),
@@ -20,11 +22,20 @@ type FormData = z.infer<typeof announcementSchema>;
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  editingAnnouncement?: AnnouncementRow | null;
   onSubmit: (data: FormData) => void;
   isPending?: boolean;
 };
 
-export default function AnnouncementCreateDialog({ open, onOpenChange, onSubmit, isPending }: Props) {
+export default function AnnouncementCreateDialog({
+  open,
+  onOpenChange,
+  editingAnnouncement,
+  onSubmit,
+  isPending,
+}: Props) {
+  const isEditing = !!editingAnnouncement;
+
   const {
     register,
     handleSubmit,
@@ -36,14 +47,25 @@ export default function AnnouncementCreateDialog({ open, onOpenChange, onSubmit,
     defaultValues: { title: "", desc: "", targetType: "ALL" },
   });
 
-  function handleOpenChange(open: boolean) {
-    if (!open) reset();
-    onOpenChange(open);
-  }
+  useEffect(() => {
+    if (!open) return;
+    if (editingAnnouncement) {
+      reset({
+        title: editingAnnouncement.title,
+        desc: editingAnnouncement.desc,
+        targetType: editingAnnouncement.targetType,
+      });
+    } else {
+      reset({ title: "", desc: "", targetType: "ALL" });
+    }
+  }, [open, editingAnnouncement, reset]);
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent title="Buat Pengumuman" description="Kirim pengumuman ke peserta">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        title={isEditing ? "Edit Pengumuman" : "Buat Pengumuman"}
+        description={isEditing ? "Perbarui isi pengumuman" : "Kirim pengumuman ke peserta"}
+      >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input label="Judul" placeholder="Judul pengumuman" error={errors.title?.message} {...register("title")} />
 
@@ -81,11 +103,11 @@ export default function AnnouncementCreateDialog({ open, onOpenChange, onSubmit,
           />
 
           <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="ghost" onClick={() => handleOpenChange(false)} disabled={isPending}>
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} disabled={isPending}>
               Batal
             </Button>
             <Button type="submit" variant="primary" loading={isPending} disabled={isPending}>
-              Kirim
+              {isEditing ? "Simpan Perubahan" : "Kirim"}
             </Button>
           </div>
         </form>

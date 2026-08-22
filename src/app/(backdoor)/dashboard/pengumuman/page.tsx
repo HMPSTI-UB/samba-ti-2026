@@ -3,12 +3,20 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ConfirmDialog from "@/components/common/confirm-dialog";
 import { useUserStore } from "@/stores/user.store";
-import { useAnnouncements, useCreateAnnouncement, useMarkAsRead } from "@/features/pengumuman/hooks/use-announcements";
+import {
+  useAnnouncements,
+  useCreateAnnouncement,
+  useUpdateAnnouncement,
+  useDeleteAnnouncement,
+  useMarkAsRead,
+} from "@/features/pengumuman/hooks/use-announcements";
 import AnnouncementList from "@/features/pengumuman/components/announcement-list";
 import AnnouncementFilter from "@/features/pengumuman/components/announcement-filter";
 import AnnouncementCreateDialog from "@/features/pengumuman/components/announcement-create-dialog";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
+import type { AnnouncementRow } from "@/features/pengumuman/types";
 
 export default function PengumumanPage() {
   const user = useUserStore((s) => s.user);
@@ -18,6 +26,9 @@ export default function PengumumanPage() {
   const [page, setPage] = useState(1);
   const [unreadOnly, setUnreadOnly] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
+  const [editingAnnouncement, setEditingAnnouncement] = useState<AnnouncementRow | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletingAnnouncement, setDeletingAnnouncement] = useState<AnnouncementRow | null>(null);
 
   const { data: announcementsRes, isLoading: listLoading } = useAnnouncements({
     page,
@@ -26,18 +37,54 @@ export default function PengumumanPage() {
   });
 
   const createMutation = useCreateAnnouncement();
+  const updateMutation = useUpdateAnnouncement();
+  const deleteMutation = useDeleteAnnouncement();
   const markReadMutation = useMarkAsRead();
   const { success: alertSuccess, error: alertError } = useSweetAlert();
 
-  async function handleCreate(data: { title: string; desc: string; targetType: "ALL" | "SPV" | "MABA" }) {
+  function handleSubmit(data: { title: string; desc: string; targetType: "ALL" | "SPV" | "MABA" }) {
+    if (editingAnnouncement) {
+      updateMutation.mutate(
+        { id: editingAnnouncement.id, data },
+        {
+          onSuccess: () => {
+            alertSuccess("Pengumuman berhasil diperbarui");
+            setCreateOpen(false);
+            setEditingAnnouncement(null);
+          },
+          onError: () => alertError("Gagal memperbarui pengumuman"),
+        },
+      );
+      return;
+    }
     createMutation.mutate(data, {
       onSuccess: () => {
         alertSuccess("Pengumuman berhasil dikirim");
         setCreateOpen(false);
       },
-      onError: () => {
-        alertError("Gagal mengirim pengumuman");
+      onError: () => alertError("Gagal mengirim pengumuman"),
+    });
+  }
+
+  function handleEdit(item: AnnouncementRow) {
+    setEditingAnnouncement(item);
+    setCreateOpen(true);
+  }
+
+  function handleOpenDelete(item: AnnouncementRow) {
+    setDeletingAnnouncement(item);
+    setDeleteOpen(true);
+  }
+
+  function handleDelete() {
+    if (!deletingAnnouncement) return;
+    deleteMutation.mutate(deletingAnnouncement.id, {
+      onSuccess: () => {
+        alertSuccess("Pengumuman berhasil dihapus");
+        setDeleteOpen(false);
+        setDeletingAnnouncement(null);
       },
+      onError: () => alertError("Gagal menghapus pengumuman"),
     });
   }
 
@@ -67,7 +114,14 @@ export default function PengumumanPage() {
         <div className="flex items-center gap-3">
           <AnnouncementFilter unreadOnly={unreadOnly} onToggle={handleToggleFilter} />
           {isAdmin && (
-            <Button variant="primary" onClick={() => setCreateOpen(true)} className="gap-2">
+            <Button
+              variant="primary"
+              onClick={() => {
+                setEditingAnnouncement(null);
+                setCreateOpen(true);
+              }}
+              className="gap-2"
+            >
               <Plus size={16} />
               Buat
             </Button>
@@ -84,13 +138,34 @@ export default function PengumumanPage() {
         onMarkRead={handleMarkRead}
         onPageChange={setPage}
         markReadPending={markReadMutation.isPending}
+        onEdit={isAdmin ? handleEdit : undefined}
+        onDelete={isAdmin ? handleOpenDelete : undefined}
       />
 
       <AnnouncementCreateDialog
         open={createOpen}
-        onOpenChange={setCreateOpen}
-        onSubmit={handleCreate}
-        isPending={createMutation.isPending}
+        onOpenChange={(v) => {
+          setCreateOpen(v);
+          if (!v) setEditingAnnouncement(null);
+        }}
+        editingAnnouncement={editingAnnouncement}
+        onSubmit={handleSubmit}
+        isPending={createMutation.isPending || updateMutation.isPending}
+      />
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={(v) => {
+          setDeleteOpen(v);
+          if (!v) setDeletingAnnouncement(null);
+        }}
+        title="Hapus Pengumuman"
+        description={`Yakin ingin menghapus pengumuman "${deletingAnnouncement?.title ?? ""}"? Tindakan ini tidak bisa dibatalkan.`}
+        confirmLabel="Hapus"
+        cancelLabel="Batal"
+        destructive
+        onConfirm={handleDelete}
+        isPending={deleteMutation.isPending}
       />
     </div>
   );
