@@ -107,6 +107,8 @@ export default function MabaTaskDetailPage() {
   const task = taskRes?.data;
   const submission = submissionRes?.data ?? null;
   const status = submissionStatus(submission);
+  const prefill = status === "REJECTED" ? (submission?.submissionData ?? {}) : {};
+  const effectiveValues = { ...prefill, ...values };
 
   const isLoading = taskLoading || subLoading;
 
@@ -123,7 +125,7 @@ export default function MabaTaskDetailPage() {
   function validate(): boolean {
     const next: Record<string, string> = {};
     (task?.formFields ?? []).forEach((f) => {
-      const value = (values[f.key] ?? "").trim();
+      const value = (effectiveValues[f.key] ?? "").trim();
       if (f.isRequired && !value) {
         next[f.key] = "Field ini wajib diisi";
         return;
@@ -144,7 +146,7 @@ export default function MabaTaskDetailPage() {
   function handleSubmit() {
     if (!validate()) return;
     submitMutation.mutate(
-      { taskId: id, data: values },
+      { taskId: id, data: effectiveValues },
       {
         onSuccess: () => {
           alertSuccess("Tugas berhasil dikumpulkan");
@@ -184,7 +186,6 @@ export default function MabaTaskDetailPage() {
   const fieldTypes: Record<string, string> = Object.fromEntries(
     (task.formFields ?? []).map((f) => [f.key, f.type]),
   );
-  const prefill = status === "REJECTED" ? (submission?.submissionData ?? {}) : {};
 
   return (
     <div className="space-y-6">
@@ -298,7 +299,7 @@ export default function MabaTaskDetailPage() {
                 </h3>
                 <FormRenderer
                   fields={task.formFields ?? []}
-                  values={{ ...prefill, ...values }}
+                  values={effectiveValues}
                   onChange={handleChange}
                   errors={errors}
                 />
