@@ -60,7 +60,7 @@ export default function UsersPage() {
     (formData: any) => {
       if (!editingUser) return;
       updateMutation.mutate(
-        { id: editingUser.id, data: { name: formData.name, email: formData.email } },
+        { id: editingUser.id, data: { name: formData.name, email: formData.email, password: formData.password || undefined } },
         {
           onSuccess: () => {
             alertSuccess("User berhasil diupdate");

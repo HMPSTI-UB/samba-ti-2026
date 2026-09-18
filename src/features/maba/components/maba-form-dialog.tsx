@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { Eye, EyeOff } from "lucide-react";
 import type { SafeUser } from "@/features/users/api/users";
 
 const mabaFormSchema = z.object({
@@ -43,6 +44,7 @@ type Props = {
 };
 
 export default function MabaFormDialog({ open, onOpenChange, editingMaba, onSubmit, isPending }: Props) {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -56,6 +58,7 @@ export default function MabaFormDialog({ open, onOpenChange, editingMaba, onSubm
 
   useEffect(() => {
     if (open) {
+      setShowPassword(false);
       if (editingMaba) {
         reset({
           name: editingMaba.name,
@@ -79,6 +82,25 @@ export default function MabaFormDialog({ open, onOpenChange, editingMaba, onSubm
           <Input label="Nama" placeholder="Nama lengkap" error={errors.name?.message} {...register("name")} />
           <Input label="Email" type="email" placeholder="email@example.com" error={errors.email?.message} {...register("email")} />
           <Input label="NIM (15 digit)" placeholder="245150200111001" error={errors.nim?.message} {...register("nim")} />
+          
+          <Input
+            label={editingMaba ? "Password Baru (kosongkan jika tidak ingin mengubah)" : "Password (kosongkan untuk default = NIM)"}
+            type={showPassword ? "text" : "password"}
+            placeholder="Minimal 8 karakter"
+            error={errors.password?.message}
+            rightIcon={
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPassword(!showPassword)}
+                className="hover:text-soft-white transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            }
+            {...register("password")}
+          />
+
           <Controller
             name="gender"
             control={control}
@@ -86,7 +108,7 @@ export default function MabaFormDialog({ open, onOpenChange, editingMaba, onSubm
               <Select
                 label="Jenis Kelamin"
                 items={[
-                  { value: "", label: "—" },
+                  { value: "", label: "-" },
                   { value: "L", label: "Laki-laki" },
                   { value: "P", label: "Perempuan" },
                 ]}
@@ -102,15 +124,7 @@ export default function MabaFormDialog({ open, onOpenChange, editingMaba, onSubm
             error={errors.username?.message}
             {...register("username")}
           />
-          {!editingMaba && (
-            <Input
-              label="Password (kosongkan untuk default = NIM)"
-              type="password"
-              placeholder="Minimal 8 karakter"
-              error={errors.password?.message}
-              {...register("password")}
-            />
-          )}
+          
           {editingMaba && (
             <Controller
               name="status"
