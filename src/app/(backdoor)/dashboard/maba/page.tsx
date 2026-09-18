@@ -93,6 +93,7 @@ export default function MabaPage() {
             gender: (formData.gender as "L" | "P" | undefined) || null,
             username: formData.username || undefined,
             status: formData.status === "true",
+            password: formData.password || undefined,
           },
         },
         {

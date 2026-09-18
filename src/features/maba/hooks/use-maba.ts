@@ -35,7 +35,7 @@ export function useUpdateMaba() {
       data,
     }: {
       id: string;
-      data: { name?: string; email?: string; username?: string; gender?: "L" | "P" | null; status?: boolean; nim?: string };
+      data: { name?: string; email?: string; username?: string; gender?: "L" | "P" | null; status?: boolean; nim?: string; password?: string };
     }) => updateUser(id, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["users"] });

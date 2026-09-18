@@ -56,7 +56,7 @@ export function createUser(data: {
 
 export function updateUser(
   id: string,
-  data: { name?: string; email?: string; username?: string; gender?: "L" | "P" | null; status?: boolean },
+  data: { name?: string; email?: string; username?: string; gender?: "L" | "P" | null; status?: boolean; password?: string },
 ) {
   return clientApi.patch<{ data: SafeUser }>(`/users/${id}`, data);
 }

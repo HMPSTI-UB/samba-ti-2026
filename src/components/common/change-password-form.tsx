@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { KeyRound } from "lucide-react";
+import { KeyRound, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
@@ -15,6 +15,10 @@ export default function ChangePasswordForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   function validate(): boolean {
     const next: Record<string, string> = {};
@@ -59,31 +63,61 @@ export default function ChangePasswordForm() {
       <div className="space-y-4">
         <Input
           label="Password Saat Ini"
-          type="password"
+          type={showCurrent ? "text" : "password"}
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           placeholder="Masukkan password saat ini"
           error={errors.currentPassword}
           autoComplete="current-password"
+          rightIcon={
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowCurrent(!showCurrent)}
+              className="hover:text-soft-white transition-colors"
+            >
+              {showCurrent ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
         />
         <Input
           label="Password Baru"
-          type="password"
+          type={showNew ? "text" : "password"}
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           placeholder="Minimal 8 karakter"
           error={errors.newPassword}
           helperText="Gunakan minimal 8 karakter"
           autoComplete="new-password"
+          rightIcon={
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowNew(!showNew)}
+              className="hover:text-soft-white transition-colors"
+            >
+              {showNew ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
         />
         <Input
           label="Konfirmasi Password Baru"
-          type="password"
+          type={showConfirm ? "text" : "password"}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Ulangi password baru"
           error={errors.confirmPassword}
           autoComplete="new-password"
+          rightIcon={
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowConfirm(!showConfirm)}
+              className="hover:text-soft-white transition-colors"
+            >
+              {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          }
         />
       </div>
 
