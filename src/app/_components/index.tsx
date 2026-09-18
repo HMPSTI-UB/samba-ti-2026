@@ -16,7 +16,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Hero loaded={loaded} setLoaded={setLoaded} />
+      <Hero loaded={loaded} setLoaded={setLoaded} ctaHref="/auth/login?redirect=%2Fapp%2Fdashboard" />
       <About loaded={loaded} />
       <Zenith />
       <ZenithPhases />
@@ -115,3 +115,4 @@ export default function HomePage() {
     </>
   );
 }
+
