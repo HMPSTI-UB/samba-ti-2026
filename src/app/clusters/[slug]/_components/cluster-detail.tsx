@@ -74,29 +74,6 @@ export default function ClusterDetail() {
 
       <div className="mt-14">
         <MemberList members={members} />
-
-        <div className="mt-8 flex items-start gap-4 rounded-2xl border border-[#F8B41D]/40 bg-[#F8B41D]/5 p-6">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F8B41D]/15">
-            <Phone size={18} className="text-[#F8B41D]" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-[#F8B41D]">
-              Kendala / Nama Tidak Ada?
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-white/70">
-              Jika nama kamu tidak ada di daftar anggota atau mengalami kendala
-              lain, silakan hubungi CP:{" "}
-              <a
-                href="https://wa.me/6285883590837"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-[#F8B41D] underline-offset-4 hover:underline"
-              >
-                0858-8359-0837
-              </a>
-            </p>
-          </div>
-        </div>
       </div>
     </>
   );
