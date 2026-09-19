@@ -18,6 +18,8 @@ import ManageMembersDialog from "@/features/clusters/components/manage-members-d
 import ClusterMembersTable from "@/features/clusters/components/cluster-members-table";
 import EditWhatsappDialog from "@/features/clusters/components/edit-whatsapp-dialog";
 import SubmissionViewer from "@/features/penugasan/components/submission-viewer";
+import { ClusterOverrideForm } from "@/features/clusters/components/cluster-override-form";
+import { Star, Zap } from "lucide-react";
 import { useSubmissions, useReviewSubmission } from "@/features/penugasan/hooks/use-tasks";
 import type { Submission } from "@/features/penugasan/types";
 
@@ -48,6 +50,9 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
   const clusterNumberLabel = cluster?.clusterNumber != null ? `Cluster ${cluster.clusterNumber}` : "";
   const detail = detailRes?.data;
   const members = detail?.members ?? [];
+  const skorFinal = detail?.skor_final_cluster ?? 0;
+  const kecepatan = detail?.kecepatan_cluster;
+  const deduction = detail?.total_deduction ?? 0;
   const totalTasks = detail?.totalTasks ?? 0;
   const submissions = subsRes?.data ?? [];
 
@@ -176,7 +181,7 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <div className="rounded-xl border border-white/10 bg-card-bg p-5">
           <div className="flex items-center gap-3 text-electric-blue mb-2">
             <Shield size={20} />
@@ -229,6 +234,33 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
           <div className="mt-3">
             <p className="text-3xl font-bold text-soft-white">{Math.round(avgProgress * 100)}%</p>
             <p className="text-sm text-muted-text mt-1">{totalTasks} total tugas tersedia</p>
+          </div>
+        </div>
+
+        <div className="col-span-1 sm:col-span-2 lg:col-span-1 rounded-xl border border-white/10 bg-card-bg p-5">
+          <div className="flex items-center gap-3 text-emerald-400 mb-2">
+            <Star size={20} />
+            <h3 className="font-medium">Skor Akhir</h3>
+          </div>
+          <div className="mt-3 flex justify-between items-end">
+            <div>
+              <p className="text-3xl font-bold text-soft-white">{skorFinal}</p>
+              <p className="text-sm text-muted-text mt-1">
+                Deduksi: <span className="text-red-400">-{deduction}</span>
+              </p>
+            </div>
+            {canManage && <ClusterOverrideForm clusterId={clusterId} />}
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-white/10 bg-card-bg p-5">
+          <div className="flex items-center gap-3 text-cyan-400 mb-2">
+            <Zap size={20} />
+            <h3 className="font-medium">Kecepatan</h3>
+          </div>
+          <div className="mt-3">
+            <p className="text-3xl font-bold text-soft-white">{kecepatan !== null && kecepatan !== undefined ? Math.round(kecepatan) + "%" : "-"}</p>
+            <p className="text-sm text-muted-text mt-1">Submit maba</p>
           </div>
         </div>
       </div>
