@@ -6,6 +6,7 @@ import { ArrowLeft, Users, Shield, Link as LinkIcon, Loader2, RefreshCw, Clipboa
 import { Button } from "@/components/ui/button";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import ConfirmDialog from "@/components/common/confirm-dialog";
+import { cn } from "@/lib/cn";
 import {
   useCluster,
   useClusterDetail,
@@ -181,7 +182,7 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className={cn("grid gap-4 sm:grid-cols-2", canManage ? "lg:grid-cols-5" : "lg:grid-cols-4")}>
         <div className="rounded-xl border border-white/10 bg-card-bg p-5">
           <div className="flex items-center gap-3 text-electric-blue mb-2">
             <Shield size={20} />
@@ -253,16 +254,18 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
           </div>
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-card-bg p-5">
-          <div className="flex items-center gap-3 text-cyan-400 mb-2">
-            <Zap size={20} />
-            <h3 className="font-medium">Kecepatan</h3>
+        {canManage && (
+          <div className="rounded-xl border border-white/10 bg-card-bg p-5">
+            <div className="flex items-center gap-3 text-cyan-400 mb-2">
+              <Zap size={20} />
+              <h3 className="font-medium">Kecepatan</h3>
+            </div>
+            <div className="mt-3">
+              <p className="text-3xl font-bold text-soft-white">{kecepatan !== null && kecepatan !== undefined ? Math.round(kecepatan) + "%" : "-"}</p>
+              <p className="text-sm text-muted-text mt-1">Submit maba</p>
+            </div>
           </div>
-          <div className="mt-3">
-            <p className="text-3xl font-bold text-soft-white">{kecepatan !== null && kecepatan !== undefined ? Math.round(kecepatan) + "%" : "-"}</p>
-            <p className="text-sm text-muted-text mt-1">Submit maba</p>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="rounded-xl border border-white/10 bg-card-bg overflow-hidden">

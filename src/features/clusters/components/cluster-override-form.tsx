@@ -45,7 +45,7 @@ export function ClusterOverrideForm({ clusterId }: { clusterId: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="sm">Kurangi Skor (Override)</Button>
+        <Button variant="destructive" size="sm">Kurangi Skor</Button>
       </DialogTrigger>
       <DialogContent>
         <div className="mb-4">
