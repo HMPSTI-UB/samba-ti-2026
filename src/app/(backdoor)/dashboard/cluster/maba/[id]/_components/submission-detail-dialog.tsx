@@ -54,7 +54,14 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
         ) : (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <TaskStatusBadge status={task.doneStatus} />
+              <div className="flex items-center gap-3">
+                <TaskStatusBadge status={task.doneStatus} />
+                <span className="text-xs font-medium text-muted-text">
+                  {task.doneStatus === "DONE" && "Nilai: 100"}
+                  {task.doneStatus === "REJECTED" && "Nilai: 0"}
+                  {task.doneStatus === "PENDING" && "Menunggu Penilaian"}
+                </span>
+              </div>
               <span className="text-xs text-muted-text">
                 Dikumpulkan {formatDate(submission.submittedAt)}
               </span>

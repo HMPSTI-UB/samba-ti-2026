@@ -91,7 +91,12 @@ export default function MemberTaskList({
                     {formatDeadline(task.deadline)}
                   </p>
                 </div>
-                <div className="hidden sm:block">
+                <div className="hidden sm:flex items-center gap-3">
+                  <span className="text-xs font-medium text-muted-text">
+                    {task.doneStatus === "DONE" && "Nilai: 100"}
+                    {(task.doneStatus === "REJECTED" || task.doneStatus === "NOT_SUBMITTED") && "Nilai: 0"}
+                    {task.doneStatus === "PENDING" && "Menunggu Penilaian"}
+                  </span>
                   <TaskStatusBadge status={task.doneStatus} />
                 </div>
                 <button
