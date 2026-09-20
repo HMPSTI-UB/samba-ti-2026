@@ -82,12 +82,12 @@ const Select = forwardRef<HTMLButtonElement, SelectProps>(
               position="popper"
               sideOffset={4}
               className={cn(
-                "z-50 min-w-[8rem] overflow-hidden rounded-lg border p-1 shadow-xl",
+                "z-50 min-w-[8rem] overflow-hidden rounded-lg border shadow-xl",
                 "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
                 v.content,
               )}
             >
-              <SelectPrimitive.Viewport className="max-h-60">
+              <SelectPrimitive.Viewport className="p-1">
                 {items.map((item) => (
                   <SelectPrimitive.Item
                     key={item.value}

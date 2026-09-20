@@ -136,7 +136,10 @@ export default function TaskDetailPage() {
                 <Select
                   items={[
                     { value: "", label: "Semua Cluster" },
-                    ...clusters.map((c) => ({ value: c.id, label: c.name })),
+                    ...clusters.map((c) => ({
+                      value: c.id,
+                      label: c.clusterNumber ? `${c.name} (${c.clusterNumber})` : c.name,
+                    })),
                   ]}
                   value={clusterId}
                   onValueChange={setClusterId}
