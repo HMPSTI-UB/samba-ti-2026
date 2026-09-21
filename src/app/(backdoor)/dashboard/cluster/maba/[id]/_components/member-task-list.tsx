@@ -82,6 +82,9 @@ export default function MemberTaskList({
         <div className="divide-y divide-white/5">
           {filtered.map((task) => {
             const isOverdue = new Date(task.deadline).getTime() < now;
+            const hasValidDates = !!(task.submission?.submittedAt && task.deadline);
+            const isLate = hasValidDates ? new Date(task.submission!.submittedAt).getTime() > new Date(task.deadline).getTime() : false;
+
             return (
               <div key={task.id} className="flex items-center gap-4 p-4">
                 <div className="min-w-0 flex-1">
@@ -91,7 +94,22 @@ export default function MemberTaskList({
                     {formatDeadline(task.deadline)}
                   </p>
                 </div>
-                <div className="hidden sm:block">
+                <div className="hidden sm:flex items-center gap-3">
+                  <span className="text-xs font-medium text-muted-text">
+                    {task.doneStatus === "DONE" && "Nilai: 100"}
+                    {(task.doneStatus === "REJECTED" || task.doneStatus === "NOT_SUBMITTED") && "Nilai: 0"}
+                    {task.doneStatus === "PENDING" && "Menunggu Penilaian"}
+                  </span>
+                  {hasValidDates && (
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                        isLate ? "bg-red-500/10 text-red-500" : "bg-emerald-500/10 text-emerald-500"
+                      )}
+                    >
+                      {isLate ? "Terlambat" : "Tepat Waktu"}
+                    </span>
+                  )}
                   <TaskStatusBadge status={task.doneStatus} />
                 </div>
                 <button

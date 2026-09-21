@@ -41,12 +41,17 @@ export type ClusterMemberProgress = {
   updatedAt: string;
   doneCount: number;
   pendingCount: number;
+  mabaScore?: number;
+  mabaSpeed?: number | null;
 };
 
 export type ClusterDetail = {
   cluster: Cluster;
   totalTasks: number;
   members: ClusterMemberProgress[];
+  skor_final_cluster?: number;
+  kecepatan_cluster?: number | null;
+  total_deduction?: number;
 };
 
 export type PublicCluster = {

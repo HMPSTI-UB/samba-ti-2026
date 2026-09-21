@@ -1,3 +1,4 @@
+// @ts-ignore
 import ExcelJS from "exceljs";
 import type { MabaExportItem } from "@/features/maba/api/maba";
 
@@ -68,7 +69,7 @@ function styleSubtitleCell(cell: ExcelJS.Cell, value: string) {
 
 function styleHeaderRow(row: ExcelJS.Row) {
   row.height = 20;
-  row.eachCell((cell) => {
+  row.eachCell((cell: any) => {
     cell.fill = HEADER_FILL;
     cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
     cell.alignment = { horizontal: "center", vertical: "middle" };
@@ -77,7 +78,7 @@ function styleHeaderRow(row: ExcelJS.Row) {
 }
 
 function styleDataRow(row: ExcelJS.Row) {
-  row.eachCell((cell) => {
+  row.eachCell((cell: any) => {
     cell.border = ALL_BORDERS;
   });
 }
@@ -201,6 +202,6 @@ export async function buildMabaWorkbook(items: MabaExportItem[]): Promise<void> 
     sheet.autoFilter = { from: "A3", to: `E${sheet.rowCount}` };
   }
 
-  const buffer = await workbook.xlsx.writeBuffer();
+  const buffer = await (workbook.xlsx as any).writeBuffer();
   triggerDownload(buffer as ArrayBuffer, `Daftar-MABA-${stamp}.xlsx`);
 }

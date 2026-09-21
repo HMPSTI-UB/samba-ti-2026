@@ -8,6 +8,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { FaRegMessage } from "react-icons/fa6";
 import type { MemberTask, MySubmission } from "@/features/penugasan/types";
 import TaskStatusBadge from "./status-badge";
+import { cn } from "@/lib/cn";
 
 type Props = {
   open: boolean;
@@ -41,6 +42,9 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
   const submission = task.submission;
   const canReview = !!onReview && !!submission && submission.status === "PENDING";
 
+  const hasValidDates = !!(submission?.submittedAt && task.deadline);
+  const isLate = hasValidDates ? new Date(submission!.submittedAt).getTime() > new Date(task.deadline).getTime() : false;
+
   function handleReview(status: "ACCEPTED" | "REJECTED") {
     if (!submission) return;
     onReview?.(submission, status, feedback);
@@ -54,7 +58,24 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
         ) : (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <TaskStatusBadge status={task.doneStatus} />
+              <div className="flex items-center gap-3">
+                <TaskStatusBadge status={task.doneStatus} />
+                <span className="text-xs font-medium text-muted-text">
+                  {task.doneStatus === "DONE" && "Nilai: 100"}
+                  {task.doneStatus === "REJECTED" && "Nilai: 0"}
+                  {task.doneStatus === "PENDING" && "Menunggu Penilaian"}
+                </span>
+                {hasValidDates && (
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider",
+                      isLate ? "bg-red-500/10 text-red-500" : "bg-emerald-500/10 text-emerald-500"
+                    )}
+                  >
+                    {isLate ? "Terlambat" : "Tepat Waktu"}
+                  </span>
+                )}
+              </div>
               <span className="text-xs text-muted-text">
                 Dikumpulkan {formatDate(submission.submittedAt)}
               </span>
