@@ -15,6 +15,8 @@ export type MabaDashboard = {
   totalTasks: number;
   doneCount: number;
   pendingCount: number;
+  averageScore: number | null;
+  gradedCount: number;
   nearestDeadline: string | null;
   latestTasks: MabaDashboardTask[];
 };

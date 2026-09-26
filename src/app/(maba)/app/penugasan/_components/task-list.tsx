@@ -169,6 +169,9 @@ const activeId = selectedId ?? filtered[0]?.id ?? null;
                       <p className="mt-1.5 flex items-center gap-1.5 text-[11px] text-muted-text">
                         <FaCalendarDay className="h-3 w-3" />
                         {formatDeadline(task.deadline)}
+                        {task.score != null && (
+                          <span className="ml-1 font-bold text-emerald-400">· Nilai {task.score}</span>
+                        )}
                       </p>
                     </button>
                   </li>
@@ -200,6 +203,11 @@ const activeId = selectedId ?? filtered[0]?.id ?? null;
               <span>
                 Deadline: <span className="font-bold text-soft-white">{formatDeadline(selected.deadline)}</span>
               </span>
+              {selected.score != null && (
+                <span className="ml-auto rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-400">
+                  Nilai: {selected.score}
+                </span>
+              )}
             </div>
 
             <Section icon={FaAlignLeft} title="Deskripsi">

@@ -135,6 +135,19 @@ export default function ClusterMembersTable({ data, totalTasks, onViewDetail, on
       },
     },
     {
+      accessorKey: "mabaScore",
+      header: "Nilai",
+      enableSorting: true,
+      cell: ({ getValue }) => {
+        const value = getValue<number | null | undefined>();
+        return value != null ? (
+          <span className="font-semibold text-soft-white">{value}</span>
+        ) : (
+          <span className="text-muted-text">—</span>
+        );
+      },
+    },
+    {
       id: "actions",
       header: "Aksi",
       cell: ({ row }) => (

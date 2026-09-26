@@ -1,6 +1,6 @@
 "use client";
 
-import { FaClipboardList, FaClipboardCheck, FaUsers, FaCalendarDay } from "react-icons/fa6";
+import { FaClipboardList, FaClipboardCheck, FaUsers, FaCalendarDay, FaStar } from "react-icons/fa6";
 import { useUser } from "@/features/auth/hooks/use-user";
 import { useMabaDashboard } from "@/features/maba/hooks/use-maba-dashboard";
 import StatCard from "./dashboard/stat-card";
@@ -39,7 +39,7 @@ export default function DashboardContent() {
       </div>
 
       {/* STATS SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
         {/* Progress (2 cols) */}
         <div className="md:col-span-2">
           <StatCard
@@ -72,6 +72,14 @@ export default function DashboardContent() {
           }
           icon={FaCalendarDay}
           iconColorClass="text-supernova-orange"
+        />
+
+        {/* Nilai Rata-rata */}
+        <StatCard
+          title="Nilai Rata-rata"
+          value={dashboard?.averageScore != null ? String(dashboard.averageScore) : "-"}
+          icon={FaStar}
+          iconColorClass="text-emerald-400"
         />
 
         {/* Hubungi SPV (Custom Card) */}

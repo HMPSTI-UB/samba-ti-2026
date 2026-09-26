@@ -1,16 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Upload, Database, Info } from "lucide-react";
+import { Download, Upload, Database, Info, Save, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
 import { useMabaSeedExport } from "@/features/maba/hooks/use-maba";
+import { useSettings, useUpdateSettings } from "@/features/settings/hooks/use-settings";
+import { useUserStore } from "@/stores/user.store";
 import SeedImportDialog from "./_components/seed-import-dialog";
 
 export default function PengaturanPage() {
   const [importOpen, setImportOpen] = useState(false);
   const exportMutation = useMabaSeedExport();
   const { success: notifySuccess, error: notifyError } = useSweetAlert();
+
+  const user = useUserStore((s) => s.user);
+  const role = (user?.role ?? "").toUpperCase();
+  const isKaderisasi = role === "KADERISASI" || role === "ADMIN";
+
+  const { data: settingsRes } = useSettings({ enabled: isKaderisasi });
+  const updateSettingsMutation = useUpdateSettings();
+  const [lateMaxScore, setLateMaxScore] = useState<string | null>(null);
+  const [scoreError, setScoreError] = useState("");
+
+  const lateMaxScoreValue =
+    lateMaxScore ?? (settingsRes?.data ? String(settingsRes.data.lateMaxScore) : "");
 
   function handleExport() {
     exportMutation.mutate(undefined, {
@@ -19,12 +34,69 @@ export default function PengaturanPage() {
     });
   }
 
+  function handleSaveScore() {
+    const parsed = Number(lateMaxScoreValue);
+    if (lateMaxScoreValue.trim() === "" || !Number.isInteger(parsed) || parsed < 0 || parsed > 100) {
+      setScoreError("Nilai harus angka bulat 0–100");
+      return;
+    }
+    setScoreError("");
+    updateSettingsMutation.mutate(
+      { lateMaxScore: parsed },
+      {
+        onSuccess: () => {
+          notifySuccess("Pengaturan nilai berhasil disimpan");
+          setLateMaxScore(null);
+        },
+        onError: (err: Error) => notifyError(err.message),
+      },
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-soft-white">Pengaturan</h1>
         <p className="text-sm text-muted-text mt-1">Kelola pengaturan website & data</p>
       </div>
+
+      {isKaderisasi && (
+        <div className="rounded-xl border border-white/10 bg-card-bg p-6">
+          <div className="flex items-center gap-3 mb-1">
+            <SlidersHorizontal className="h-5 w-5 text-electric-blue" />
+            <h2 className="text-lg font-bold text-soft-white">Penilaian</h2>
+          </div>
+          <p className="text-sm text-muted-text mb-5">
+            Atur nilai default untuk tugas MABA yang dikumpulkan melewati tenggat (deadline). Nilai ini otomatis
+            diberikan saat submission terlambat, dan masih dapat diubah manual oleh penilai.
+          </p>
+
+          <div className="flex flex-col gap-3 sm:max-w-xs">
+            <Input
+              label="Nilai Maksimal Keterlambatan (0–100)"
+              type="number"
+              min={0}
+              max={100}
+              placeholder="Contoh: 60"
+              value={lateMaxScoreValue}
+              error={scoreError}
+              onChange={(e) => {
+                setLateMaxScore(e.target.value);
+                if (scoreError) setScoreError("");
+              }}
+            />
+            <Button
+              variant="primary"
+              onClick={handleSaveScore}
+              loading={updateSettingsMutation.isPending}
+              className="gap-2 sm:self-start"
+            >
+              <Save className="h-4 w-4" />
+              Simpan
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="rounded-xl border border-white/10 bg-card-bg p-6">
         <div className="flex items-center gap-3 mb-1">

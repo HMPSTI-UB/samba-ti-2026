@@ -28,6 +28,7 @@ export type Submission = {
   clusterName?: string | null;
   submissionData: Record<string, string>;
   status: "PENDING" | "ACCEPTED" | "REJECTED";
+  score: number | null;
   feedback: string | null;
   submittedAt: string;
 };
@@ -53,6 +54,7 @@ export type MabaTask = {
   termsConditions: string[];
   formFields: FormField[];
   doneStatus: MabaTaskStatus;
+  score: number | null;
 };
 
 export type MySubmission = {
@@ -61,6 +63,7 @@ export type MySubmission = {
   mabaId: string;
   submissionData: Record<string, string>;
   status: "PENDING" | "ACCEPTED" | "REJECTED";
+  score: number | null;
   feedback: string | null;
   submittedAt: string;
 };
@@ -73,6 +76,7 @@ export type MemberTask = {
   termsConditions: string[];
   formFields: FormField[];
   doneStatus: MabaTaskStatus;
+  score: number | null;
   submission: MySubmission | null;
 };
 
@@ -88,5 +92,6 @@ export type MemberTasksData = {
     clusterId: string | null;
     clusterName: string | null;
   };
+  averageScore: number | null;
   tasks: MemberTask[];
 };

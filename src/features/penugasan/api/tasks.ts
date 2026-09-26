@@ -49,6 +49,6 @@ export function getTaskSubmissions(taskId: string, params?: { search?: string; c
   return clientApi.get<Submission[]>(`/tasks/${taskId}/submissions?${searchParams.toString()}`);
 }
 
-export function reviewSubmission(taskId: string, submissionId: string, status: "ACCEPTED" | "REJECTED", feedback: string) {
-  return clientApi.patch<{ message: string }>(`/tasks/${taskId}/submissions/${submissionId}`, { status, feedback });
+export function reviewSubmission(taskId: string, submissionId: string, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) {
+  return clientApi.patch<{ message: string }>(`/tasks/${taskId}/submissions/${submissionId}`, { status, feedback, score });
 }

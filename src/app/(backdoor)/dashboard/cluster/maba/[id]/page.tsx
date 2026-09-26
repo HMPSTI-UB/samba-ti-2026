@@ -11,6 +11,7 @@ import {
   XCircle,
   CircleDashed,
   CalendarClock,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useSweetAlert } from "@/components/common/sweet-alert-provider";
@@ -36,9 +37,9 @@ export default function MabaDetailPage() {
   const alert = useSweetAlert();
   const [now] = useState(() => Date.now());
 
-  function handleReview(sub: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string) {
+  function handleReview(sub: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) {
     reviewMutation.mutate(
-      { taskId: sub.taskId, id: sub.id, status, feedback },
+      { taskId: sub.taskId, id: sub.id, status, feedback, score },
       {
         onSuccess: () => alert.success("Review berhasil disimpan"),
         onError: (err: Error) => alert.error(err.message),
@@ -70,6 +71,7 @@ export default function MabaDetailPage() {
 
   const maba = res.data.maba;
   const tasks = res.data.tasks;
+  const averageScore = res.data.averageScore;
 
   const stats = {
     total: tasks.length,
@@ -108,13 +110,14 @@ export default function MabaDetailPage() {
         </span>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
         <StatCard label="Total Tugas" value={stats.total} icon={ClipboardList} accent="text-electric-blue" />
         <StatCard label="Selesai" value={stats.done} icon={CheckCircle2} accent="text-emerald-400" />
         <StatCard label="Menunggu Review" value={stats.pending} icon={Clock3} accent="text-amber-400" />
         <StatCard label="Perlu Revisi" value={stats.rejected} icon={XCircle} accent="text-red-400" />
         <StatCard label="Belum Dikerjakan" value={stats.notSubmitted} icon={CircleDashed} accent="text-slate-300" />
         <StatCard label="Lewat Deadline" value={stats.overdue} icon={CalendarClock} accent="text-sun-gold" />
+        <StatCard label="Rata-rata Nilai" value={averageScore != null ? averageScore : "-"} icon={Star} accent="text-emerald-400" />
       </div>
 
       <MemberTaskList tasks={tasks} onReview={handleReview} isReviewPending={reviewMutation.isPending} />

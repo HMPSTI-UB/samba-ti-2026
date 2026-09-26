@@ -17,20 +17,55 @@ const statusColors: Record<string, string> = {
 
 type Props = {
   submissions: Submission[];
-  onReview: (submission: Submission, status: "ACCEPTED" | "REJECTED", feedback: string) => void;
+  onReview: (submission: Submission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) => void;
   isPending?: boolean;
   fieldTypes?: Record<string, string>;
+  deadline?: string;
+  lateMaxScore?: number;
 };
 
-export default function SubmissionViewer({ submissions, onReview, isPending, fieldTypes }: Props) {
+export default function SubmissionViewer({ submissions, onReview, isPending, fieldTypes, deadline, lateMaxScore }: Props) {
   const [selected, setSelected] = useState<Submission | null>(null);
   const [feedback, setFeedback] = useState("");
+  const [scoreInput, setScoreInput] = useState("");
+  const [error, setError] = useState("");
+
+  const isLate = !!(selected && deadline && new Date(selected.submittedAt).getTime() > new Date(deadline).getTime());
+
+  function openDetail(sub: Submission) {
+    setSelected(sub);
+    setFeedback(sub.feedback ?? "");
+    setScoreInput(
+      sub.score != null
+        ? String(sub.score)
+        : deadline && new Date(sub.submittedAt).getTime() > new Date(deadline).getTime() && lateMaxScore != null
+          ? String(lateMaxScore)
+          : "",
+    );
+    setError("");
+  }
+
+  function closeDialog() {
+    setSelected(null);
+    setFeedback("");
+    setScoreInput("");
+    setError("");
+  }
 
   function handleReview(status: "ACCEPTED" | "REJECTED") {
     if (!selected) return;
-    onReview(selected, status, feedback);
-    setSelected(null);
-    setFeedback("");
+
+    if (status === "ACCEPTED") {
+      const parsed = Number(scoreInput);
+      if (scoreInput.trim() === "" || !Number.isInteger(parsed) || parsed < 0 || parsed > 100) {
+        setError("Nilai wajib diisi angka bulat 0–100");
+        return;
+      }
+    }
+
+    const parsed = scoreInput.trim() === "" ? undefined : Number(scoreInput);
+    onReview(selected, status, feedback, parsed);
+    closeDialog();
   }
 
   if (submissions.length === 0) {
@@ -49,6 +84,7 @@ export default function SubmissionViewer({ submissions, onReview, isPending, fie
           <TR>
             <TH>MABA</TH>
             <TH>Status</TH>
+            <TH>Nilai</TH>
             <TH>Dikumpulkan</TH>
             <TH></TH>
           </TR>
@@ -62,6 +98,9 @@ export default function SubmissionViewer({ submissions, onReview, isPending, fie
                   {sub.status === "PENDING" ? "Menunggu" : sub.status === "ACCEPTED" ? "Diterima" : "Ditolak"}
                 </span>
               </TD>
+              <TD className="text-sm font-semibold text-soft-white">
+                {sub.score != null ? sub.score : <span className="font-normal text-muted-text">-</span>}
+              </TD>
               <TD className="text-sm text-muted-text">
                 {new Date(sub.submittedAt).toLocaleDateString("id-ID", {
                   day: "numeric",
@@ -74,7 +113,7 @@ export default function SubmissionViewer({ submissions, onReview, isPending, fie
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => { setSelected(sub); setFeedback(sub.feedback ?? ""); }}
+                  onClick={() => openDetail(sub)}
                   className="text-xs gap-1.5"
                 >
                   <Eye size={14} />
@@ -86,7 +125,7 @@ export default function SubmissionViewer({ submissions, onReview, isPending, fie
         </TBody>
       </Table>
 
-      <Dialog open={!!selected} onOpenChange={(open) => { if (!open) { setSelected(null); setFeedback(""); } }}>
+      <Dialog open={!!selected} onOpenChange={(open) => { if (!open) closeDialog(); }}>
         <DialogContent title="Detail Submission" description={selected?.mabaName ?? ""}>
           {selected && (
             <div className="space-y-4">
@@ -111,6 +150,26 @@ export default function SubmissionViewer({ submissions, onReview, isPending, fie
                   </div>
                 ))}
               </div>
+
+              {isLate && (
+                <p className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs text-red-300">
+                  Submission terlambat — nilai otomatis mengikuti pengaturan keterlambatan, tetapi tetap bisa diubah.
+                </p>
+              )}
+
+              <Input
+                label="Nilai (0–100)"
+                type="number"
+                min={0}
+                max={100}
+                placeholder="Contoh: 85"
+                value={scoreInput}
+                error={error}
+                onChange={(e) => {
+                  setScoreInput(e.target.value);
+                  if (error) setError("");
+                }}
+              />
 
               <Input
                 label="Feedback"
@@ -138,7 +197,7 @@ export default function SubmissionViewer({ submissions, onReview, isPending, fie
                   className="gap-1.5"
                 >
                   <CheckCircle size={14} />
-                  Terima
+                  {selected.status === "PENDING" ? "Terima" : "Simpan Nilai"}
                 </Button>
               </div>
             </div>

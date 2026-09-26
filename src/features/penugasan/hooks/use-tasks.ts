@@ -120,13 +120,15 @@ export function useSubmissions(options?: { enabled?: boolean }) {
 export function useReviewSubmission() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ taskId, id, status, feedback }: { taskId: string; id: string; status: "ACCEPTED" | "REJECTED"; feedback: string }) =>
-      reviewSubmission(taskId, id, status, feedback),
+    mutationFn: ({ taskId, id, status, feedback, score }: { taskId: string; id: string; status: "ACCEPTED" | "REJECTED"; feedback: string; score?: number }) =>
+      reviewSubmission(taskId, id, status, feedback, score),
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ["tasks", variables.taskId, "submissions"] });
       qc.invalidateQueries({ queryKey: ["submissions"] });
       qc.invalidateQueries({ queryKey: ["audit-logs"] });
       qc.invalidateQueries({ queryKey: ["tasks", "member"] });
+      qc.invalidateQueries({ queryKey: ["clusters"] });
+      qc.invalidateQueries({ queryKey: ["maba", "tasks"] });
     },
   });
 }

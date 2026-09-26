@@ -14,7 +14,6 @@ import {
   getClusterMembers,
   addClusterMembers,
   removeClusterMember,
-  addClusterOverride,
   getAvailableSpvs,
   getAvailableMabas,
 } from "@/features/clusters/api/clusters";
@@ -133,18 +132,6 @@ export function useRemoveClusterMember() {
   return useMutation({
     mutationFn: ({ clusterId, userId }: { clusterId: string; userId: string }) =>
       removeClusterMember(clusterId, userId),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["clusters"] });
-      qc.invalidateQueries({ queryKey: ["audit-logs"] });
-    },
-  });
-}
-
-export function useAddClusterOverride() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: ({ clusterId, deductionPoints, reason }: { clusterId: string; deductionPoints: number; reason: string }) =>
-      addClusterOverride(clusterId, deductionPoints, reason),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["clusters"] });
       qc.invalidateQueries({ queryKey: ["audit-logs"] });

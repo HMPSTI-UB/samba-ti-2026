@@ -252,6 +252,12 @@ export default function MabaTaskDetailPage() {
                 <FaCircleCheck className="h-5 w-5" />
                 <h3 className="font-bold text-white">Tugas Selesai</h3>
               </div>
+              <div className="flex items-center justify-between rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
+                <span className="text-sm text-slate-300">Nilai Tugas</span>
+                <span className="text-2xl font-extrabold text-emerald-400">
+                  {submission?.score != null ? submission.score : "-"}
+                </span>
+              </div>
               <AnswerList data={submission?.submissionData ?? {}} fieldLabels={fieldLabels} fieldTypes={fieldTypes} />
               {submission?.feedback && (
                 <div className="rounded-lg border border-white/10 bg-white/5 p-4">

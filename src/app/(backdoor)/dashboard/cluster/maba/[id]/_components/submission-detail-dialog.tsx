@@ -14,8 +14,9 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   task: MemberTask | null;
-  onReview?: (submission: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string) => void;
+  onReview?: (submission: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) => void;
   isPending?: boolean;
+  lateMaxScore?: number;
 };
 
 function formatDate(value: string) {
@@ -28,8 +29,20 @@ function formatDate(value: string) {
   });
 }
 
-export default function SubmissionDetailDialog({ open, onOpenChange, task, onReview, isPending }: Props) {
-  const [feedback, setFeedback] = useState(task?.submission?.feedback ?? "");
+export default function SubmissionDetailDialog({ open, onOpenChange, task, onReview, isPending, lateMaxScore }: Props) {
+  const submission = task?.submission ?? null;
+  const hasValidDates = !!(submission?.submittedAt && task?.deadline);
+  const isLate = hasValidDates && submission ? new Date(submission.submittedAt).getTime() > new Date(task!.deadline).getTime() : false;
+
+  const [feedback, setFeedback] = useState(submission?.feedback ?? "");
+  const [scoreInput, setScoreInput] = useState(
+    submission?.score != null
+      ? String(submission.score)
+      : isLate && lateMaxScore != null
+        ? String(lateMaxScore)
+        : "",
+  );
+  const [error, setError] = useState("");
 
   if (!task) return null;
 
@@ -39,15 +52,22 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
   const fieldTypes: Record<string, string> = Object.fromEntries(
     (task.formFields ?? []).map((f) => [f.key, f.type]),
   );
-  const submission = task.submission;
-  const canReview = !!onReview && !!submission && submission.status === "PENDING";
-
-  const hasValidDates = !!(submission?.submittedAt && task.deadline);
-  const isLate = hasValidDates ? new Date(submission!.submittedAt).getTime() > new Date(task.deadline).getTime() : false;
+  const canReview = !!onReview && !!submission;
 
   function handleReview(status: "ACCEPTED" | "REJECTED") {
     if (!submission) return;
-    onReview?.(submission, status, feedback);
+
+    if (status === "ACCEPTED") {
+      const parsed = Number(scoreInput);
+      if (scoreInput.trim() === "" || !Number.isInteger(parsed) || parsed < 0 || parsed > 100) {
+        setError("Nilai wajib diisi angka bulat 0–100");
+        return;
+      }
+    }
+
+    setError("");
+    const parsed = scoreInput.trim() === "" ? undefined : Number(scoreInput);
+    onReview?.(submission, status, feedback, parsed);
   }
 
   return (
@@ -61,9 +81,7 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
               <div className="flex items-center gap-3">
                 <TaskStatusBadge status={task.doneStatus} />
                 <span className="text-xs font-medium text-muted-text">
-                  {task.doneStatus === "DONE" && "Nilai: 100"}
-                  {task.doneStatus === "REJECTED" && "Nilai: 0"}
-                  {task.doneStatus === "PENDING" && "Menunggu Penilaian"}
+                  {submission.score != null ? `Nilai: ${submission.score}` : "Belum dinilai"}
                 </span>
                 {hasValidDates && (
                   <span
@@ -117,6 +135,24 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
 
             {canReview && (
               <>
+                {isLate && (
+                  <p className="rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs text-red-300">
+                    Submission terlambat — nilai otomatis mengikuti pengaturan keterlambatan, tetapi tetap bisa diubah.
+                  </p>
+                )}
+                <Input
+                  label="Nilai (0–100)"
+                  type="number"
+                  min={0}
+                  max={100}
+                  placeholder="Contoh: 85"
+                  value={scoreInput}
+                  error={error}
+                  onChange={(e) => {
+                    setScoreInput(e.target.value);
+                    if (error) setError("");
+                  }}
+                />
                 <Input
                   label="Feedback"
                   placeholder="Masukkan feedback untuk MABA"
@@ -142,7 +178,7 @@ export default function SubmissionDetailDialog({ open, onOpenChange, task, onRev
                     className="gap-1.5"
                   >
                     <CheckCircle size={14} />
-                    Terima
+                    {submission.status === "PENDING" ? "Terima" : "Simpan Nilai"}
                   </Button>
                 </div>
               </>

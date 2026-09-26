@@ -28,18 +28,20 @@ export default function MemberTaskList({
   tasks,
   onReview,
   isReviewPending,
+  lateMaxScore,
 }: {
   tasks: MemberTask[];
-  onReview?: (submission: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string) => void;
+  onReview?: (submission: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) => void;
   isReviewPending?: boolean;
+  lateMaxScore?: number;
 }) {
   const [filter, setFilter] = useState<Filter>("all");
   const [selected, setSelected] = useState<MemberTask | null>(null);
   const [now] = useState(() => Date.now());
 
-  function handleReview(submission: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string) {
+  function handleReview(submission: MySubmission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) {
     setSelected(null);
-    onReview?.(submission, status, feedback);
+    onReview?.(submission, status, feedback, score);
   }
 
   const filtered = useMemo(() => {
@@ -96,9 +98,11 @@ export default function MemberTaskList({
                 </div>
                 <div className="hidden sm:flex items-center gap-3">
                   <span className="text-xs font-medium text-muted-text">
-                    {task.doneStatus === "DONE" && "Nilai: 100"}
-                    {(task.doneStatus === "REJECTED" || task.doneStatus === "NOT_SUBMITTED") && "Nilai: 0"}
-                    {task.doneStatus === "PENDING" && "Menunggu Penilaian"}
+                    {task.submission?.score != null
+                      ? `Nilai: ${task.submission.score}`
+                      : task.submission
+                        ? "Belum dinilai"
+                        : "Nilai: -"}
                   </span>
                   {hasValidDates && (
                     <span
@@ -134,6 +138,7 @@ export default function MemberTaskList({
         task={selected}
         onReview={handleReview}
         isPending={isReviewPending}
+        lateMaxScore={lateMaxScore}
       />
     </div>
   );

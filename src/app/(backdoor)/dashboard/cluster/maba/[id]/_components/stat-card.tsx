@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 
 type Props = {
   label: string;
-  value: number;
+  value: number | string;
   icon: LucideIcon;
   accent: string;
 };

@@ -49,10 +49,6 @@ export function removeClusterMember(clusterId: string, userId: string) {
   return clientApi.delete<{ message: string }>(`/clusters/${clusterId}/members/${userId}`);
 }
 
-export function addClusterOverride(clusterId: string, deductionPoints: number, reason: string) {
-  return clientApi.post<{ message: string; data: any }>(`/clusters/${clusterId}/overrides`, { deductionPoints, reason });
-}
-
 export type PublicMabaItem = {
   id: string;
   name: string;

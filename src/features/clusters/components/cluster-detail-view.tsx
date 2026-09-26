@@ -19,7 +19,6 @@ import ManageMembersDialog from "@/features/clusters/components/manage-members-d
 import ClusterMembersTable from "@/features/clusters/components/cluster-members-table";
 import EditWhatsappDialog from "@/features/clusters/components/edit-whatsapp-dialog";
 import SubmissionViewer from "@/features/penugasan/components/submission-viewer";
-import { ClusterOverrideForm } from "@/features/clusters/components/cluster-override-form";
 import { Star, Zap } from "lucide-react";
 import { useSubmissions, useReviewSubmission } from "@/features/penugasan/hooks/use-tasks";
 import type { Submission } from "@/features/penugasan/types";
@@ -53,7 +52,6 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
   const members = detail?.members ?? [];
   const skorFinal = detail?.skor_final_cluster ?? 0;
   const kecepatan = detail?.kecepatan_cluster;
-  const deduction = detail?.total_deduction ?? 0;
   const totalTasks = detail?.totalTasks ?? 0;
   const submissions = subsRes?.data ?? [];
 
@@ -89,9 +87,9 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
     );
   }
 
-  function handleReview(sub: Submission, status: "ACCEPTED" | "REJECTED", feedback: string) {
+  function handleReview(sub: Submission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) {
     reviewMutation.mutate(
-      { taskId: sub.taskId, id: sub.id, status, feedback },
+      { taskId: sub.taskId, id: sub.id, status, feedback, score },
       {
         onSuccess: () => alert.success("Review berhasil disimpan"),
         onError: (err: Error) => alert.error(err.message),
@@ -243,14 +241,9 @@ export default function ClusterDetailView({ clusterId, canManage, showBack = tru
             <Star size={20} />
             <h3 className="font-medium">Skor Akhir</h3>
           </div>
-          <div className="mt-3 flex justify-between items-end">
-            <div>
-              <p className="text-3xl font-bold text-soft-white">{skorFinal}</p>
-              <p className="text-sm text-muted-text mt-1">
-                Deduksi: <span className="text-red-400">-{deduction}</span>
-              </p>
-            </div>
-            {canManage && <ClusterOverrideForm clusterId={clusterId} />}
+          <div className="mt-3">
+            <p className="text-3xl font-bold text-soft-white">{skorFinal}</p>
+            <p className="text-sm text-muted-text mt-1">Skor akhir cluster</p>
           </div>
         </div>
 

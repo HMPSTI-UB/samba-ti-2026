@@ -30,9 +30,9 @@ export default function TaskDetailPage() {
   const submissions = subsRes?.data ?? [];
   const clusters = clustersRes?.data ?? [];
 
-  function handleReview(sub: Submission, status: "ACCEPTED" | "REJECTED", feedback: string) {
+  function handleReview(sub: Submission, status: "ACCEPTED" | "REJECTED", feedback: string, score?: number) {
     reviewMutation.mutate(
-      { taskId: sub.taskId, id: sub.id, status, feedback },
+      { taskId: sub.taskId, id: sub.id, status, feedback, score },
       {
         onSuccess: () => alert.success("Review berhasil disimpan"),
         onError: (err: Error) => alert.error(err.message),
@@ -157,6 +157,7 @@ export default function TaskDetailPage() {
                 onReview={handleReview}
                 isPending={reviewMutation.isPending}
                 fieldTypes={Object.fromEntries((task.formFields ?? []).map((f) => [f.key, f.type]))}
+                deadline={task.deadline}
               />
             )}
           </div>
